@@ -5,10 +5,8 @@ import { upload } from "../config/cloudinary.js";
 
 const router = express.Router();
 
-// All routes here are protected
-router.use(protect);
-
-router.get("/profile", getProfile);
-router.put("/profile", upload.single("avatar"), updateProfile);
+// Routes are now identified by :id instead of token
+router.get("/profile/:id", getProfile);
+router.put("/profile/:id", upload.single("avatar"), updateProfile);
 
 export default router;
