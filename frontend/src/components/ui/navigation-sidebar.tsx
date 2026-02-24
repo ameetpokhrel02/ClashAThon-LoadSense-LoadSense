@@ -1,11 +1,13 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { LogoutDialog } from "@/components/ui/logout-dialog"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { 
   LayoutDashboard, 
   BookOpen, 
-  Calendar as CalendarIcon, 
-  Settings, 
+  CalendarCheck, 
+  BarChart3, 
+  User,
   LogOut,
   Plus,
   GraduationCap
@@ -37,52 +39,58 @@ export function NavigationSidebar({
       active: currentScreen === 'dashboard'
     },
     {
+      id: 'deadlines',
+      label: 'Deadlines',
+      icon: CalendarCheck,
+      active: currentScreen === 'deadlines'
+    },
+    {
       id: 'courses',
       label: 'Courses',
       icon: BookOpen,
       active: currentScreen === 'courses'
     },
     {
-      id: 'calendar',
-      label: 'Calendar',
-      icon: CalendarIcon,
-      active: currentScreen === 'calendar'
+      id: 'insights',
+      label: 'Insights',
+      icon: BarChart3,
+      active: currentScreen === 'insights'
     },
     {
-      id: 'settings',
-      label: 'Settings',
-      icon: Settings,
-      active: currentScreen === 'settings'
+      id: 'profile',
+      label: 'Profile',
+      icon: User,
+      active: currentScreen === 'profile'
     }
   ]
 
   return (
     <>
       <aside className={cn(
-        "w-64 bg-gradient-to-b from-[#ff7400] to-[#ff7400]/85 text-white flex flex-col shadow-xl relative overflow-hidden",
+        "w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-colors duration-200",
         className
       )}>
-        {/* Subtle glow overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/8 pointer-events-none" />
-        
         {/* Brand Header with Logo */}
-        <div className="p-6 relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center shadow-sm border border-white/20">
-              <GraduationCap className="w-6 h-6 text-white" />
+        <div className="p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 bg-[#ff7400] rounded-xl flex items-center justify-center shadow-sm">
+                <GraduationCap className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="font-semibold text-lg text-gray-800 dark:text-white">LoadSense</h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Workload Management</p>
+              </div>
             </div>
-            <div>
-              <h2 className="font-semibold text-lg text-white">LoadSense</h2>
-              <p className="text-xs text-white/70">Workload Management</p>
-            </div>
+            <ThemeToggle />
           </div>
         </div>
         
         {/* Quick Action - Add Deadline */}
-        <div className="px-6 mb-6 relative z-10">
+        <div className="px-6 mb-6">
           <Button 
             onClick={() => onNavigate('add-deadline')} 
-            className="w-full gap-3 bg-white/15 hover:bg-white/25 text-white border-0 rounded-xl py-3.5 font-medium transition-all duration-200 backdrop-blur-sm border border-white/10"
+            className="w-full gap-3 bg-[#ff7400] hover:bg-[#e66800] text-white border-0 rounded-xl py-3.5 font-medium transition-all duration-200"
           >
             <Plus className="w-5 h-5" />
             Add Deadline
@@ -90,7 +98,7 @@ export function NavigationSidebar({
         </div>
         
         {/* Navigation */}
-        <nav className="flex-1 px-6 space-y-2 relative z-10">
+        <nav className="flex-1 px-4 space-y-1">
           {navigationItems.map((item) => {
             const Icon = item.icon
             return (
@@ -98,12 +106,12 @@ export function NavigationSidebar({
                 key={item.id}
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start gap-3 text-white/80 hover:text-white hover:bg-white/10 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm",
-                  item.active && "bg-white/15 text-white font-semibold"
+                  "w-full justify-start gap-3 text-gray-600 dark:text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm",
+                  item.active && "bg-[#ff7400]/10 text-[#ff7400] font-semibold"
                 )}
                 onClick={() => onNavigate(item.id)}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className={cn("w-5 h-5", item.active && "text-[#ff7400]")} />
                 {item.label}
               </Button>
             )
@@ -111,25 +119,25 @@ export function NavigationSidebar({
         </nav>
 
         {/* User Section */}
-        <div className="p-6 border-t border-white/15 bg-white/5 relative z-10">
+        <div className="p-6 border-t border-gray-200 dark:border-gray-800">
           {user && (
-            <div className="mb-4 p-3 rounded-xl bg-white/10">
+            <div className="mb-4 p-3 rounded-xl bg-gray-50 dark:bg-gray-800">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-medium text-white text-sm">
+                <div className="w-9 h-9 bg-[#ff7400]/20 rounded-full flex items-center justify-center font-medium text-[#ff7400] text-sm">
                   {user.firstName?.[0]}{user.lastName?.[0]}
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">
+                  <p className="text-gray-800 dark:text-white font-medium text-sm">
                     {user.firstName} {user.lastName}
                   </p>
-                  <p className="text-white/60 text-xs">Student</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-xs">Student</p>
                 </div>
               </div>
             </div>
           )}
           <Button 
             variant="ghost" 
-            className="w-full justify-start gap-3 text-white/80 hover:text-white hover:bg-white/10 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm" 
+            className="w-full justify-start gap-3 text-gray-600 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm" 
             onClick={() => setShowLogoutDialog(true)}
           >
             <LogOut className="w-5 h-5" />

@@ -62,13 +62,13 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB]">
+    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950">
       {/* Top Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">My Courses</h1>
-            <p className="text-sm text-gray-500">Manage your enrolled courses</p>
+            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">My Courses</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Manage your enrolled courses</p>
           </div>
         </div>
       </div>
@@ -83,34 +83,34 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: index * 0.1, duration: 0.4 }}
             >
-              <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6 hover:border-gray-300 hover:shadow-md transition-all cursor-pointer">
+              <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-md transition-all cursor-pointer">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
                     <BookOpen className="w-5 h-5 text-[#ff7400]" />
                   </div>
                   <div>
-                    <h3 className="font-medium text-gray-800">{course.name}</h3>
-                    <p className="text-xs text-gray-500">{course.code}</p>
+                    <h3 className="font-medium text-gray-800 dark:text-white">{course.name}</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{course.code}</p>
                   </div>
                 </div>
                 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                     <Users className="w-4 h-4" />
                     <span>{course.students} students</span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                     <Star className="w-4 h-4" />
                     <span>{course.instructor}</span>
                   </div>
                   
                   <div>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-gray-500">Progress</span>
-                      <span className="font-medium text-gray-700">{course.progress}%</span>
+                      <span className="text-gray-500 dark:text-gray-400">Progress</span>
+                      <span className="font-medium text-gray-700 dark:text-gray-300">{course.progress}%</span>
                     </div>
-                    <div className="w-full bg-gray-100 rounded-full h-1.5">
+                    <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
                       <div 
                         className="h-1.5 rounded-full bg-[#ff7400]"
                         style={{ width: `${course.progress}%` }}

@@ -16,7 +16,7 @@
 }
 
 :root {
-  --background: #FFF8F5;
+  --background: #ffffff;
   --foreground: #1a1a2e;
   --card: #ffffff;
   --card-foreground: #1a1a2e;
@@ -26,41 +26,41 @@
   --primary-mid: #ff8c33;
   --primary-dark: #e66800;
   --primary-foreground: #ffffff;
-  --secondary: #fff5eb;
+  --secondary: #f8fafc;
   --secondary-foreground: #ff7400;
-  --muted: #fff5eb;
+  --muted: #f8fafc;
   --muted-foreground: #64748B;
-  --accent: #fff5eb;
+  --accent: #f8fafc;
   --accent-foreground: #ff7400;
   --destructive: #EF4444;
   --destructive-foreground: #ffffff;
   --border: #e2e8f0;
-  --input: #f8fafc;
+  --input: #ffffff;
   --ring: #ff7400;
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: #1a1a2e;
+  --background: #111827;
   --foreground: #f8fafc;
-  --card: #2d2d44;
+  --card: #1f2937;
   --card-foreground: #f8fafc;
-  --popover: #2d2d44;
+  --popover: #1f2937;
   --popover-foreground: #f8fafc;
   --primary: #ff7400;
   --primary-mid: #ff8c33;
   --primary-dark: #e66800;
   --primary-foreground: #ffffff;
-  --secondary: #2d2d44;
+  --secondary: #374151;
   --secondary-foreground: #f8fafc;
-  --muted: #2d2d44;
-  --muted-foreground: #94a3b8;
-  --accent: #2d2d44;
+  --muted: #374151;
+  --muted-foreground: #9ca3af;
+  --accent: #374151;
   --accent-foreground: #f8fafc;
-  --destructive: #7f1d1d;
+  --destructive: #dc2626;
   --destructive-foreground: #f8fafc;
-  --border: #2d2d44;
-  --input: #2d2d44;
+  --border: #374151;
+  --input: #1f2937;
   --ring: #ff7400;
 }
 
@@ -69,10 +69,51 @@
 }
 
 body {
-  background: linear-gradient(to bottom right, #FFF8F5, #FFF5F0, #FFEDE5);
+  background: #F6FAFB;
   min-height: 100vh;
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Dark mode body */
+.dark body,
+body:is(.dark *) {
+  background: #111827;
+}
+
+html.dark {
+  background: #111827;
+}
+
+html.dark body {
+  background: #111827;
+}
+
+/* Mobile Navigation - Dark Mode Support */
+.mobile-nav {
+  background: rgba(255, 255, 255, 0.98);
+  border-top: 1px solid #e2e8f0;
+}
+
+.dark .mobile-nav {
+  background: rgba(17, 24, 39, 0.98);
+  border-top: 1px solid #374151;
+}
+
+.mobile-nav-item {
+  color: #6b7280;
+}
+
+.mobile-nav-item.active {
+  color: #ff7400;
+}
+
+.dark .mobile-nav-item {
+  color: #9ca3af;
+}
+
+.dark .mobile-nav-item.active {
+  color: #ff7400;
 }
 
 /* ===== ORANGE DESIGN SYSTEM ===== */

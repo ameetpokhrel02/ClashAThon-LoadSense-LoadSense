@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Home, Plus, AlertTriangle, Lightbulb, Menu, X } from "lucide-react"
+import { Home, Plus, CalendarCheck, BarChart3, User, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface MobileNavigationProps {
@@ -19,9 +19,10 @@ interface MobileSidebarProps {
 export function MobileNavigation({ currentScreen, onNavigate, className }: MobileNavigationProps) {
   const navItems = [
     { id: 'dashboard', icon: Home, label: 'Home' },
+    { id: 'deadlines', icon: CalendarCheck, label: 'Deadlines' },
     { id: 'add-deadline', icon: Plus, label: 'Add' },
-    { id: 'overload-alert', icon: AlertTriangle, label: 'Alerts' },
-    { id: 'suggestion', icon: Lightbulb, label: 'Tips' },
+    { id: 'insights', icon: BarChart3, label: 'Insights' },
+    { id: 'profile', icon: User, label: 'Profile' },
   ]
 
   return (
@@ -65,9 +66,10 @@ export function MobileSidebar({
 }: MobileSidebarProps) {
   const sidebarItems = [
     { id: 'dashboard', icon: Home, label: 'Dashboard' },
+    { id: 'deadlines', icon: CalendarCheck, label: 'Deadlines' },
     { id: 'add-deadline', icon: Plus, label: 'Add Deadline' },
-    { id: 'overload-alert', icon: AlertTriangle, label: 'Overload Alerts' },
-    { id: 'suggestion', icon: Lightbulb, label: 'Suggestions' },
+    { id: 'insights', icon: BarChart3, label: 'Insights' },
+    { id: 'profile', icon: User, label: 'Profile' },
   ]
 
   return (

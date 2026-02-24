@@ -7,11 +7,11 @@ const modernCardVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-white border-[#FFE8D6] shadow-xl hover:shadow-2xl",
-        elevated: "bg-white border-[#FFE8D6] shadow-2xl hover:shadow-[0_25px_60px_-15px_rgba(255,116,0,0.2)]",
-        outlined: "bg-white border-2 border-[#FFE8D6] hover:border-[#ff7400]/40",
-        gradient: "bg-gradient-to-br from-[#FFF8F5] to-[#FFE8D6] border-[#FFE8D6] shadow-xl hover:shadow-2xl",
-        glass: "bg-white/95 backdrop-blur-md border-[#FFE8D6] shadow-xl hover:shadow-2xl glow-primary-hover",
+        default: "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 shadow-xl hover:shadow-2xl",
+        elevated: "bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 shadow-2xl hover:shadow-[0_25px_60px_-15px_rgba(255,116,0,0.2)]",
+        outlined: "bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 hover:border-[#ff7400]/40",
+        gradient: "bg-gradient-to-br from-[#F6FAFB] dark:from-gray-900 to-[#F0F5F6] dark:to-gray-800 border-gray-200 dark:border-gray-800 shadow-xl hover:shadow-2xl",
+        glass: "bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-gray-200 dark:border-gray-800 shadow-xl hover:shadow-2xl glow-primary-hover",
       },
       padding: {
         none: "p-0",
