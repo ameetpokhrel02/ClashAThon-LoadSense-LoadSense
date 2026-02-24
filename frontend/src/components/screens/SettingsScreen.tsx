@@ -74,13 +74,13 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2]">
       {/* Top Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white shadow-sm border-b border-[#E2E8F0] px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Settings</h1>
-            <p className="text-gray-600">Manage your account and preferences</p>
+            <h1 className="text-2xl font-semibold text-[#0F172A]"><span className="text-[#2A7A8C]">Settings</span></h1>
+            <p className="text-[#64748B]">Manage your account and preferences</p>
           </div>
         </div>
       </div>
@@ -97,8 +97,8 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
             >
               <ModernCard className="p-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <section.icon className="w-5 h-5 text-purple-600" />
+                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <section.icon className="w-5 h-5 text-primary" />
                   </div>
                   <h2 className="text-lg font-semibold text-gray-900">{section.title}</h2>
                 </div>
@@ -119,14 +119,14 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                             readOnly
                           />
                         ) : item.type === "select" ? (
-                          <select className="w-32 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                          <select className="w-32 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                             <option>{item.value as string}</option>
                           </select>
                         ) : item.type === "toggle" ? (
                           <button
                             className={`
                               relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-                              ${item.value ? 'bg-purple-600' : 'bg-gray-200'}
+                              ${item.value ? 'bg-primary' : 'bg-gray-200'}
                             `}
                           >
                             <span
@@ -152,7 +152,7 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
             transition={{ delay: 0.5, duration: 0.5 }}
             className="flex justify-end"
           >
-            <Button className="bg-purple-600 hover:bg-purple-700 px-8">
+            <Button className="bg-primary hover:bg-primary/80 px-8">
               Save Changes
             </Button>
           </motion.div>

@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react'
-import LoginScreen from './components/screens/LoginScreen'
+import {
+  LoginScreen,
+  RegisterScreen,
+  ForgotPasswordScreen,
+  OTPVerificationScreen,
+  ChangePasswordScreen,
+  PasswordSuccessScreen
+} from './components/auth'
 import DashboardScreen from './components/screens/DashboardScreen'
 import AddDeadlineScreen from './components/screens/AddDeadlineScreen'
 import OverloadAlertScreen from './components/screens/OverloadAlertScreen'
@@ -12,11 +19,12 @@ import { useAuthStore } from './store/authStore'
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
   const [currentScreen, setCurrentScreen] = useState(isLoggedIn ? 'dashboard' : 'login')
+  const [resetEmail, setResetEmail] = useState('')
 
   useEffect(() => {
-    if (!isLoggedIn && currentScreen !== 'login') {
+    if (!isLoggedIn && !['login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
       setCurrentScreen('login')
-    } else if (isLoggedIn && currentScreen === 'login') {
+    } else if (isLoggedIn && ['login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
       setCurrentScreen('dashboard')
     }
   }, [isLoggedIn, currentScreen])
@@ -25,9 +33,62 @@ function App() {
     setCurrentScreen(screen)
   }
 
+  const handleForgotPasswordSubmit = (email: string) => {
+    setResetEmail(email)
+    handleNavigate('otp-verification')
+  }
+
+  const handleOTPVerify = () => {
+    handleNavigate('change-password')
+  }
+
+  const handlePasswordChange = () => {
+    handleNavigate('password-success')
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased">
-      {currentScreen === 'login' && <LoginScreen onLogin={() => handleNavigate('dashboard')} />}
+      {/* Auth Screens */}
+      {currentScreen === 'login' && (
+        <LoginScreen 
+          onLogin={() => handleNavigate('dashboard')} 
+          onNavigate={handleNavigate}
+        />
+      )}
+      {currentScreen === 'register' && (
+        <RegisterScreen 
+          onRegister={() => handleNavigate('dashboard')} 
+          onNavigate={handleNavigate}
+        />
+      )}
+      {currentScreen === 'forgot-password' && (
+        <ForgotPasswordScreen 
+          onNavigate={handleNavigate}
+          onSubmit={handleForgotPasswordSubmit}
+        />
+      )}
+      {currentScreen === 'otp-verification' && (
+        <OTPVerificationScreen 
+          email={resetEmail}
+          onNavigate={handleNavigate}
+          onVerify={handleOTPVerify}
+          onResend={() => {}}
+        />
+      )}
+      {currentScreen === 'change-password' && (
+        <ChangePasswordScreen 
+          email={resetEmail}
+          onNavigate={handleNavigate}
+          onSubmit={handlePasswordChange}
+        />
+      )}
+      {currentScreen === 'password-success' && (
+        <PasswordSuccessScreen 
+          onNavigate={handleNavigate}
+        />
+      )}
+
+      {/* App Screens */}
       {currentScreen === 'dashboard' && <DashboardScreen onNavigate={handleNavigate} />}
       {currentScreen === 'courses' && <CoursesScreen onNavigate={handleNavigate} />}
       {currentScreen === 'calendar' && <CalendarScreen onNavigate={handleNavigate} />}

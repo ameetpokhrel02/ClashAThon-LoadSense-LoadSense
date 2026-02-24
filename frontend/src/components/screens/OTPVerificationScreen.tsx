@@ -135,7 +135,7 @@ export default function OTPVerificationScreen({
             Check your email
           </h1>
           <p className="text-lg text-gray-600">
-            We've sent a 6-digit verification code to <span className="font-semibold text-purple-600">{email}</span>
+            We've sent a 6-digit verification code to <span className="font-semibold text-primary">{email}</span>
           </p>
         </motion.div>
       </div>

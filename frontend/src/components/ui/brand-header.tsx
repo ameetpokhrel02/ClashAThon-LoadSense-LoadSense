@@ -19,7 +19,7 @@ export function BrandHeader({
   return (
     <div className={cn("flex items-center gap-3", className)}>
       {variant === 'full' && (
-        <div className="bg-primary/20 p-2 rounded-xl backdrop-blur-sm border border-primary/30 neon-glow-teal">
+        <div className="bg-primary/20 p-2 rounded-xl backdrop-blur-sm border border-primary/30">
           <img 
             src={LoadSenseImage} 
             alt="LoadSense" 

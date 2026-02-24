@@ -67,17 +67,17 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2]">
       {/* Top Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white shadow-sm border-b border-[#E2E8F0] px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Academic Calendar</h1>
-            <p className="text-gray-600">Track your deadlines and events</p>
+            <h1 className="text-2xl font-semibold text-[#0F172A]">Academic <span className="text-[#2A7A8C]">Calendar</span></h1>
+            <p className="text-[#64748B]">Track your deadlines and events</p>
           </div>
           <Button 
             onClick={() => onNavigate('add-deadline')}
-            className="bg-purple-600 hover:bg-purple-700"
+            className="btn-primary-glow rounded-lg"
           >
             Add Event
           </Button>
@@ -91,7 +91,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
           <div className="lg:col-span-2">
             <ModernCard className="p-6">
               <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-purple-600" />
+                <Calendar className="w-5 h-5 text-primary" />
                 September 2023
               </h2>
               
@@ -116,7 +116,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                       className={`
                         aspect-square flex items-center justify-center text-sm rounded-lg cursor-pointer
                         ${isCurrentMonth ? 'text-gray-900' : 'text-gray-300'}
-                        ${isToday ? 'bg-purple-600 text-white font-bold' : 'hover:bg-gray-100'}
+                        ${isToday ? 'bg-primary text-white font-bold' : 'hover:bg-gray-100'}
                         ${hasEvent ? 'bg-red-100 text-red-800 font-semibold' : ''}
                       `}
                     >
@@ -132,7 +132,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
           <div>
             <ModernCard className="p-6">
               <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-purple-600" />
+                <Clock className="w-5 h-5 text-primary" />
                 Upcoming Events
               </h2>
               
@@ -143,7 +143,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                     initial={{ x: 20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1, duration: 0.3 }}
-                    className="border-l-4 border-purple-500 pl-4 py-2"
+                    className="border-l-4 border-primary pl-4 py-2"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">

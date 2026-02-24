@@ -5,6 +5,8 @@
 @theme {
   --color-primary: #2A7A8C;
   --color-primary-hover: #246B7B;
+  --color-primary-mid: #3B8FA1;
+  --color-primary-dark: #1F5F6E;
   --color-background: #F6FAFB;
   --color-foreground: #0F172A;
   --color-muted: #64748B;
@@ -21,17 +23,19 @@
   --popover: #ffffff;
   --popover-foreground: #0F172A;
   --primary: #2A7A8C;
+  --primary-mid: #3B8FA1;
+  --primary-dark: #1F5F6E;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0F172A;
-  --muted: #f1f5f9;
+  --secondary: #EAF4F6;
+  --secondary-foreground: #2A7A8C;
+  --muted: #EAF4F6;
   --muted-foreground: #64748B;
-  --accent: #f1f5f9;
-  --accent-foreground: #0F172A;
+  --accent: #EAF4F6;
+  --accent-foreground: #2A7A8C;
   --destructive: #EF4444;
   --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
+  --border: #E2E8F0;
+  --input: #DCEFF2;
   --ring: #2A7A8C;
   --radius: 0.5rem;
 }
@@ -43,7 +47,9 @@
   --card-foreground: #f8fafc;
   --popover: #1e293b;
   --popover-foreground: #f8fafc;
-  --primary: #2A7A8C;
+  --primary: #3B8FA1;
+  --primary-mid: #3B8FA1;
+  --primary-dark: #1F5F6E;
   --primary-foreground: #ffffff;
   --secondary: #1e293b;
   --secondary-foreground: #f8fafc;
@@ -55,7 +61,7 @@
   --destructive-foreground: #f8fafc;
   --border: #1e293b;
   --input: #1e293b;
-  --ring: #2A7A8C;
+  --ring: #3B8FA1;
 }
 
 * {
@@ -63,7 +69,156 @@
 }
 
 body {
-  background-color: var(--background);
+  background: linear-gradient(to bottom right, #F6FAFB, #EAF4F6, #DCEFF2);
+  min-height: 100vh;
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ===== WARM TEAL DESIGN SYSTEM ===== */
+
+/* Primary Warm Gradient */
+.gradient-primary {
+  background: linear-gradient(to right, #2A7A8C, #3B8FA1, #1F5F6E);
+}
+
+.gradient-primary-warm {
+  background: linear-gradient(to right, #2A7A8C, #3B8FA1);
+}
+
+.gradient-primary-br {
+  background: linear-gradient(to bottom right, #2A7A8C, #3B8FA1, #1F5F6E);
+}
+
+/* Hero Background - Soft & Warm */
+.gradient-hero {
+  background: linear-gradient(135deg, #F6FAFB 0%, #EAF4F6 50%, #DCEFF2 100%);
+}
+
+.gradient-hero-teal {
+  background: linear-gradient(135deg, #2A7A8C 0%, #3B8FA1 50%, #1F5F6E 100%);
+}
+
+/* Premium Card Style */
+.card-premium {
+  background: #ffffff;
+  box-shadow: 0 10px 40px -10px rgba(42, 122, 140, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
+  border: 1px solid #E2E8F0;
+}
+
+.card-premium:hover {
+  box-shadow: 0 20px 50px -10px rgba(42, 122, 140, 0.25), 0 8px 10px -4px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Glass Card - Warm Feel */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 10px 40px -10px rgba(42, 122, 140, 0.15);
+}
+
+.glass-card-dark {
+  background: rgba(42, 122, 140, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Warm Glow Effects */
+.glow-primary {
+  box-shadow: 0 10px 40px -10px rgba(42, 122, 140, 0.3);
+}
+
+.glow-primary-hover:hover {
+  box-shadow: 0 20px 50px -10px rgba(42, 122, 140, 0.4);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.glow-success {
+  box-shadow: 0 4px 20px -4px rgba(34, 197, 94, 0.25);
+}
+
+.glow-warning {
+  box-shadow: 0 4px 20px -4px rgba(250, 204, 21, 0.3);
+}
+
+.glow-danger {
+  box-shadow: 0 4px 20px -4px rgba(239, 68, 68, 0.25);
+}
+
+/* Gradient Text - Warm Teal */
+.gradient-text {
+  background: linear-gradient(to right, #ffffff, #EAF4F6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-primary {
+  background: linear-gradient(to right, #2A7A8C, #3B8FA1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Primary CTA Button - Warm Glow */
+.btn-primary-glow {
+  background: linear-gradient(to right, #2A7A8C, #3B8FA1);
+  color: white;
+  box-shadow: 0 10px 30px -10px rgba(42, 122, 140, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-primary-glow:hover {
+  box-shadow: 0 15px 40px -10px rgba(42, 122, 140, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Secondary CTA Button */
+.btn-secondary-warm {
+  background: #EAF4F6;
+  color: #2A7A8C;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary-warm:hover {
+  background: #DCEFF2;
+  box-shadow: 0 4px 15px -4px rgba(42, 122, 140, 0.2);
+}
+
+/* Soft Input Style */
+.input-soft {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #DCEFF2;
+  transition: all 0.2s ease;
+}
+
+.input-soft:focus {
+  background: #ffffff;
+  border-color: #2A7A8C;
+  box-shadow: 0 0 0 3px rgba(42, 122, 140, 0.15);
+}
+
+/* Badge Style - Warm */
+.badge-warm {
+  background: #EAF4F6;
+  color: #2A7A8C;
+  font-weight: 500;
+}
+
+/* Highlight Text */
+.text-highlight {
+  color: #2A7A8C;
+  font-weight: 600;
+}
+
+/* Warm Sidebar */
+.sidebar-warm {
+  background: linear-gradient(to bottom, #2A7A8C, #3B8FA1, #1F5F6E);
 }

@@ -74,12 +74,12 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-gray-100 relative pb-20 md:pb-0">
+    <div className="min-h-screen bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2] relative pb-20 md:pb-0">
       {/* Floating Add Deadline Button */}
       <div className="absolute top-6 right-6 z-10 hidden md:block">
         <Button
           onClick={() => onNavigate('add-deadline')}
-          className="bg-primary hover:bg-primary/80 text-white rounded-lg shadow-lg flex items-center gap-2"
+          className="btn-primary-glow rounded-lg flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
           Add Deadline
@@ -87,12 +87,12 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
       </div>
 
       {/* Mobile Header with Add Button */}
-      <div className="md:hidden bg-white p-4 flex justify-between items-center shadow-sm sticky top-0 z-20">
-        <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
+      <div className="md:hidden bg-gradient-to-r from-[#2A7A8C] via-[#3B8FA1] to-[#1F5F6E] p-4 flex justify-between items-center shadow-lg shadow-[#2A7A8C]/20 sticky top-0 z-20">
+        <h1 className="text-xl font-bold text-white">Dashboard</h1>
         <Button
           onClick={() => onNavigate('add-deadline')}
           size="sm"
-          className="bg-primary hover:bg-primary/80 text-white rounded-lg shadow-sm flex items-center gap-1"
+          className="bg-white/20 hover:bg-white/30 text-white rounded-lg backdrop-blur-sm flex items-center gap-1 border border-white/20"
         >
           <Plus className="w-4 h-4" />
           Add
@@ -105,7 +105,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="bg-red-100 text-red-600 rounded-lg p-4 flex items-center gap-3 shadow-sm"
+            className="bg-red-50 text-red-600 rounded-xl p-4 flex items-center gap-3 glow-danger border border-red-100"
           >
             <AlertTriangle className="w-5 h-5 flex-shrink-0" />
             <span className="font-medium text-sm md:text-base">You may face overload next week.</span>
@@ -118,18 +118,18 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="card-premium p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg md:text-xl font-bold text-gray-900">Your Academic Load</h2>
-              <div className="bg-gray-100 text-primary px-3 py-1 rounded-full text-xs md:text-sm font-medium flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
+              <h2 className="text-lg md:text-xl font-semibold text-[#0F172A]">Your Academic Load</h2>
+              <div className="bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] text-white px-3 py-1 rounded-full text-xs md:text-sm font-medium flex items-center gap-2 shadow-lg shadow-[#2A7A8C]/30">
+                <span className="w-2 h-2 rounded-full bg-yellow-400 glow-warning"></span>
                 Moderate
               </div>
             </div>
             <div className="flex items-end gap-4">
               <div>
                 <p className="text-sm text-gray-500 mb-1">Weekly Load Score</p>
-                <p className="text-4xl font-bold text-gray-900">65<span className="text-lg text-gray-400 font-normal">/100</span></p>
+                <p className="text-4xl font-bold gradient-text-primary">65<span className="text-lg text-gray-400 font-normal">/100</span></p>
               </div>
             </div>
           </div>
@@ -141,13 +141,13 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Workload Heatmap</h2>
+          <div className="card-premium p-6">
+            <h2 className="text-lg font-semibold text-[#0F172A] mb-6">Workload Heatmap</h2>
             <div className="grid grid-cols-5 gap-2 md:gap-4">
               {weeklyIntensity.map((day) => {
-                let bgColor = 'bg-green-500';
-                if (day.intensity > 70) bgColor = 'bg-red-500';
-                else if (day.intensity > 40) bgColor = 'bg-yellow-500';
+                let bgColor = 'bg-green-500 glow-success';
+                if (day.intensity > 70) bgColor = 'bg-red-500 glow-danger';
+                else if (day.intensity > 40) bgColor = 'bg-yellow-500 glow-warning';
 
                 return (
                   <div key={day.day} className="flex flex-col items-center gap-3">
@@ -176,19 +176,19 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-6">Upcoming Deadlines</h2>
+          <div className="card-premium p-6">
+            <h2 className="text-lg font-semibold text-[#0F172A] mb-6">Upcoming Deadlines</h2>
             <div className="space-y-4">
               {priorityDeadlines.map((task, index) => {
-                let badgeColor = 'bg-green-100 text-green-700';
-                if (task.impact === 'High') badgeColor = 'bg-red-100 text-red-700';
-                else if (task.impact === 'Medium') badgeColor = 'bg-yellow-100 text-yellow-700';
+                let badgeColor = 'bg-green-100 text-green-700 glow-success';
+                if (task.impact === 'High') badgeColor = 'bg-red-100 text-red-700 glow-danger';
+                else if (task.impact === 'Medium') badgeColor = 'bg-yellow-100 text-yellow-700 glow-warning';
 
                 return (
-                  <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-lg border border-gray-100 hover:border-primary/20 hover:shadow-sm transition-all bg-gray-50/50 gap-4 sm:gap-0">
+                  <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-[#E2E8F0] hover:border-[#2A7A8C]/30 hover:shadow-lg transition-all bg-white gap-4 sm:gap-0 glow-primary-hover">
                     <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
-                        <Calendar className="w-5 h-5 text-primary" />
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] flex items-center justify-center flex-shrink-0 mt-1 shadow-lg shadow-[#2A7A8C]/30">
+                        <Calendar className="w-5 h-5 text-white" />
                       </div>
                       <div>
                         <h3 className="font-semibold text-gray-900">{task.title}</h3>

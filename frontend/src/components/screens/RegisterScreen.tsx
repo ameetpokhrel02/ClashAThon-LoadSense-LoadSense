@@ -105,7 +105,7 @@ export default function RegisterScreen({ onBack, onRegister }: RegisterScreenPro
         >
           <h1 className="text-4xl font-bold mb-4 leading-tight text-gray-900">
             Start your{" "}
-            <span className="text-purple-600">
+            <span className="text-primary">
               academic journey
             </span>
             .
@@ -134,7 +134,7 @@ export default function RegisterScreen({ onBack, onRegister }: RegisterScreenPro
               animate={{ x: 0, opacity: 0.7 }}
               transition={{ delay: 1 + index * 0.1, duration: 0.5 }}
             >
-              <Sparkles className="w-4 h-4 text-purple-500" />
+              <Sparkles className="w-4 h-4 text-primary" />
               <span className="text-sm">{feature}</span>
             </motion.div>
           ))}
@@ -161,7 +161,7 @@ export default function RegisterScreen({ onBack, onRegister }: RegisterScreenPro
         <BrandHeader variant="compact" />
       </div>
 
-      <ModernCard variant="glass" className="modern-shadow-xl neon-glow-purple">
+      <ModernCard variant="glass" className="modern-shadow-xl">
         <div className="p-8 space-y-6">
           <motion.div 
             className="text-center mb-6"
@@ -170,7 +170,7 @@ export default function RegisterScreen({ onBack, onRegister }: RegisterScreenPro
             transition={{ delay: 0.3, duration: 0.6 }}
           >
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="bg-primary/20 p-3 rounded-full neon-glow-purple">
+              <div className="bg-primary/20 p-3 rounded-full">
                 <UserPlus className="w-6 h-6 text-primary" />
               </div>
               <h2 className="text-2xl font-bold">Create Account</h2>
@@ -277,7 +277,7 @@ export default function RegisterScreen({ onBack, onRegister }: RegisterScreenPro
               className="space-y-4"
             >
               <Button 
-                className="w-full h-12 text-base modern-gradient-purple hover:neon-glow-purple transition-smooth" 
+                className="w-full h-12 text-base bg-primary hover:bg-primary/80 text-white transition-smooth" 
                 type="submit" 
                 disabled={isLoading}
               >
