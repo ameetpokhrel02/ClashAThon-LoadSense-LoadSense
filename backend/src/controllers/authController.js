@@ -83,6 +83,11 @@ export const register = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        phone: user.phone,
+        address: user.address,
+        ward: user.ward,
+        avatar: user.avatar,
+        role: user.role,
       },
     });
   } catch (err) {
@@ -121,6 +126,11 @@ export const login = async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
+        phone: user.phone,
+        address: user.address,
+        ward: user.ward,
+        avatar: user.avatar,
+        role: user.role,
       },
     });
   } catch (err) {
