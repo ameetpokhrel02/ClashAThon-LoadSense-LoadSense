@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Loader2, Mail, Lock, User, ArrowLeft, BookOpen, Pencil, Eye, EyeOff } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
-import { handleApiError } from "@/lib/api"
+import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
 
 interface RegisterScreenProps {
@@ -44,11 +44,14 @@ export default function RegisterScreen({ onRegister, onNavigate }: RegisterScree
     }
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setAuth(
-        { id: '1', firstName, lastName, email },
-        'mock-jwt-token-123'
-      )
+      const response = await api.post('/auth/register', {
+        firstName,
+        lastName,
+        email,
+        password
+      })
+      const { token, user } = response.data
+      setAuth(user, token)
       onRegister()
     } catch (err) {
       setError(handleApiError(err))

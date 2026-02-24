@@ -3,12 +3,13 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Loader2, ArrowLeft, RefreshCw, BookOpen, Pencil } from "lucide-react"
+import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
 
 interface OTPVerificationScreenProps {
   email: string
   onNavigate: (screen: string) => void
-  onVerify: () => void
+  onVerify: (otp: string) => void
   onResend: () => void
 }
 
@@ -63,10 +64,10 @@ export default function OTPVerificationScreen({ email, onNavigate, onVerify, onR
     setError(null)
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
-      onVerify()
+      await api.post('/auth/verify-otp', { email, otp: otpCode })
+      onVerify(otpCode)
     } catch (err) {
-      setError("Invalid verification code. Please try again.")
+      setError(handleApiError(err))
       setOtp(["", "", "", "", "", ""])
       inputRefs.current[0]?.focus()
     } finally {
@@ -77,14 +78,14 @@ export default function OTPVerificationScreen({ email, onNavigate, onVerify, onR
   const handleResend = async () => {
     setIsResending(true)
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await api.post('/auth/forgot-password', { email })
       onResend()
       setTimeRemaining(60)
       setCanResend(false)
       setOtp(["", "", "", "", "", ""])
       inputRefs.current[0]?.focus()
     } catch (err) {
-      setError("Failed to resend code. Please try again.")
+      setError(handleApiError(err))
     } finally {
       setIsResending(false)
     }

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Loader2, Mail, Lock, BookOpen, Pencil, Eye, EyeOff } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
-import { handleApiError } from "@/lib/api"
+import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
 
 interface LoginScreenProps {
@@ -28,11 +28,9 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
     setError(null)
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      setAuth(
-        { id: '1', firstName: 'Alex', lastName: 'Student', email },
-        'mock-jwt-token-123'
-      )
+      const response = await api.post('/auth/login', { email, password })
+      const { token, user } = response.data
+      setAuth(user, token)
       onLogin()
     } catch (err) {
       setError(handleApiError(err))

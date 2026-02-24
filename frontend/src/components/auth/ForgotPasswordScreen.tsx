@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Loader2, Mail, ArrowLeft, BookOpen, Pencil } from "lucide-react"
+import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
 
 interface ForgotPasswordScreenProps {
@@ -29,10 +30,10 @@ export default function ForgotPasswordScreen({ onNavigate, onSubmit }: ForgotPas
     }
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await api.post('/auth/forgot-password', { email })
       onSubmit(email)
     } catch (err) {
-      setError("Failed to send reset code. Please try again.")
+      setError(handleApiError(err))
     } finally {
       setIsLoading(false)
     }

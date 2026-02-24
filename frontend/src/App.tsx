@@ -26,6 +26,7 @@ function App() {
   const initializeTheme = useThemeStore((state) => state.initializeTheme)
   const [currentScreen, setCurrentScreen] = useState(isLoggedIn ? 'dashboard' : 'landing')
   const [resetEmail, setResetEmail] = useState('')
+  const [resetOtp, setResetOtp] = useState('')
 
   // Initialize theme on mount
   useEffect(() => {
@@ -49,7 +50,8 @@ function App() {
     handleNavigate('otp-verification')
   }
 
-  const handleOTPVerify = () => {
+  const handleOTPVerify = (otp: string) => {
+    setResetOtp(otp)
     handleNavigate('change-password')
   }
 
@@ -94,6 +96,7 @@ function App() {
       {currentScreen === 'change-password' && (
         <ChangePasswordScreen 
           email={resetEmail}
+          otp={resetOtp}
           onNavigate={handleNavigate}
           onSubmit={handlePasswordChange}
         />

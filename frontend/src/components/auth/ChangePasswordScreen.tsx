@@ -5,15 +5,17 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Loader2, Lock, ArrowLeft, Eye, EyeOff, BookOpen, Pencil } from "lucide-react"
+import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
 
 interface ChangePasswordScreenProps {
   email: string
+  otp: string
   onNavigate: (screen: string) => void
   onSubmit: () => void
 }
 
-export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: ChangePasswordScreenProps) {
+export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit }: ChangePasswordScreenProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [password, setPassword] = useState("")
@@ -39,10 +41,14 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
     }
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      await api.post('/auth/reset-password', {
+        email,
+        otp,
+        newPassword: password
+      })
       onSubmit()
     } catch (err) {
-      setError("Failed to reset password. Please try again.")
+      setError(handleApiError(err))
     } finally {
       setIsLoading(false)
     }
