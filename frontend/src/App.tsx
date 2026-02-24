@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import {
   LoginScreen,
   RegisterScreen,
@@ -21,10 +22,32 @@ import SettingsScreen from './components/screens/SettingsScreen'
 import { useAuthStore } from './store/authStore'
 import { useThemeStore } from './store/themeStore'
 
-function App() {
+// Protected Route wrapper - redirects to login if not authenticated
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
+  
+  if (!isLoggedIn) {
+    return <Navigate to="/login" replace />
+  }
+  
+  return <>{children}</>
+}
+
+// Public Route wrapper - redirects to dashboard if already logged in
+function PublicRoute({ children }: { children: React.ReactNode }) {
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
+  
+  if (isLoggedIn) {
+    return <Navigate to="/dashboard" replace />
+  }
+  
+  return <>{children}</>
+}
+
+// Main App Routes Component
+function AppRoutes() {
+  const navigate = useNavigate()
   const initializeTheme = useThemeStore((state) => state.initializeTheme)
-  const [currentScreen, setCurrentScreen] = useState(isLoggedIn ? 'dashboard' : 'landing')
   const [resetEmail, setResetEmail] = useState('')
   const [resetOtp, setResetOtp] = useState('')
 
@@ -33,92 +56,184 @@ function App() {
     initializeTheme()
   }, [initializeTheme])
 
-  useEffect(() => {
-    if (!isLoggedIn && !['landing', 'login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
-      setCurrentScreen('landing')
-    } else if (isLoggedIn && ['landing', 'login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
-      setCurrentScreen('dashboard')
-    }
-  }, [isLoggedIn, currentScreen])
-
+  // Navigation helper that maps screen names to routes
   const handleNavigate = (screen: string) => {
-    setCurrentScreen(screen)
+    const routeMap: Record<string, string> = {
+      'landing': '/',
+      'login': '/login',
+      'register': '/register',
+      'forgot-password': '/forgot-password',
+      'otp-verification': '/otp-verification',
+      'change-password': '/change-password',
+      'password-success': '/password-success',
+      'dashboard': '/dashboard',
+      'deadlines': '/deadlines',
+      'add-deadline': '/add-deadline',
+      'courses': '/courses',
+      'insights': '/insights',
+      'profile': '/profile',
+      'calendar': '/calendar',
+      'settings': '/settings',
+      'overload-alert': '/overload-alert',
+      'suggestion': '/suggestion',
+    }
+    navigate(routeMap[screen] || '/')
   }
 
   const handleForgotPasswordSubmit = (email: string) => {
     setResetEmail(email)
-    handleNavigate('otp-verification')
+    navigate('/otp-verification')
   }
 
   const handleOTPVerify = (otp: string) => {
     setResetOtp(otp)
-    handleNavigate('change-password')
+    navigate('/change-password')
   }
 
   const handlePasswordChange = () => {
-    handleNavigate('password-success')
+    navigate('/password-success')
   }
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased">
-      {/* Landing Page */}
-      {currentScreen === 'landing' && (
-        <LandingPage onNavigate={handleNavigate} />
-      )}
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={
+          <PublicRoute>
+            <LandingPage onNavigate={handleNavigate} />
+          </PublicRoute>
+        } />
+        
+        <Route path="/login" element={
+          <PublicRoute>
+            <LoginScreen 
+              onLogin={() => navigate('/dashboard')} 
+              onNavigate={handleNavigate}
+            />
+          </PublicRoute>
+        } />
+        
+        <Route path="/register" element={
+          <PublicRoute>
+            <RegisterScreen 
+              onRegister={() => navigate('/login')} 
+              onNavigate={handleNavigate}
+            />
+          </PublicRoute>
+        } />
+        
+        <Route path="/forgot-password" element={
+          <PublicRoute>
+            <ForgotPasswordScreen 
+              onNavigate={handleNavigate}
+              onSubmit={handleForgotPasswordSubmit}
+            />
+          </PublicRoute>
+        } />
+        
+        <Route path="/otp-verification" element={
+          <PublicRoute>
+            <OTPVerificationScreen 
+              email={resetEmail}
+              onNavigate={handleNavigate}
+              onVerify={handleOTPVerify}
+              onResend={() => {}}
+            />
+          </PublicRoute>
+        } />
+        
+        <Route path="/change-password" element={
+          <PublicRoute>
+            <ChangePasswordScreen 
+              email={resetEmail}
+              otp={resetOtp}
+              onNavigate={handleNavigate}
+              onSubmit={handlePasswordChange}
+            />
+          </PublicRoute>
+        } />
+        
+        <Route path="/password-success" element={
+          <PublicRoute>
+            <PasswordSuccessScreen 
+              onNavigate={handleNavigate}
+            />
+          </PublicRoute>
+        } />
 
-      {/* Auth Screens */}
-      {currentScreen === 'login' && (
-        <LoginScreen 
-          onLogin={() => handleNavigate('dashboard')} 
-          onNavigate={handleNavigate}
-        />
-      )}
-      {currentScreen === 'register' && (
-        <RegisterScreen 
-          onRegister={() => handleNavigate('dashboard')} 
-          onNavigate={handleNavigate}
-        />
-      )}
-      {currentScreen === 'forgot-password' && (
-        <ForgotPasswordScreen 
-          onNavigate={handleNavigate}
-          onSubmit={handleForgotPasswordSubmit}
-        />
-      )}
-      {currentScreen === 'otp-verification' && (
-        <OTPVerificationScreen 
-          email={resetEmail}
-          onNavigate={handleNavigate}
-          onVerify={handleOTPVerify}
-          onResend={() => {}}
-        />
-      )}
-      {currentScreen === 'change-password' && (
-        <ChangePasswordScreen 
-          email={resetEmail}
-          otp={resetOtp}
-          onNavigate={handleNavigate}
-          onSubmit={handlePasswordChange}
-        />
-      )}
-      {currentScreen === 'password-success' && (
-        <PasswordSuccessScreen 
-          onNavigate={handleNavigate}
-        />
-      )}
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <DashboardScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/deadlines" element={
+          <ProtectedRoute>
+            <DeadlinesScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/add-deadline" element={
+          <ProtectedRoute>
+            <AddDeadlineScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/courses" element={
+          <ProtectedRoute>
+            <CoursesScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/insights" element={
+          <ProtectedRoute>
+            <InsightsScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/profile" element={
+          <ProtectedRoute>
+            <ProfileScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/calendar" element={
+          <ProtectedRoute>
+            <CalendarScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/settings" element={
+          <ProtectedRoute>
+            <SettingsScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/overload-alert" element={
+          <ProtectedRoute>
+            <OverloadAlertScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/suggestion" element={
+          <ProtectedRoute>
+            <SuggestionScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
 
-      {/* App Screens */}
-      {currentScreen === 'dashboard' && <DashboardScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'deadlines' && <DeadlinesScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'courses' && <CoursesScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'insights' && <InsightsScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'profile' && <ProfileScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'calendar' && <CalendarScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'settings' && <SettingsScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'add-deadline' && <AddDeadlineScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'overload-alert' && <OverloadAlertScreen onNavigate={handleNavigate} />}
-      {currentScreen === 'suggestion' && <SuggestionScreen onNavigate={handleNavigate} />}
+        {/* Catch all - redirect to landing */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   )
 }
 

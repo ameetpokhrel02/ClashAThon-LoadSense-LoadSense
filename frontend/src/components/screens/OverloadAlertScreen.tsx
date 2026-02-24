@@ -1,9 +1,56 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { AlertTriangle, ArrowLeft, Calendar, Clock, CheckCircle2, XCircle } from "lucide-react"
+import { AlertTriangle, ArrowLeft, Calendar, Clock, CheckCircle2, XCircle, Loader2 } from "lucide-react"
+import { useEffect } from "react"
+import { useWorkloadStore } from "@/store/workloadStore"
 
 export default function OverloadAlertScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
+  const { alerts, isLoading, fetchAlerts } = useWorkloadStore()
+
+  useEffect(() => {
+    fetchAlerts()
+  }, [fetchAlerts])
+
+  const activeAlert = alerts[0]
+  const tasks = activeAlert?.tasks_causing_overload || []
+
+  // Format date range
+  const formatDateRange = (start: string, end: string) => {
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+    return `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+  }
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-[#ff7400]" />
+      </div>
+    )
+  }
+
+  if (!activeAlert) {
+    return (
+      <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
+        <div className="w-full max-w-3xl mb-6">
+          <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground" onClick={() => onNavigate('dashboard')}>
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </Button>
+        </div>
+        <Card className="w-full max-w-3xl p-8 text-center">
+          <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-foreground mb-2">No Overload Detected</h2>
+          <p className="text-muted-foreground">Your schedule looks manageable! Keep up the good work.</p>
+          <Button className="mt-6 bg-[#ff7400] hover:bg-[#e66800] text-white" onClick={() => onNavigate('dashboard')}>
+            Return to Dashboard
+          </Button>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
       <div className="w-full max-w-3xl mb-6">
@@ -21,10 +68,12 @@ export default function OverloadAlertScreen({ onNavigate }: { onNavigate: (scree
           <div>
             <div className="flex items-center gap-3 mb-2">
               <h1 className="text-3xl font-bold text-destructive">Workload Overload Detected</h1>
-              <Badge variant="destructive" className="text-sm px-3 py-1 uppercase tracking-wider font-bold">High Risk</Badge>
+              <Badge variant="destructive" className="text-sm px-3 py-1 uppercase tracking-wider font-bold">
+                {activeAlert.risk_level === 'critical' ? 'Critical' : 'High'} Risk
+              </Badge>
             </div>
             <p className="text-lg text-destructive/80 max-w-xl">
-              You have scheduled 3 major assignments due within a 48-hour window next week. This exceeds your recommended capacity.
+              {activeAlert.message}
             </p>
           </div>
         </div>
@@ -33,29 +82,25 @@ export default function OverloadAlertScreen({ onNavigate }: { onNavigate: (scree
           <div>
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
               <Calendar className="w-5 h-5 text-primary" />
-              The Conflict Zone (Feb 26 - Feb 27)
+              The Conflict Zone ({formatDateRange(activeAlert.week_start, activeAlert.week_end)})
             </h3>
             <div className="space-y-3">
-              {[
-                { title: "CS301 Midterm Project", course: "Computer Science", hours: 15, type: "Project" },
-                { title: "ENG205 Essay Draft", course: "Literature", hours: 8, type: "Essay" },
-                { title: "MATH210 Problem Set 4", course: "Mathematics", hours: 5, type: "Homework" },
-              ].map((task, i) => (
-                <div key={i} className="flex items-center justify-between p-4 rounded-lg border border-border bg-secondary/30">
+              {tasks.map((task, i) => (
+                <div key={task._id || i} className="flex items-center justify-between p-4 rounded-lg border border-border bg-secondary/30">
                   <div>
                     <h4 className="font-medium text-foreground">{task.title}</h4>
-                    <p className="text-sm text-muted-foreground mt-1">{task.course} • {task.type}</p>
+                    <p className="text-sm text-muted-foreground mt-1">{task.type || 'Task'} • {task.impact_level || 'Medium'} Impact</p>
                   </div>
                   <div className="flex items-center gap-2 text-sm font-medium text-destructive">
                     <Clock className="w-4 h-4" />
-                    Est. {task.hours}h
+                    Weight: {task.weight || 1}
                   </div>
                 </div>
               ))}
             </div>
             <div className="mt-4 p-4 bg-secondary rounded-lg flex justify-between items-center border border-border/50">
-              <span className="font-medium">Total Estimated Effort:</span>
-              <span className="text-xl font-bold text-destructive">28 Hours</span>
+              <span className="font-medium">Total Load Score:</span>
+              <span className="text-xl font-bold text-destructive">{activeAlert.load_score}</span>
             </div>
           </div>
 

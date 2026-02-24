@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { GraduationCap, Loader2, Mail, Lock, User, ArrowLeft, BookOpen, Pencil, Eye, EyeOff } from "lucide-react"
-import { useAuthStore } from "@/store/authStore"
 import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
 
@@ -15,7 +14,6 @@ interface RegisterScreenProps {
 }
 
 export default function RegisterScreen({ onRegister, onNavigate }: RegisterScreenProps) {
-  const setAuth = useAuthStore((state) => state.setAuth)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [firstName, setFirstName] = useState("")
@@ -50,8 +48,7 @@ export default function RegisterScreen({ onRegister, onNavigate }: RegisterScree
         email,
         password
       })
-      const { token, user } = response.data
-      setAuth(user, token)
+      // Registration successful - navigate to login instead of auto-login
       onRegister()
     } catch (err) {
       setError(handleApiError(err))
