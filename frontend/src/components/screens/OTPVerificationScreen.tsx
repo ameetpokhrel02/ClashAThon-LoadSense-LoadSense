@@ -5,7 +5,7 @@ import { ModernCard } from "@/components/ui/modern-card"
 import { BrandHeader } from "@/components/ui/brand-header"
 import { LayoutWrapper, SplitLayout } from "@/components/ui/layout-wrapper"
 import { Footer } from "@/components/ui/footer"
-import { Shield, ArrowLeft, Loader2, RefreshCw } from "lucide-react"
+import { ArrowLeft, Loader2, RefreshCw } from "lucide-react"
 
 interface OTPVerificationScreenProps {
   email: string
@@ -135,7 +135,7 @@ export default function OTPVerificationScreen({
             Check your email
           </h1>
           <p className="text-lg text-gray-600">
-            We've sent a 6-digit verification code to <span className="font-semibold text-purple-600">{email}</span>
+            We've sent a 6-digit verification code to <span className="font-semibold text-primary">{email}</span>
           </p>
         </motion.div>
       </div>
@@ -194,7 +194,7 @@ export default function OTPVerificationScreen({
             {otp.map((digit, index) => (
               <motion.input
                 key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
+                ref={(el) => { inputRefs.current[index] = el }}
                 type="text"
                 inputMode="numeric"
                 maxLength={1}

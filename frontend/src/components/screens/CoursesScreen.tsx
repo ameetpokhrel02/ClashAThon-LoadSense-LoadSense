@@ -1,10 +1,10 @@
-import { ModernCard } from "@/components/ui/modern-card"
+// ModernCard removed - using plain divs
 import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { Footer } from "@/components/ui/footer"
-import { BookOpen, Users, Clock, Star } from "lucide-react"
+import { BookOpen, Users, Star } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
@@ -30,7 +30,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
       instructor: "Dr. Smith",
       students: 45,
       progress: 75,
-      color: "bg-blue-500"
+      color: "bg-primary"
     },
     {
       id: 2,
@@ -39,7 +39,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
       instructor: "Prof. Johnson",
       students: 38,
       progress: 60,
-      color: "bg-green-500"
+      color: "bg-primary/70"
     },
     {
       id: 3,
@@ -48,7 +48,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
       instructor: "Dr. Williams",
       students: 52,
       progress: 40,
-      color: "bg-purple-500"
+      color: "bg-primary/50"
     }
   ]
 
@@ -62,13 +62,13 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950">
       {/* Top Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My Courses</h1>
-            <p className="text-gray-600">Manage your enrolled courses</p>
+            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">My Courses</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Manage your enrolled courses</p>
           </div>
         </div>
       </div>
@@ -79,50 +79,50 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
           {courses.map((course, index) => (
             <motion.div
               key={course.id}
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
             >
-              <ModernCard className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
+              <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6 hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-md transition-all cursor-pointer">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-12 h-12 ${course.color} rounded-lg flex items-center justify-center`}>
-                    <BookOpen className="w-6 h-6 text-white" />
+                  <div className="w-10 h-10 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-[#ff7400]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{course.name}</h3>
-                    <p className="text-sm text-gray-500">{course.code}</p>
+                    <h3 className="font-medium text-gray-800 dark:text-white">{course.name}</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{course.code}</p>
                   </div>
                 </div>
                 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                     <Users className="w-4 h-4" />
                     <span>{course.students} students</span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                     <Star className="w-4 h-4" />
                     <span>{course.instructor}</span>
                   </div>
                   
                   <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">Progress</span>
-                      <span className="font-medium">{course.progress}%</span>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-gray-500 dark:text-gray-400">Progress</span>
+                      <span className="font-medium text-gray-700 dark:text-gray-300">{course.progress}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-1.5">
                       <div 
-                        className={`h-2 rounded-full ${course.color}`}
+                        className="h-1.5 rounded-full bg-[#ff7400]"
                         style={{ width: `${course.progress}%` }}
                       ></div>
                     </div>
                   </div>
                 </div>
                 
-                <Button className="w-full mt-4 bg-purple-600 hover:bg-purple-700">
+                <Button className="w-full mt-4 bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg font-medium text-sm shadow-sm">
                   View Course
                 </Button>
-              </ModernCard>
+              </div>
             </motion.div>
           ))}
         </div>

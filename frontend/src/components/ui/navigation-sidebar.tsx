@@ -1,12 +1,13 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
-import { BrandHeader } from "@/components/ui/brand-header"
 import { LogoutDialog } from "@/components/ui/logout-dialog"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { 
   LayoutDashboard, 
   BookOpen, 
-  Calendar as CalendarIcon, 
-  Settings, 
+  CalendarCheck, 
+  BarChart3, 
+  User,
   LogOut,
   Plus,
   GraduationCap
@@ -38,52 +39,58 @@ export function NavigationSidebar({
       active: currentScreen === 'dashboard'
     },
     {
+      id: 'deadlines',
+      label: 'Deadlines',
+      icon: CalendarCheck,
+      active: currentScreen === 'deadlines'
+    },
+    {
       id: 'courses',
       label: 'Courses',
       icon: BookOpen,
       active: currentScreen === 'courses'
     },
     {
-      id: 'calendar',
-      label: 'Calendar',
-      icon: CalendarIcon,
-      active: currentScreen === 'calendar'
+      id: 'insights',
+      label: 'Insights',
+      icon: BarChart3,
+      active: currentScreen === 'insights'
     },
     {
-      id: 'settings',
-      label: 'Settings',
-      icon: Settings,
-      active: currentScreen === 'settings'
+      id: 'profile',
+      label: 'Profile',
+      icon: User,
+      active: currentScreen === 'profile'
     }
   ]
 
   return (
     <>
       <aside className={cn(
-        "w-64 bg-gradient-to-b from-purple-500 via-purple-550 to-purple-600 text-white flex flex-col shadow-2xl relative overflow-hidden",
+        "w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-colors duration-200",
         className
       )}>
-        {/* Subtle overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none" />
-        
         {/* Brand Header with Logo */}
-        <div className="p-6 relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg border border-white/10">
-              <GraduationCap className="w-6 h-6 text-white drop-shadow-sm" />
+        <div className="p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 bg-[#ff7400] rounded-xl flex items-center justify-center shadow-sm">
+                <GraduationCap className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h2 className="font-semibold text-lg text-gray-800 dark:text-white">LoadSense</h2>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Workload Management</p>
+              </div>
             </div>
-            <div>
-              <h2 className="font-bold text-xl text-white drop-shadow-sm">LoadSense</h2>
-              <p className="text-xs text-white/80 font-medium">Smart Workload Management</p>
-            </div>
+            <ThemeToggle />
           </div>
         </div>
         
         {/* Quick Action - Add Deadline */}
-        <div className="px-6 mb-8 relative z-10">
+        <div className="px-6 mb-6">
           <Button 
             onClick={() => onNavigate('add-deadline')} 
-            className="w-full gap-3 bg-purple-700/80 hover:bg-purple-800 text-white border-0 rounded-xl py-4 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/10 hover:scale-[1.02]"
+            className="w-full gap-3 bg-[#ff7400] hover:bg-[#e66800] text-white border-0 rounded-xl py-3.5 font-medium transition-all duration-200"
           >
             <Plus className="w-5 h-5" />
             Add Deadline
@@ -91,7 +98,7 @@ export function NavigationSidebar({
         </div>
         
         {/* Navigation */}
-        <nav className="flex-1 px-6 space-y-3 relative z-10">
+        <nav className="flex-1 px-4 space-y-1">
           {navigationItems.map((item) => {
             const Icon = item.icon
             return (
@@ -99,16 +106,12 @@ export function NavigationSidebar({
                 key={item.id}
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start gap-4 text-white/90 hover:text-white hover:bg-white/15 rounded-xl py-4 px-4 transition-all duration-300 font-medium text-base group",
-                  item.active && "bg-white/20 text-white font-semibold shadow-lg backdrop-blur-sm border border-white/10"
+                  "w-full justify-start gap-3 text-gray-600 dark:text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm",
+                  item.active && "bg-[#ff7400]/10 text-[#ff7400] font-semibold"
                 )}
                 onClick={() => onNavigate(item.id)}
               >
-                <Icon className={cn(
-                  "w-5 h-5 transition-transform duration-300",
-                  item.active && "scale-110",
-                  "group-hover:scale-110"
-                )} />
+                <Icon className={cn("w-5 h-5", item.active && "text-[#ff7400]")} />
                 {item.label}
               </Button>
             )
@@ -116,28 +119,28 @@ export function NavigationSidebar({
         </nav>
 
         {/* User Section */}
-        <div className="p-6 border-t border-white/20 bg-white/5 backdrop-blur-sm relative z-10">
+        <div className="p-6 border-t border-gray-200 dark:border-gray-800">
           {user && (
-            <div className="mb-4 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+            <div className="mb-4 p-3 rounded-xl bg-gray-50 dark:bg-gray-800">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-white shadow-lg">
+                <div className="w-9 h-9 bg-[#ff7400]/20 rounded-full flex items-center justify-center font-medium text-[#ff7400] text-sm">
                   {user.firstName?.[0]}{user.lastName?.[0]}
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-base">
+                  <p className="text-gray-800 dark:text-white font-medium text-sm">
                     {user.firstName} {user.lastName}
                   </p>
-                  <p className="text-white/80 text-sm font-medium">Student</p>
+                  <p className="text-gray-500 dark:text-gray-400 text-xs">Student</p>
                 </div>
               </div>
             </div>
           )}
           <Button 
             variant="ghost" 
-            className="w-full justify-start gap-4 text-white/90 hover:text-white hover:bg-white/15 rounded-xl py-4 px-4 transition-all duration-300 font-medium group" 
+            className="w-full justify-start gap-3 text-gray-600 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm" 
             onClick={() => setShowLogoutDialog(true)}
           >
-            <LogOut className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+            <LogOut className="w-5 h-5" />
             Logout
           </Button>
         </div>

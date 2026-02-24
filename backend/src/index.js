@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
 import authRoutes from "./routes/authRoutes.js";
-import courseRoutes from "./routes/courseRoutes.js";
+import moduleRoutes from "./routes/moduleRoutes.js";
 import deadlineRoutes from "./routes/deadlineRoutes.js";
 import workloadRoutes from "./routes/workloadRoutes.js";
 
@@ -19,15 +19,19 @@ connectDB();
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/courses", courseRoutes);
+app.use("/api/modules", moduleRoutes);
 app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/workload", workloadRoutes);
 
 app.get("/", (req, res) => {
+<<<<<<< samir
   res.send("LoadSense API Running ");
+=======
+  res.send("LoadSense API Running...");
+>>>>>>> main
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
