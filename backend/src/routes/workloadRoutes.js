@@ -1,14 +1,9 @@
-import express from "express";
-import {
-  calculateWorkload,
-  getWorkload,
-  getAlert,
-} from "../controllers/workloadController.js";
+import React from 'react'
 
-const router = express.Router();
+const workloadRoutes = () => {
+  return (
+    <div>workloadRoutes</div>
+  )
+}
 
-router.post("/calculate", calculateWorkload);
-router.get("/", getWorkload);
-router.get("/alert", getAlert);
-
-export default router;
+export default workloadRoutes
