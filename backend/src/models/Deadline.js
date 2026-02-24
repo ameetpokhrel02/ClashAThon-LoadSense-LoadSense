@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
 
-// Deadline schema aligned with the frontend Deadline model
-// Fields are kept simple for the hackathon use case and can
-// be extended later (e.g. user-specific scoping, courses, etc.).
 const deadlineSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
