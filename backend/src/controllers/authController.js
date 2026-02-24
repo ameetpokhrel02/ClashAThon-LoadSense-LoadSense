@@ -3,10 +3,9 @@ import jwt from "jsonwebtoken";
 import nodemailer from "nodemailer";
 import User from "../models/User.js";
 
-
 const signToken = (user) =>
   jwt.sign(
-    { id: user._id, email: user.email },
+    { _id: user._id, email: user.email }, // include _id instead of id
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
   );
@@ -236,7 +235,7 @@ export const resetPassword = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password -otp -otpExpiry");
+    const user = await User.findById(req.user._id).select("-password -otp -otpExpiry");
     if (!user)
       return res.status(404).json({ message: "User not found" });
 
