@@ -3,7 +3,7 @@ import { cloudinary } from "../config/cloudinary.js";
 
 export const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password -otp -otpExpiry");
+    const user = await User.findById(req.params.id).select("-password -otp -otpExpiry");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -16,7 +16,7 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { firstName, lastName, phone, address, ward } = req.body;
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.params.id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

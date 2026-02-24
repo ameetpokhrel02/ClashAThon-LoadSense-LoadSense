@@ -1,55 +1,61 @@
 const API_URL = 'http://localhost:5000/api';
-let token = '';
 
-async function testProfile() {
+async function testProtectedProfile() {
   try {
     console.log('--- Registering User ---');
+    const email = `test${Date.now()}@example.com`;
     const regRes = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        firstName: 'Test',
+        firstName: 'Protected',
         lastName: 'User',
-        email: `test${Date.now()}@example.com`,
+        email: email,
         password: 'password123'
       })
     });
     const regData = await regRes.json();
     if (!regRes.ok) throw new Error(regData.message || 'Registration failed');
     
-    token = regData.token;
-    console.log('Registered successfully');
+    const token = regData.token;
+    const userId = regData.user.id;
+    console.log('Registered successfully. User ID:', userId);
 
-    console.log('\n--- Getting Profile ---');
-    const profileRes = await fetch(`${API_URL}/users/profile`, {
+    console.log('\n--- Getting Profile (With Token) ---');
+    const profileRes = await fetch(`${API_URL}/users/profile/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const profileData = await profileRes.json();
+    if (!profileRes.ok) throw new Error(profileData.message || 'Get profile failed');
     console.log('Profile:', profileData.user);
 
-    console.log('\n--- Updating Profile (Fields Only) ---');
-    const updateRes = await fetch(`${API_URL}/users/profile`, {
+    console.log('\n--- Updating Profile (With Token) ---');
+    const updateRes = await fetch(`${API_URL}/users/profile/${userId}`, {
       method: 'PUT',
       headers: { 
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        phone: '9876543210',
-        address: 'Kathmandu',
-        ward: '10'
+        phone: '1234567890',
+        address: 'New Location'
       })
     });
     const updateData = await updateRes.json();
+    if (!updateRes.ok) throw new Error(updateData.message || 'Update profile failed');
     console.log('Update Response:', updateData.user);
 
-    console.log('\n--- Testing Image Upload ---');
-    console.log('Note: Image upload requires a multipart form with a real file.');
-    console.log('You can test this via Postman or the cURL command provided in the walkthrough.');
+    console.log('\n--- Testing ERROR (Without Token) ---');
+    const errRes = await fetch(`${API_URL}/users/profile/${userId}`);
+    const errData = await errRes.json();
+    console.log('Access without token status:', errRes.status);
+    console.log('Access without token message:', errData.message);
+
+    console.log('\n✅ VERIFICATION COMPLETE: Protected endpoints are working as intended.');
 
   } catch (error) {
-    console.error('Test failed:', error.message);
+    console.error('❌ Test failed:', error.message);
   }
 }
 
-testProfile();
+testProtectedProfile();

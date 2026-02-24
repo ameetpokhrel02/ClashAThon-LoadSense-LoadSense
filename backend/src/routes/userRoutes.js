@@ -5,10 +5,10 @@ import { upload } from "../config/cloudinary.js";
 
 const router = express.Router();
 
-// All routes here are protected
-router.use(protect);
+// Protect the routes: only logged-in users can access
+router.get("/profile/:id", protect, getProfile);
 
-router.get("/profile", getProfile);
-router.put("/profile", upload.single("avatar"), updateProfile);
+// Protect + handle avatar upload
+router.put("/profile/:id", protect, upload.single("avatar"), updateProfile);
 
 export default router;
