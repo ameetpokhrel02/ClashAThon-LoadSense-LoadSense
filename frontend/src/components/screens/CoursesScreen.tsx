@@ -1,10 +1,10 @@
-import { ModernCard } from "@/components/ui/modern-card"
+// ModernCard removed - using plain divs
 import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { Footer } from "@/components/ui/footer"
-import { BookOpen, Users, Clock, Star } from "lucide-react"
+import { BookOpen, Users, Star } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
@@ -62,13 +62,13 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2]">
+    <div className="min-h-screen bg-[#F6FAFB]">
       {/* Top Header */}
-      <div className="bg-white shadow-sm border-b border-[#E2E8F0] px-6 py-4">
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-[#0F172A]">My <span className="text-[#2A7A8C]">Courses</span></h1>
-            <p className="text-[#64748B]">Manage your enrolled courses</p>
+            <h1 className="text-xl font-semibold text-gray-800">My Courses</h1>
+            <p className="text-sm text-gray-500">Manage your enrolled courses</p>
           </div>
         </div>
       </div>
@@ -79,50 +79,50 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
           {courses.map((course, index) => (
             <motion.div
               key={course.id}
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
             >
-              <ModernCard className="p-6 hover:shadow-2xl transition-all cursor-pointer glow-primary-hover">
+              <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6 hover:border-gray-300 hover:shadow-md transition-all cursor-pointer">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-12 h-12 bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] rounded-lg flex items-center justify-center shadow-lg shadow-[#2A7A8C]/20`}>
-                    <BookOpen className="w-6 h-6 text-white" />
+                  <div className="w-10 h-10 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-[#ff7400]" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-[#0F172A]">{course.name}</h3>
-                    <p className="text-sm text-[#64748B]">{course.code}</p>
+                    <h3 className="font-medium text-gray-800">{course.name}</h3>
+                    <p className="text-xs text-gray-500">{course.code}</p>
                   </div>
                 </div>
                 
                 <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
                     <Users className="w-4 h-4" />
                     <span>{course.students} students</span>
                   </div>
                   
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-500">
                     <Star className="w-4 h-4" />
                     <span>{course.instructor}</span>
                   </div>
                   
                   <div>
-                    <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">Progress</span>
-                      <span className="font-medium">{course.progress}%</span>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-gray-500">Progress</span>
+                      <span className="font-medium text-gray-700">{course.progress}%</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-100 rounded-full h-1.5">
                       <div 
-                        className={`h-2 rounded-full bg-gradient-to-r from-primary to-[#317E90]`}
+                        className="h-1.5 rounded-full bg-[#ff7400]"
                         style={{ width: `${course.progress}%` }}
                       ></div>
                     </div>
                   </div>
                 </div>
                 
-                <Button className="w-full mt-4 btn-primary-glow rounded-lg">
+                <Button className="w-full mt-4 bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg font-medium text-sm shadow-sm">
                   View Course
                 </Button>
-              </ModernCard>
+              </div>
             </motion.div>
           ))}
         </div>

@@ -70,9 +70,9 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
   }
 
   return (
-    <div className="min-h-screen w-full flex bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2]">
+    <div className="min-h-screen w-full flex bg-gradient-to-br from-[#FFF8F5] via-[#FFF5F0] to-[#FFEDE5]">
       {/* Left Panel - Illustration & Branding */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-gradient-to-br from-[#2A7A8C] via-[#3B8FA1] to-[#1F5F6E] p-12 text-white relative overflow-hidden">
+      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-gradient-to-br from-[#ff7400] via-[#ff8c33] to-[#e66800] p-12 text-white relative overflow-hidden">
         {/* Subtle glow overlay */}
         <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
         
@@ -108,14 +108,14 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <div className="bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] p-2 rounded-lg glow-primary">
+            <div className="bg-gradient-to-r from-[#ff7400] to-[#ff8c33] p-2 rounded-lg glow-primary">
               <Calendar className="w-6 h-6 text-white" />
             </div>
             <span className="text-2xl font-bold tracking-tight gradient-text-primary">LoadSense</span>
           </div>
 
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8 bg-[#EAF4F6] border border-[#E2E8F0]">
+            <TabsList className="grid w-full grid-cols-2 mb-8 bg-[#FFF5F0] border border-[#FFE8D6]">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="register">Register</TabsTrigger>
             </TabsList>
@@ -146,7 +146,7 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label htmlFor="password">Password</Label>
-                        <a href="#" className="text-sm text-[#2A7A8C] hover:underline">Forgot password?</a>
+                        <a href="#" className="text-sm text-[#ff7400] hover:underline">Forgot password?</a>
                       </div>
                       <Input 
                         id="password" 

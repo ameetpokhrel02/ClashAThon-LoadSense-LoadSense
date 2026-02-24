@@ -6,7 +6,7 @@ import { ModernCard } from "@/components/ui/modern-card"
 import { BrandHeader } from "@/components/ui/brand-header"
 import { LayoutWrapper, SplitLayout } from "@/components/ui/layout-wrapper"
 import { Footer } from "@/components/ui/footer"
-import { UserPlus, ArrowLeft, Loader2, Mail, Lock, User, GraduationCap, Sparkles } from "lucide-react"
+import { UserPlus, ArrowLeft, Loader2, Mail, Lock, User, Sparkles } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
 import { handleApiError } from "@/lib/api"
 

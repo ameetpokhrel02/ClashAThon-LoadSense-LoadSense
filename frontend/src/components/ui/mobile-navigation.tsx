@@ -1,7 +1,6 @@
 import { motion } from "framer-motion"
 import { Home, Plus, AlertTriangle, Lightbulb, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
 
 interface MobileNavigationProps {
   currentScreen: string

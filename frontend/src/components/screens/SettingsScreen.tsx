@@ -1,11 +1,11 @@
-import { ModernCard } from "@/components/ui/modern-card"
+// ModernCard removed - using plain divs
 import { Button } from "@/components/ui/button"
 import { ModernInput } from "@/components/ui/modern-input"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { Footer } from "@/components/ui/footer"
-import { Settings, User, Bell, Shield, Palette, Globe } from "lucide-react"
+import { User, Bell, Shield, Palette } from "lucide-react"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
@@ -74,13 +74,13 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2]">
+    <div className="min-h-screen bg-[#F6FAFB]">
       {/* Top Header */}
-      <div className="bg-white shadow-sm border-b border-[#E2E8F0] px-6 py-4">
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-[#0F172A]"><span className="text-[#2A7A8C]">Settings</span></h1>
-            <p className="text-[#64748B]">Manage your account and preferences</p>
+            <h1 className="text-xl font-semibold text-gray-800">Settings</h1>
+            <p className="text-sm text-gray-500">Manage your account and preferences</p>
           </div>
         </div>
       </div>
@@ -91,47 +91,48 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
           {settingsSections.map((section, sectionIndex) => (
             <motion.div
               key={section.title}
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: sectionIndex * 0.1, duration: 0.5 }}
+              transition={{ delay: sectionIndex * 0.1, duration: 0.4 }}
             >
-              <ModernCard className="p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <section.icon className="w-5 h-5 text-primary" />
+              <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="w-9 h-9 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
+                    <section.icon className="w-4 h-4 text-[#ff7400]" />
                   </div>
-                  <h2 className="text-lg font-semibold text-gray-900">{section.title}</h2>
+                  <h2 className="text-base font-semibold text-gray-800">{section.title}</h2>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {section.items.map((item, itemIndex) => (
                     <div key={itemIndex} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
                       <div>
-                        <label className="text-sm font-medium text-gray-900">{item.label}</label>
+                        <label className="text-sm font-medium text-gray-700">{item.label}</label>
                       </div>
                       
                       <div className="flex items-center">
                         {item.type === "text" || item.type === "email" ? (
                           <ModernInput
+                            label=""
                             value={item.value as string}
                             type={item.type}
                             className="w-64"
                             readOnly
                           />
                         ) : item.type === "select" ? (
-                          <select className="w-32 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                          <select className="w-32 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ff7400]/20 focus:border-[#ff7400]">
                             <option>{item.value as string}</option>
                           </select>
                         ) : item.type === "toggle" ? (
                           <button
                             className={`
                               relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-                              ${item.value ? 'bg-primary' : 'bg-gray-200'}
+                              ${item.value ? 'bg-[#ff7400]' : 'bg-gray-200'}
                             `}
                           >
                             <span
                               className={`
-                                inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+                                inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-sm
                                 ${item.value ? 'translate-x-6' : 'translate-x-1'}
                               `}
                             />
@@ -141,18 +142,18 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                     </div>
                   ))}
                 </div>
-              </ModernCard>
+              </div>
             </motion.div>
           ))}
           
           {/* Save Button */}
           <motion.div
-            initial={{ y: 20, opacity: 0 }}
+            initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
+            transition={{ delay: 0.4, duration: 0.4 }}
             className="flex justify-end"
           >
-            <Button className="bg-primary hover:bg-primary/80 px-8">
+            <Button className="bg-[#ff7400] hover:bg-[#e66800] text-white px-8 font-medium shadow-sm">
               Save Changes
             </Button>
           </motion.div>

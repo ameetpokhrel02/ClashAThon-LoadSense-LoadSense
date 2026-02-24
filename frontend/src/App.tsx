@@ -7,6 +7,7 @@ import {
   ChangePasswordScreen,
   PasswordSuccessScreen
 } from './components/auth'
+import LandingPage from './components/screens/LandingPage'
 import DashboardScreen from './components/screens/DashboardScreen'
 import AddDeadlineScreen from './components/screens/AddDeadlineScreen'
 import OverloadAlertScreen from './components/screens/OverloadAlertScreen'
@@ -18,13 +19,13 @@ import { useAuthStore } from './store/authStore'
 
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
-  const [currentScreen, setCurrentScreen] = useState(isLoggedIn ? 'dashboard' : 'login')
+  const [currentScreen, setCurrentScreen] = useState(isLoggedIn ? 'dashboard' : 'landing')
   const [resetEmail, setResetEmail] = useState('')
 
   useEffect(() => {
-    if (!isLoggedIn && !['login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
-      setCurrentScreen('login')
-    } else if (isLoggedIn && ['login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
+    if (!isLoggedIn && !['landing', 'login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
+      setCurrentScreen('landing')
+    } else if (isLoggedIn && ['landing', 'login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
       setCurrentScreen('dashboard')
     }
   }, [isLoggedIn, currentScreen])
@@ -48,6 +49,11 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased">
+      {/* Landing Page */}
+      {currentScreen === 'landing' && (
+        <LandingPage onNavigate={handleNavigate} />
+      )}
+
       {/* Auth Screens */}
       {currentScreen === 'login' && (
         <LoginScreen 
