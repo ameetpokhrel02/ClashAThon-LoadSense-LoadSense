@@ -11,7 +11,7 @@ import { LayoutWrapper, ResponsiveContainer, MobileHeader } from "@/components/u
 import { Footer } from "@/components/ui/footer"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { PullToRefresh } from "@/components/ui/pull-to-refresh"
-import { CalendarIcon, ArrowLeft, Clock, BookOpen, Target } from "lucide-react"
+import { CalendarIcon, ArrowLeft, Clock, BookOpen, Target, Loader2 } from "lucide-react"
 import { format } from "date-fns"
 import { useState } from "react"
 import { motion } from "framer-motion"
@@ -27,14 +27,16 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
   const [hours, setHours] = useState("")
   const [notes, setNotes] = useState("")
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   
-  const addDeadline = useDeadlineStore(state => state.addDeadline)
+  const createDeadline = useDeadlineStore(state => state.createDeadline)
   const { triggerHaptic } = useHapticFeedback()
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title || !course || !type || !date || !hours) {
       triggerHaptic('medium')
-      alert("Please fill in all required fields")
+      setError("Please fill in all required fields")
       return
     }
 
@@ -43,18 +45,28 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
     if (estimatedHours > 10) risk = 'high'
     else if (estimatedHours > 5) risk = 'medium'
 
-    addDeadline({
-      id: Math.random().toString(36).substring(7),
-      title,
-      course,
-      type,
-      dueDate: date.toISOString(),
-      estimatedHours,
-      risk
-    })
+    setIsSaving(true)
+    setError(null)
 
-    triggerHaptic('light')
-    onNavigate('dashboard')
+    try {
+      await createDeadline({
+        title,
+        course,
+        type,
+        dueDate: date.toISOString(),
+        estimatedHours,
+        risk,
+        notes: notes || undefined
+      })
+
+      triggerHaptic('light')
+      onNavigate('deadlines')
+    } catch {
+      setError('Failed to create deadline. Please try again.')
+      triggerHaptic('medium')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const toggleMobileSidebar = () => {
@@ -282,6 +294,17 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                       onChange={(e) => setNotes(e.target.value)}
                     />
                   </motion.div>
+
+                  {/* Error Message */}
+                  {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="p-4 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-lg"
+                    >
+                      {error}
+                    </motion.div>
+                  )}
                 </div>
                 
                 {/* Footer */}
@@ -293,16 +316,25 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                 >
                   <Button 
                     variant="outline" 
-                    onClick={() => onNavigate('dashboard')} 
+                    onClick={() => onNavigate('deadlines')} 
+                    disabled={isSaving}
                     className="rounded-lg h-11 px-6 border-muted-foreground/30 text-muted-foreground hover:border-primary/50 hover:text-primary touch-target"
                   >
                     Cancel
                   </Button>
                   <Button 
                     onClick={handleSave} 
-                    className="rounded-lg h-11 px-8 bg-primary hover:bg-primary/80 text-white transition-smooth touch-target"
+                    disabled={isSaving}
+                    className="rounded-lg h-11 px-8 bg-primary hover:bg-primary/80 text-white transition-smooth touch-target disabled:opacity-50"
                   >
-                    Save Deadline
+                    {isSaving ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      'Save Deadline'
+                    )}
                   </Button>
                 </motion.div>
               </ModernCard>

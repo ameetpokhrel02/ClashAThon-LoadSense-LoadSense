@@ -5,14 +5,43 @@ import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { Footer } from "@/components/ui/footer"
-import { User, Bell, Shield, Palette } from "lucide-react"
-import { useState } from "react"
+import { User, Bell, Shield, Palette, Camera, Loader2 } from "lucide-react"
+import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
 
 export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
-  const { user, logout } = useAuthStore()
+  const { user, logout, updateProfile, isLoadingProfile, fetchProfile } = useAuthStore()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  // Form state
+  const [firstName, setFirstName] = useState(user?.firstName || '')
+  const [lastName, setLastName] = useState(user?.lastName || '')
+  const [phone, setPhone] = useState(user?.phone || '')
+  const [address, setAddress] = useState(user?.address || '')
+  const [ward, setWard] = useState(user?.ward || '')
+  const [avatarFile, setAvatarFile] = useState<File | null>(null)
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(user?.avatar || null)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+
+  // Update form when user data changes
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.firstName || '')
+      setLastName(user.lastName || '')
+      setPhone(user.phone || '')
+      setAddress(user.address || '')
+      setWard(user.ward || '')
+      setAvatarPreview(user.avatar || null)
+    }
+  }, [user])
+
+  // Fetch profile on mount
+  useEffect(() => {
+    fetchProfile()
+  }, [fetchProfile])
 
   const handleLogout = () => {
     logout()
@@ -23,17 +52,49 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
     setIsMobileSidebarOpen(!isMobileSidebarOpen)
   }
 
+  const handleAvatarClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setAvatarFile(file)
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleSaveChanges = async () => {
+    setIsSaving(true)
+    setSaveMessage(null)
+    
+    try {
+      const formData = new FormData()
+      formData.append('firstName', firstName)
+      formData.append('lastName', lastName)
+      formData.append('phone', phone)
+      formData.append('address', address)
+      formData.append('ward', ward)
+      
+      if (avatarFile) {
+        formData.append('avatar', avatarFile)
+      }
+      
+      await updateProfile(formData)
+      setSaveMessage({ type: 'success', text: 'Profile updated successfully!' })
+      setAvatarFile(null)
+    } catch {
+      setSaveMessage({ type: 'error', text: 'Failed to update profile. Please try again.' })
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
   const settingsSections = [
-    {
-      title: "Profile Settings",
-      icon: User,
-      items: [
-        { label: "Full Name", value: `${user?.firstName || 'John'} ${user?.lastName || 'Doe'}`, type: "text" },
-        { label: "Email", value: user?.email || "john.doe@university.edu", type: "email" },
-        { label: "Student ID", value: "2023001", type: "text" },
-        { label: "Year", value: "3rd Year", type: "select" }
-      ]
-    },
     {
       title: "Notifications",
       icon: Bell,
@@ -88,12 +149,109 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
       {/* Main Content */}
       <div className="p-6">
         <div className="max-w-4xl mx-auto space-y-6">
+          {/* Profile Settings - Editable Form */}
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0, duration: 0.4 }}
+          >
+            <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-9 h-9 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
+                  <User className="w-4 h-4 text-[#ff7400]" />
+                </div>
+                <h2 className="text-base font-semibold text-gray-800 dark:text-white">Profile Settings</h2>
+              </div>
+              
+              {/* Avatar Upload */}
+              <div className="flex items-center gap-4 mb-6">
+                <div className="relative">
+                  {avatarPreview ? (
+                    <img 
+                      src={avatarPreview} 
+                      alt="Profile" 
+                      className="w-20 h-20 rounded-2xl object-cover shadow-lg"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#ff7400] to-[#ff8c33] rounded-2xl flex items-center justify-center text-white text-2xl font-semibold shadow-lg">
+                      {firstName?.[0]}{lastName?.[0] || 'U'}
+                    </div>
+                  )}
+                  <button
+                    onClick={handleAvatarClick}
+                    className="absolute -bottom-2 -right-2 w-8 h-8 bg-[#ff7400] rounded-full flex items-center justify-center text-white shadow-lg hover:bg-[#e66800] transition-colors"
+                  >
+                    <Camera className="w-4 h-4" />
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-800 dark:text-white">Profile Photo</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Click to upload a new photo</p>
+                </div>
+              </div>
+              
+              {/* Form Fields */}
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <ModernInput
+                    label="First Name"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    type="text"
+                  />
+                  <ModernInput
+                    label="Last Name"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    type="text"
+                  />
+                </div>
+                <ModernInput
+                  label="Email"
+                  value={user?.email || ''}
+                  type="email"
+                  readOnly
+                  className="bg-gray-50 dark:bg-gray-800"
+                />
+                <ModernInput
+                  label="Phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  type="tel"
+                  placeholder="Enter your phone number"
+                />
+                <ModernInput
+                  label="Address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  type="text"
+                  placeholder="Enter your address"
+                />
+                <ModernInput
+                  label="Ward"
+                  value={ward}
+                  onChange={(e) => setWard(e.target.value)}
+                  type="text"
+                  placeholder="Enter your ward"
+                />
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Other Settings Sections */}
           {settingsSections.map((section, sectionIndex) => (
             <motion.div
               key={section.title}
               initial={{ y: 10, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: sectionIndex * 0.1, duration: 0.4 }}
+              transition={{ delay: (sectionIndex + 1) * 0.1, duration: 0.4 }}
             >
               <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-5">
@@ -111,15 +269,7 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                       </div>
                       
                       <div className="flex items-center">
-                        {item.type === "text" || item.type === "email" ? (
-                          <ModernInput
-                            label=""
-                            value={item.value as string}
-                            type={item.type}
-                            className="w-64"
-                            readOnly
-                          />
-                        ) : item.type === "select" ? (
+                        {item.type === "select" ? (
                           <select className="w-32 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ff7400]/20 focus:border-[#ff7400]">
                             <option>{item.value as string}</option>
                           </select>
@@ -145,6 +295,21 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
               </div>
             </motion.div>
           ))}
+
+          {/* Save Message */}
+          {saveMessage && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`p-4 rounded-lg ${
+                saveMessage.type === 'success' 
+                  ? 'bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 border border-green-200 dark:border-green-800' 
+                  : 'bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800'
+              }`}
+            >
+              {saveMessage.text}
+            </motion.div>
+          )}
           
           {/* Save Button */}
           <motion.div
@@ -153,8 +318,19 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
             transition={{ delay: 0.4, duration: 0.4 }}
             className="flex justify-end"
           >
-            <Button className="bg-[#ff7400] hover:bg-[#e66800] text-white px-8 font-medium shadow-sm">
-              Save Changes
+            <Button 
+              onClick={handleSaveChanges}
+              disabled={isSaving || isLoadingProfile}
+              className="bg-[#ff7400] hover:bg-[#e66800] text-white px-8 font-medium shadow-sm disabled:opacity-50"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                'Save Changes'
+              )}
             </Button>
           </motion.div>
         </div>

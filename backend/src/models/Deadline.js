@@ -7,7 +7,7 @@ const deadlineSchema = new mongoose.Schema(
     type: { type: String, required: true },
     dueDate: { type: Date, required: true },
     estimatedHours: { type: Number, required: true },
-    risk: {
+    risk: { 
       type: String,
       enum: ["low", "medium", "high"],
       default: "low",

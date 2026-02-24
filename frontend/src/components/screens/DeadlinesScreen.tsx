@@ -6,32 +6,29 @@ import {
   Plus, 
   Calendar, 
   Clock, 
-  Edit2, 
   Trash2,
   Search,
   Filter,
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  Loader2
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
-
-interface Deadline {
-  id: string
-  title: string
-  course: string
-  dueDate: string
-  impact: 'High' | 'Medium' | 'Low'
-  status: 'pending' | 'completed'
-  estimatedHours: number
-}
+import { useDeadlineStore, type Deadline } from "@/store/deadlineStore"
+import { format } from "date-fns"
 
 export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const [filterImpact, setFilterImpact] = useState<string>('all')
+  const [filterRisk, setFilterRisk] = useState<string>('all')
   const { user, logout } = useAuthStore()
+  const { deadlines, isLoading, error, fetchDeadlines, deleteDeadline } = useDeadlineStore()
+
+  useEffect(() => {
+    fetchDeadlines()
+  }, [fetchDeadlines])
 
   const handleLogout = () => {
     logout()
@@ -42,90 +39,37 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
     setIsMobileSidebarOpen(!isMobileSidebarOpen)
   }
 
-  // Sample deadlines data
-  const [deadlines, setDeadlines] = useState<Deadline[]>([
-    {
-      id: '1',
-      title: "Neural Networks Project",
-      course: "CS402: Artificial Intelligence",
-      dueDate: "Feb 26, 2026",
-      impact: "High",
-      status: 'pending',
-      estimatedHours: 8
-    },
-    {
-      id: '2',
-      title: "Database Normalization Quiz",
-      course: "CS301: Database Systems",
-      dueDate: "Feb 25, 2026",
-      impact: "Medium",
-      status: 'pending',
-      estimatedHours: 2
-    },
-    {
-      id: '3',
-      title: "Term Paper: Ethics in Tech",
-      course: "HU305: Tech Ethics",
-      dueDate: "Mar 01, 2026",
-      impact: "Medium",
-      status: 'pending',
-      estimatedHours: 6
-    },
-    {
-      id: '4',
-      title: "Calculus III Problem Set",
-      course: "MA301: Advanced Math",
-      dueDate: "Mar 02, 2026",
-      impact: "Low",
-      status: 'pending',
-      estimatedHours: 3
-    },
-    {
-      id: '5',
-      title: "Physics Lab Report",
-      course: "PH202: Physics II",
-      dueDate: "Mar 03, 2026",
-      impact: "High",
-      status: 'pending',
-      estimatedHours: 4
-    },
-    {
-      id: '6',
-      title: "Weekly Reading Summary",
-      course: "EN201: Literature",
-      dueDate: "Feb 22, 2026",
-      impact: "Low",
-      status: 'completed',
-      estimatedHours: 1
+  const handleDelete = async (id: string) => {
+    if (confirm('Are you sure you want to delete this deadline?')) {
+      try {
+        await deleteDeadline(id)
+      } catch {
+        alert('Failed to delete deadline')
+      }
     }
-  ])
-
-  const handleDelete = (id: string) => {
-    setDeadlines(deadlines.filter(d => d.id !== id))
-  }
-
-  const handleToggleStatus = (id: string) => {
-    setDeadlines(deadlines.map(d => 
-      d.id === id ? { ...d, status: d.status === 'pending' ? 'completed' : 'pending' } : d
-    ))
   }
 
   const filteredDeadlines = deadlines.filter(d => {
     const matchesSearch = d.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           d.course.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesFilter = filterImpact === 'all' || d.impact === filterImpact
+    const matchesFilter = filterRisk === 'all' || d.risk === filterRisk.toLowerCase()
     return matchesSearch && matchesFilter
   })
 
-  const pendingDeadlines = filteredDeadlines.filter(d => d.status === 'pending')
-  const completedDeadlines = filteredDeadlines.filter(d => d.status === 'completed')
-
-  const getImpactBadgeColor = (impact: string) => {
-    switch (impact) {
-      case 'High': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800'
-      case 'Medium': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800'
-      case 'Low': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800'
+  const getRiskBadgeColor = (risk: string) => {
+    switch (risk.toLowerCase()) {
+      case 'high': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 border-red-200 dark:border-red-800'
+      case 'medium': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800'
+      case 'low': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-green-200 dark:border-green-800'
       default: return 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700'
+    }
+  }
+
+  const formatDueDate = (dateString: string) => {
+    try {
+      return format(new Date(dateString), 'MMM dd, yyyy')
+    } catch {
+      return dateString
     }
   }
 
@@ -143,58 +87,44 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
       initial={{ y: 10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: index * 0.05 }}
-      className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm transition-all ${
-        deadline.status === 'completed' ? 'opacity-60' : ''
-      }`}
+      className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm transition-all"
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3 flex-1">
-          <button
-            onClick={() => handleToggleStatus(deadline.id)}
-            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
-              deadline.status === 'completed' 
-                ? 'bg-green-500 border-green-500' 
-                : 'border-gray-300 hover:border-[#ff7400]'
-            }`}
-          >
-            {deadline.status === 'completed' && (
-              <CheckCircle2 className="w-3 h-3 text-white" />
-            )}
-          </button>
           <div className="flex-1">
-            <h3 className={`font-medium text-gray-800 dark:text-white ${deadline.status === 'completed' ? 'line-through' : ''}`}>
+            <h3 className="font-medium text-gray-800 dark:text-white">
               {deadline.title}
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{deadline.course}</p>
             <div className="flex flex-wrap items-center gap-3 mt-2">
               <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
                 <Calendar className="w-3.5 h-3.5" />
-                {deadline.dueDate}
+                {formatDueDate(deadline.dueDate)}
               </div>
               <div className="flex items-center gap-1.5 text-xs text-gray-500">
                 <Clock className="w-3.5 h-3.5" />
                 {deadline.estimatedHours}h estimated
               </div>
+              {deadline.type && (
+                <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded">
+                  {deadline.type}
+                </span>
+              )}
             </div>
+            {deadline.notes && (
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2 line-clamp-2">{deadline.notes}</p>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getImpactBadgeColor(deadline.impact)}`}>
-            {deadline.impact}
+          <span className={`px-2.5 py-1 rounded-full text-xs font-medium border capitalize ${getRiskBadgeColor(deadline.risk)}`}>
+            {deadline.risk}
           </span>
           <Button
             variant="ghost"
             size="sm"
-            className="w-8 h-8 p-0 text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10"
-            onClick={() => onNavigate('add-deadline')}
-          >
-            <Edit2 className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
             className="w-8 h-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30"
-            onClick={() => handleDelete(deadline.id)}
+            onClick={() => handleDelete(deadline._id || deadline.id || '')}
           >
             <Trash2 className="w-4 h-4" />
           </Button>
@@ -246,8 +176,8 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
                 <AlertCircle className="w-5 h-5 text-[#ff7400]" />
               </div>
               <div>
-                <p className="text-2xl font-semibold text-gray-800 dark:text-white">{pendingDeadlines.length}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Pending</p>
+                <p className="text-2xl font-semibold text-gray-800 dark:text-white">{filteredDeadlines.length}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Total</p>
               </div>
             </div>
           </motion.div>
@@ -263,9 +193,9 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
               </div>
               <div>
                 <p className="text-2xl font-semibold text-gray-800 dark:text-white">
-                  {pendingDeadlines.filter(d => d.impact === 'High').length}
+                  {filteredDeadlines.filter(d => d.risk === 'high').length}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">High Priority</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">High Risk</p>
               </div>
             </div>
           </motion.div>
@@ -280,8 +210,10 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
                 <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-2xl font-semibold text-gray-800 dark:text-white">{completedDeadlines.length}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Completed</p>
+                <p className="text-2xl font-semibold text-gray-800 dark:text-white">
+                  {filteredDeadlines.reduce((sum, d) => sum + d.estimatedHours, 0)}h
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Total Hours</p>
               </div>
             </div>
           </motion.div>
@@ -302,47 +234,58 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
           <div className="flex items-center gap-2">
             <Filter className="w-4 h-4 text-gray-400" />
             <select
-              value={filterImpact}
-              onChange={(e) => setFilterImpact(e.target.value)}
+              value={filterRisk}
+              onChange={(e) => setFilterRisk(e.target.value)}
               className="px-4 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#ff7400]/20 focus:border-[#ff7400]"
             >
-              <option value="all">All Impact</option>
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
+              <option value="all">All Risk Levels</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
             </select>
           </div>
         </div>
 
-        {/* Pending Deadlines */}
-        <div className="space-y-3">
-          <h2 className="text-sm font-medium text-gray-600 dark:text-gray-300">Pending ({pendingDeadlines.length})</h2>
-          {pendingDeadlines.length > 0 ? (
-            <div className="space-y-3">
-              {pendingDeadlines.map((deadline, index) => (
-                <DeadlineCard key={deadline.id} deadline={deadline} index={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-8 text-center">
-              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-3">
-                <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
-              </div>
-              <p className="text-gray-600 dark:text-gray-300 font-medium">All caught up!</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">No pending deadlines.</p>
-            </div>
-          )}
-        </div>
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl p-4 text-red-700 dark:text-red-400">
+            {error}
+          </div>
+        )}
 
-        {/* Completed Deadlines */}
-        {completedDeadlines.length > 0 && (
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-[#ff7400]" />
+          </div>
+        ) : (
+          /* Deadlines List */
           <div className="space-y-3">
-            <h2 className="text-sm font-medium text-gray-600 dark:text-gray-300">Completed ({completedDeadlines.length})</h2>
-            <div className="space-y-3">
-              {completedDeadlines.map((deadline, index) => (
-                <DeadlineCard key={deadline.id} deadline={deadline} index={index} />
-              ))}
-            </div>
+            <h2 className="text-sm font-medium text-gray-600 dark:text-gray-300">
+              Deadlines ({filteredDeadlines.length})
+            </h2>
+            {filteredDeadlines.length > 0 ? (
+              <div className="space-y-3">
+                {filteredDeadlines.map((deadline, index) => (
+                  <DeadlineCard key={deadline._id || deadline.id} deadline={deadline} index={index} />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-8 text-center">
+                <div className="w-12 h-12 bg-[#ff7400]/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <AlertCircle className="w-6 h-6 text-[#ff7400]" />
+                </div>
+                <p className="text-gray-600 dark:text-gray-300 font-medium">No deadlines found</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Add your first deadline to get started.</p>
+                <Button
+                  onClick={() => onNavigate('add-deadline')}
+                  className="mt-4 bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Deadline
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>
