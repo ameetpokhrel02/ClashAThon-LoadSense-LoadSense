@@ -40,9 +40,14 @@ export const useAuthStore = create<AuthState>()(
       updateUser: (user) => set({ user }),
       
       fetchProfile: async () => {
+        const { user } = get()
+        if (!user?.id) {
+          set({ profileError: 'No user logged in' })
+          return
+        }
         try {
           set({ isLoadingProfile: true, profileError: null })
-          const response = await api.get('/users/profile')
+          const response = await api.get(`/users/profile/${user.id}`)
           set({ user: response.data.user, isLoadingProfile: false })
         } catch (error: unknown) {
           const err = error as { response?: { data?: { message?: string } } }
@@ -54,9 +59,14 @@ export const useAuthStore = create<AuthState>()(
       },
       
       updateProfile: async (data: FormData) => {
+        const { user } = get()
+        if (!user?.id) {
+          set({ profileError: 'No user logged in' })
+          throw new Error('No user logged in')
+        }
         try {
           set({ isLoadingProfile: true, profileError: null })
-          const response = await api.put('/users/profile', data, {
+          const response = await api.put(`/users/profile/${user.id}`, data, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },

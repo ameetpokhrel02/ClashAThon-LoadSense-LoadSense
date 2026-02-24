@@ -81,16 +81,11 @@ export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: str
 
   const mainContent = (
     <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0">
-      {/* Mobile Header */}
-      <div className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 sticky top-0 z-20">
-        <h1 className="text-lg font-semibold text-gray-800 dark:text-white">Profile</h1>
-      </div>
-
       <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-6">
         {/* Header */}
-        <div className="hidden md:block">
+        <div>
           <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Profile</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your account and preferences.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 hidden md:block">Manage your account and preferences.</p>
         </div>
 
         {/* Profile Card */}
@@ -251,6 +246,7 @@ export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: str
       <SidebarLayout
         sidebar={sidebarContent}
         content={mainContent}
+        onNavigate={onNavigate}
         mobileNavigation={
           <>
             <MobileNavigation

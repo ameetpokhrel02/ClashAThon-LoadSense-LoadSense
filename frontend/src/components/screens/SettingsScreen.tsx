@@ -135,20 +135,16 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950">
-      {/* Top Header */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 pb-20 md:pb-0">
+      {/* Main Content */}
+      <div className="p-4 md:p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {/* Header */}
           <div>
             <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Settings</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Manage your account and preferences</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 hidden md:block">Manage your account and preferences</p>
           </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="p-6">
-        <div className="max-w-4xl mx-auto space-y-6">
+          
           {/* Profile Settings - Editable Form */}
           <motion.div
             initial={{ y: 10, opacity: 0 }}
@@ -346,6 +342,7 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
       <SidebarLayout
         sidebar={sidebarContent}
         content={mainContent}
+        onNavigate={onNavigate}
         mobileNavigation={
           <>
             <MobileNavigation 

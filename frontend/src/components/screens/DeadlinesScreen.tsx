@@ -135,32 +135,20 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
 
   const mainContent = (
     <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0">
-      {/* Mobile Header */}
-      <div className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 flex justify-between items-center sticky top-0 z-20">
-        <h1 className="text-lg font-semibold text-gray-800 dark:text-white">Deadlines</h1>
-        <Button
-          onClick={() => onNavigate('add-deadline')}
-          size="sm"
-          className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg flex items-center gap-1"
-        >
-          <Plus className="w-4 h-4" />
-          Add
-        </Button>
-      </div>
-
       <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-6">
         {/* Header */}
-        <div className="hidden md:flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Deadlines</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage all your academic deadlines in one place.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 hidden md:block">Manage all your academic deadlines in one place.</p>
           </div>
           <Button
             onClick={() => onNavigate('add-deadline')}
             className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg flex items-center gap-2 font-medium shadow-sm"
           >
             <Plus className="w-4 h-4" />
-            Add Deadline
+            <span className="hidden sm:inline">Add Deadline</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </div>
 
@@ -297,6 +285,7 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
       <SidebarLayout
         sidebar={sidebarContent}
         content={mainContent}
+        onNavigate={onNavigate}
         mobileNavigation={
           <>
             <MobileNavigation

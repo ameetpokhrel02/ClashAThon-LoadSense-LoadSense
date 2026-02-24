@@ -103,17 +103,18 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
 
   const mainContent = (
     <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 pb-20 md:pb-0">
-      {/* Mobile Header */}
-      <div className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 flex justify-between items-center sticky top-0 z-20">
-        <h1 className="text-lg font-semibold text-gray-800 dark:text-white">My Modules</h1>
+      {/* Header */}
+      <div className="p-4 md:px-6 md:py-4 flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold text-gray-800 dark:text-white">My Modules</h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400 hidden md:block">Manage your enrolled modules</p>
+        </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
-            <Button
-              size="sm"
-              className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg flex items-center gap-1"
-            >
+            <Button className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg flex items-center gap-2 font-medium shadow-sm">
               <Plus className="w-4 h-4" />
-              Add
+              <span className="hidden sm:inline">Add Module</span>
+              <span className="sm:hidden">Add</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
@@ -204,111 +205,6 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
             </div>
           </DialogContent>
         </Dialog>
-      </div>
-
-      {/* Desktop Header */}
-      <div className="hidden md:block bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">My Modules</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Manage your enrolled modules</p>
-          </div>
-          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg flex items-center gap-2 font-medium shadow-sm">
-                <Plus className="w-4 h-4" />
-                Add Module
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Add New Module</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 pt-4">
-                {formError && (
-                  <div className="p-3 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-lg text-sm">
-                    {formError}
-                  </div>
-                )}
-                <ModernInput
-                  label="Module Code"
-                  value={moduleCode}
-                  onChange={(e) => setModuleCode(e.target.value)}
-                  placeholder="e.g., CS301"
-                />
-                <ModernInput
-                  label="Title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="e.g., Data Structures"
-                />
-                <ModernInput
-                  label="Department"
-                  value={department}
-                  onChange={(e) => setDepartment(e.target.value)}
-                  placeholder="e.g., Computer Science"
-                />
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="space-y-2">
-                    <Label>Credits</Label>
-                    <Select value={credits} onValueChange={setCredits}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Credits" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[1, 2, 3, 4, 5, 6].map(c => (
-                          <SelectItem key={c} value={c.toString()}>{c}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Semester</Label>
-                    <Select value={semester} onValueChange={setSemester}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Sem" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map(s => (
-                          <SelectItem key={s} value={s.toString()}>{s}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Year</Label>
-                    <Select value={year} onValueChange={setYear}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Year" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {[1, 2, 3, 4].map(y => (
-                          <SelectItem key={y} value={y.toString()}>{y}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <div className="flex gap-3 pt-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => { setIsAddDialogOpen(false); resetForm() }}
-                    className="flex-1"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={handleAddModule}
-                    disabled={isSaving}
-                    className="flex-1 bg-[#ff7400] hover:bg-[#e66800] text-white"
-                  >
-                    {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Add Module'}
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
-        </div>
       </div>
 
       {/* Main Content */}
@@ -420,6 +316,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
       <SidebarLayout
         sidebar={sidebarContent}
         content={mainContent}
+        onNavigate={onNavigate}
         mobileNavigation={
           <>
             <MobileNavigation 
