@@ -1,4 +1,4 @@
-import { ModernCard } from "@/components/ui/modern-card"
+// ModernCard removed - using plain divs
 import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
@@ -67,17 +67,17 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2]">
+    <div className="min-h-screen bg-[#F6FAFB]">
       {/* Top Header */}
-      <div className="bg-white shadow-sm border-b border-[#E2E8F0] px-6 py-4">
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold text-[#0F172A]">Academic <span className="text-[#2A7A8C]">Calendar</span></h1>
-            <p className="text-[#64748B]">Track your deadlines and events</p>
+            <h1 className="text-xl font-semibold text-gray-800">Academic Calendar</h1>
+            <p className="text-sm text-gray-500">Track your deadlines and events</p>
           </div>
           <Button 
             onClick={() => onNavigate('add-deadline')}
-            className="btn-primary-glow rounded-lg"
+            className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg font-medium shadow-sm"
           >
             Add Event
           </Button>
@@ -89,16 +89,16 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Calendar View */}
           <div className="lg:col-span-2">
-            <ModernCard className="p-6">
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />
+            <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-[#ff7400]" />
                 September 2023
               </h2>
               
               {/* Simple Calendar Grid */}
-              <div className="grid grid-cols-7 gap-2 mb-4">
+              <div className="grid grid-cols-7 gap-2 mb-4 border border-gray-200 rounded-lg p-3 bg-gray-50/50">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                  <div key={day} className="text-center text-sm font-medium text-gray-500 p-2">
+                  <div key={day} className="text-center text-xs font-medium text-gray-500 p-2">
                     {day}
                   </div>
                 ))}
@@ -115,9 +115,9 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                       key={i}
                       className={`
                         aspect-square flex items-center justify-center text-sm rounded-lg cursor-pointer
-                        ${isCurrentMonth ? 'text-gray-900' : 'text-gray-300'}
-                        ${isToday ? 'bg-primary text-white font-bold' : 'hover:bg-gray-100'}
-                        ${hasEvent ? 'bg-red-100 text-red-800 font-semibold' : ''}
+                        ${isCurrentMonth ? 'text-gray-700' : 'text-gray-300'}
+                        ${isToday ? 'bg-[#ff7400] text-white font-medium' : 'hover:bg-gray-100'}
+                        ${hasEvent && !isToday ? 'bg-red-50 text-red-700 font-medium' : ''}
                       `}
                     >
                       {isCurrentMonth ? day : ''}
@@ -125,41 +125,41 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                   )
                 })}
               </div>
-            </ModernCard>
+            </div>
           </div>
 
           {/* Upcoming Events */}
           <div>
-            <ModernCard className="p-6">
-              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-primary" />
+            <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <Clock className="w-5 h-5 text-[#ff7400]" />
                 Upcoming Events
               </h2>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {upcomingEvents.map((event, index) => (
                   <motion.div
                     key={event.id}
-                    initial={{ x: 20, opacity: 0 }}
+                    initial={{ x: 10, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.1, duration: 0.3 }}
-                    className="border-l-4 border-primary pl-4 py-2"
+                    className="border-l-2 border-[#ff7400] pl-3 py-2"
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-medium text-gray-900">{event.title}</h3>
-                        <p className="text-sm text-gray-600">{event.date} at {event.time}</p>
+                        <h3 className="font-medium text-gray-800 text-sm">{event.title}</h3>
+                        <p className="text-xs text-gray-500">{event.date} at {event.time}</p>
                         <div className="flex items-center gap-2 mt-1">
                           {event.priority === 'high' && (
-                            <AlertTriangle className="w-4 h-4 text-red-500" />
+                            <AlertTriangle className="w-3 h-3 text-red-500" />
                           )}
                           {event.priority === 'medium' && (
-                            <Clock className="w-4 h-4 text-yellow-500" />
+                            <Clock className="w-3 h-3 text-yellow-500" />
                           )}
                           {event.priority === 'low' && (
-                            <CheckCircle className="w-4 h-4 text-green-500" />
+                            <CheckCircle className="w-3 h-3 text-green-500" />
                           )}
-                          <span className="text-xs text-gray-500 capitalize">
+                          <span className="text-xs text-gray-400 capitalize">
                             {event.type}
                           </span>
                         </div>
@@ -168,7 +168,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                   </motion.div>
                 ))}
               </div>
-            </ModernCard>
+            </div>
           </div>
         </div>
         

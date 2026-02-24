@@ -1,6 +1,5 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
-import { BrandHeader } from "@/components/ui/brand-header"
 import { LogoutDialog } from "@/components/ui/logout-dialog"
 import { 
   LayoutDashboard, 
@@ -60,30 +59,30 @@ export function NavigationSidebar({
   return (
     <>
       <aside className={cn(
-        "w-64 bg-gradient-to-b from-[#2A7A8C] via-[#3B8FA1] to-[#1F5F6E] text-white flex flex-col shadow-2xl shadow-[#2A7A8C]/20 relative overflow-hidden",
+        "w-64 bg-gradient-to-b from-[#ff7400] to-[#ff7400]/85 text-white flex flex-col shadow-xl relative overflow-hidden",
         className
       )}>
         {/* Subtle glow overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/8 pointer-events-none" />
         
         {/* Brand Header with Logo */}
         <div className="p-6 relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 glass-card-dark rounded-xl flex items-center justify-center shadow-lg border border-white/20 glow-primary">
-              <GraduationCap className="w-6 h-6 text-white drop-shadow-sm" />
+            <div className="w-11 h-11 bg-white/20 rounded-xl flex items-center justify-center shadow-sm border border-white/20">
+              <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h2 className="font-bold text-xl text-white drop-shadow-sm">LoadSense</h2>
-              <p className="text-xs text-white/80 font-medium">Smart Workload Management</p>
+              <h2 className="font-semibold text-lg text-white">LoadSense</h2>
+              <p className="text-xs text-white/70">Workload Management</p>
             </div>
           </div>
         </div>
         
         {/* Quick Action - Add Deadline */}
-        <div className="px-6 mb-8 relative z-10">
+        <div className="px-6 mb-6 relative z-10">
           <Button 
             onClick={() => onNavigate('add-deadline')} 
-            className="w-full gap-3 bg-white/20 hover:bg-white/30 text-white border-0 rounded-xl py-4 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/20 hover:scale-[1.02] glow-primary"
+            className="w-full gap-3 bg-white/15 hover:bg-white/25 text-white border-0 rounded-xl py-3.5 font-medium transition-all duration-200 backdrop-blur-sm border border-white/10"
           >
             <Plus className="w-5 h-5" />
             Add Deadline
@@ -91,7 +90,7 @@ export function NavigationSidebar({
         </div>
         
         {/* Navigation */}
-        <nav className="flex-1 px-6 space-y-3 relative z-10">
+        <nav className="flex-1 px-6 space-y-2 relative z-10">
           {navigationItems.map((item) => {
             const Icon = item.icon
             return (
@@ -99,16 +98,12 @@ export function NavigationSidebar({
                 key={item.id}
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start gap-4 text-white/90 hover:text-white hover:bg-white/15 rounded-xl py-4 px-4 transition-all duration-300 font-medium text-base group",
-                  item.active && "bg-white/20 text-white font-semibold shadow-lg backdrop-blur-sm border border-white/10"
+                  "w-full justify-start gap-3 text-white/80 hover:text-white hover:bg-white/10 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm",
+                  item.active && "bg-white/15 text-white font-semibold"
                 )}
                 onClick={() => onNavigate(item.id)}
               >
-                <Icon className={cn(
-                  "w-5 h-5 transition-transform duration-300",
-                  item.active && "scale-110",
-                  "group-hover:scale-110"
-                )} />
+                <Icon className="w-5 h-5" />
                 {item.label}
               </Button>
             )
@@ -116,28 +111,28 @@ export function NavigationSidebar({
         </nav>
 
         {/* User Section */}
-        <div className="p-6 border-t border-white/20 bg-white/5 backdrop-blur-sm relative z-10">
+        <div className="p-6 border-t border-white/15 bg-white/5 relative z-10">
           {user && (
-            <div className="mb-4 p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+            <div className="mb-4 p-3 rounded-xl bg-white/10">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center font-bold text-white shadow-lg">
+                <div className="w-9 h-9 bg-white/20 rounded-full flex items-center justify-center font-medium text-white text-sm">
                   {user.firstName?.[0]}{user.lastName?.[0]}
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-base">
+                  <p className="text-white font-medium text-sm">
                     {user.firstName} {user.lastName}
                   </p>
-                  <p className="text-white/80 text-sm font-medium">Student</p>
+                  <p className="text-white/60 text-xs">Student</p>
                 </div>
               </div>
             </div>
           )}
           <Button 
             variant="ghost" 
-            className="w-full justify-start gap-4 text-white/90 hover:text-white hover:bg-white/15 rounded-xl py-4 px-4 transition-all duration-300 font-medium group" 
+            className="w-full justify-start gap-3 text-white/80 hover:text-white hover:bg-white/10 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm" 
             onClick={() => setShowLogoutDialog(true)}
           >
-            <LogOut className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+            <LogOut className="w-5 h-5" />
             Logout
           </Button>
         </div>

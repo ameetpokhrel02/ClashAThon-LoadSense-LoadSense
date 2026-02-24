@@ -3,12 +3,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-primary: #2A7A8C;
-  --color-primary-hover: #246B7B;
-  --color-primary-mid: #3B8FA1;
-  --color-primary-dark: #1F5F6E;
-  --color-background: #F6FAFB;
-  --color-foreground: #0F172A;
+  --color-primary: #ff7400;
+  --color-primary-hover: #e66800;
+  --color-primary-mid: #ff8c33;
+  --color-primary-dark: #cc5c00;
+  --color-background: #FFF8F5;
+  --color-foreground: #1a1a2e;
   --color-muted: #64748B;
   --color-success: #22C55E;
   --color-warning: #FACC15;
@@ -16,52 +16,52 @@
 }
 
 :root {
-  --background: #F6FAFB;
-  --foreground: #0F172A;
+  --background: #FFF8F5;
+  --foreground: #1a1a2e;
   --card: #ffffff;
-  --card-foreground: #0F172A;
+  --card-foreground: #1a1a2e;
   --popover: #ffffff;
-  --popover-foreground: #0F172A;
-  --primary: #2A7A8C;
-  --primary-mid: #3B8FA1;
-  --primary-dark: #1F5F6E;
+  --popover-foreground: #1a1a2e;
+  --primary: #ff7400;
+  --primary-mid: #ff8c33;
+  --primary-dark: #e66800;
   --primary-foreground: #ffffff;
-  --secondary: #EAF4F6;
-  --secondary-foreground: #2A7A8C;
-  --muted: #EAF4F6;
+  --secondary: #fff5eb;
+  --secondary-foreground: #ff7400;
+  --muted: #fff5eb;
   --muted-foreground: #64748B;
-  --accent: #EAF4F6;
-  --accent-foreground: #2A7A8C;
+  --accent: #fff5eb;
+  --accent-foreground: #ff7400;
   --destructive: #EF4444;
   --destructive-foreground: #ffffff;
-  --border: #E2E8F0;
-  --input: #DCEFF2;
-  --ring: #2A7A8C;
+  --border: #e2e8f0;
+  --input: #f8fafc;
+  --ring: #ff7400;
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: #0f172a;
+  --background: #1a1a2e;
   --foreground: #f8fafc;
-  --card: #1e293b;
+  --card: #2d2d44;
   --card-foreground: #f8fafc;
-  --popover: #1e293b;
+  --popover: #2d2d44;
   --popover-foreground: #f8fafc;
-  --primary: #3B8FA1;
-  --primary-mid: #3B8FA1;
-  --primary-dark: #1F5F6E;
+  --primary: #ff7400;
+  --primary-mid: #ff8c33;
+  --primary-dark: #e66800;
   --primary-foreground: #ffffff;
-  --secondary: #1e293b;
+  --secondary: #2d2d44;
   --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
+  --muted: #2d2d44;
   --muted-foreground: #94a3b8;
-  --accent: #1e293b;
+  --accent: #2d2d44;
   --accent-foreground: #f8fafc;
   --destructive: #7f1d1d;
   --destructive-foreground: #f8fafc;
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #3B8FA1;
+  --border: #2d2d44;
+  --input: #2d2d44;
+  --ring: #ff7400;
 }
 
 * {
@@ -69,73 +69,73 @@
 }
 
 body {
-  background: linear-gradient(to bottom right, #F6FAFB, #EAF4F6, #DCEFF2);
+  background: linear-gradient(to bottom right, #FFF8F5, #FFF5F0, #FFEDE5);
   min-height: 100vh;
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
 }
 
-/* ===== WARM TEAL DESIGN SYSTEM ===== */
+/* ===== ORANGE DESIGN SYSTEM ===== */
 
-/* Primary Warm Gradient */
+/* Primary Orange Gradient */
 .gradient-primary {
-  background: linear-gradient(to right, #2A7A8C, #3B8FA1, #1F5F6E);
+  background: linear-gradient(to right, #ff7400, #ff8c33, #e66800);
 }
 
 .gradient-primary-warm {
-  background: linear-gradient(to right, #2A7A8C, #3B8FA1);
+  background: linear-gradient(to right, #ff7400, #ff8c33);
 }
 
 .gradient-primary-br {
-  background: linear-gradient(to bottom right, #2A7A8C, #3B8FA1, #1F5F6E);
+  background: linear-gradient(to bottom right, #ff7400, #ff8c33, #e66800);
 }
 
-/* Hero Background - Soft & Warm */
+/* Hero Background - Cream */
 .gradient-hero {
-  background: linear-gradient(135deg, #F6FAFB 0%, #EAF4F6 50%, #DCEFF2 100%);
+  background: linear-gradient(135deg, #FFF8F5 0%, #FFF5F0 50%, #FFEDE5 100%);
 }
 
-.gradient-hero-teal {
-  background: linear-gradient(135deg, #2A7A8C 0%, #3B8FA1 50%, #1F5F6E 100%);
+.gradient-hero-orange {
+  background: linear-gradient(135deg, #ff7400 0%, #ff8c33 50%, #e66800 100%);
 }
 
 /* Premium Card Style */
 .card-premium {
   background: #ffffff;
-  box-shadow: 0 10px 40px -10px rgba(42, 122, 140, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 40px -10px rgba(255, 116, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border-radius: 1rem;
-  border: 1px solid #E2E8F0;
+  border: 1px solid #e2e8f0;
 }
 
 .card-premium:hover {
-  box-shadow: 0 20px 50px -10px rgba(42, 122, 140, 0.25), 0 8px 10px -4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 50px -10px rgba(255, 116, 0, 0.2), 0 8px 10px -4px rgba(0, 0, 0, 0.05);
   transform: translateY(-2px);
   transition: all 0.3s ease;
 }
 
-/* Glass Card - Warm Feel */
+/* Glass Card - Cream Feel */
 .glass-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid #E2E8F0;
-  box-shadow: 0 10px 40px -10px rgba(42, 122, 140, 0.15);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 40px -10px rgba(255, 116, 0, 0.1);
 }
 
 .glass-card-dark {
-  background: rgba(42, 122, 140, 0.1);
+  background: rgba(255, 116, 0, 0.1);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Warm Glow Effects */
+/* Orange Glow Effects */
 .glow-primary {
-  box-shadow: 0 10px 40px -10px rgba(42, 122, 140, 0.3);
+  box-shadow: 0 10px 40px -10px rgba(255, 116, 0, 0.3);
 }
 
 .glow-primary-hover:hover {
-  box-shadow: 0 20px 50px -10px rgba(42, 122, 140, 0.4);
+  box-shadow: 0 20px 50px -10px rgba(255, 116, 0, 0.4);
   transform: translateY(-2px);
   transition: all 0.3s ease;
 }
@@ -152,73 +152,73 @@ body {
   box-shadow: 0 4px 20px -4px rgba(239, 68, 68, 0.25);
 }
 
-/* Gradient Text - Warm Teal */
+/* Gradient Text - Orange */
 .gradient-text {
-  background: linear-gradient(to right, #ffffff, #EAF4F6);
+  background: linear-gradient(to right, #ffffff, #fff5eb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .gradient-text-primary {
-  background: linear-gradient(to right, #2A7A8C, #3B8FA1);
+  background: linear-gradient(to right, #ff7400, #ff8c33);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Primary CTA Button - Warm Glow */
+/* Primary CTA Button - Orange Glow */
 .btn-primary-glow {
-  background: linear-gradient(to right, #2A7A8C, #3B8FA1);
+  background: linear-gradient(to right, #ff7400, #ff8c33);
   color: white;
-  box-shadow: 0 10px 30px -10px rgba(42, 122, 140, 0.4);
+  box-shadow: 0 10px 30px -10px rgba(255, 116, 0, 0.4);
   transition: all 0.3s ease;
 }
 
 .btn-primary-glow:hover {
-  box-shadow: 0 15px 40px -10px rgba(42, 122, 140, 0.5);
+  box-shadow: 0 15px 40px -10px rgba(255, 116, 0, 0.5);
   transform: translateY(-2px);
 }
 
 /* Secondary CTA Button */
 .btn-secondary-warm {
-  background: #EAF4F6;
-  color: #2A7A8C;
+  background: #fff5eb;
+  color: #ff7400;
   transition: all 0.3s ease;
 }
 
 .btn-secondary-warm:hover {
-  background: #DCEFF2;
-  box-shadow: 0 4px 15px -4px rgba(42, 122, 140, 0.2);
+  background: #ffebe0;
+  box-shadow: 0 4px 15px -4px rgba(255, 116, 0, 0.2);
 }
 
 /* Soft Input Style */
 .input-soft {
   background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #DCEFF2;
+  border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
 }
 
 .input-soft:focus {
   background: #ffffff;
-  border-color: #2A7A8C;
-  box-shadow: 0 0 0 3px rgba(42, 122, 140, 0.15);
+  border-color: #ff7400;
+  box-shadow: 0 0 0 3px rgba(255, 116, 0, 0.15);
 }
 
-/* Badge Style - Warm */
+/* Badge Style - Orange */
 .badge-warm {
-  background: #EAF4F6;
-  color: #2A7A8C;
+  background: #fff5eb;
+  color: #ff7400;
   font-weight: 500;
 }
 
 /* Highlight Text */
 .text-highlight {
-  color: #2A7A8C;
+  color: #ff7400;
   font-weight: 600;
 }
 
-/* Warm Sidebar */
+/* Orange Sidebar */
 .sidebar-warm {
-  background: linear-gradient(to bottom, #2A7A8C, #3B8FA1, #1F5F6E);
+  background: linear-gradient(to bottom, #ff7400, #ff8c33, #e66800);
 }

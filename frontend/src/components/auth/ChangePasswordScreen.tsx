@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { GraduationCap, Loader2, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react"
-import childrenImage from "@/assets/childenjooying.png"
+import { GraduationCap, Loader2, Lock, ArrowLeft, Eye, EyeOff, BookOpen, Pencil } from "lucide-react"
+import childrenImage from "@/assets/childenjooying-Photoroom.png"
 
 interface ChangePasswordScreenProps {
   email: string
@@ -50,58 +50,90 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
 
   return (
     <div className="min-h-screen w-full flex bg-gradient-to-br from-[#FFF8F5] via-[#FFF5F0] to-[#FFEDE5]">
-      {/* Left Panel */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-gradient-to-br from-[#2A7A8C] via-[#3B8FA1] to-[#1F5F6E] p-12 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 via-transparent to-orange-400/5 pointer-events-none" />
-        <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-amber-400/20 to-orange-500/10 rounded-full blur-3xl" />
+      {/* Left Panel - Modern Hero */}
+      <div className="hidden lg:flex flex-col w-1/2 bg-gradient-to-br from-[#FFF8F5] via-[#FFEEE5] to-[#FFE4D6] relative overflow-hidden">
+        {/* Floating decorative elements */}
+        <div className="absolute top-20 left-10 opacity-60">
+          <motion.div
+            animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <BookOpen className="w-12 h-12 text-[#ff7400]/40" />
+          </motion.div>
+        </div>
+        <div className="absolute top-32 right-16 opacity-50">
+          <motion.div
+            animate={{ y: [0, 8, 0], rotate: [0, -8, 0] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          >
+            <Pencil className="w-8 h-8 text-[#ff7400]/50" />
+          </motion.div>
+        </div>
+        <div className="absolute bottom-40 left-16 opacity-40">
+          <motion.div
+            animate={{ y: [0, -12, 0], rotate: [0, 10, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          >
+            <BookOpen className="w-10 h-10 text-[#ff7400]/30" />
+          </motion.div>
+        </div>
         
         <motion.div 
-          className="flex items-center gap-3 relative z-10"
+          className="p-8 flex items-center gap-3 relative z-10"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm border border-white/20 shadow-lg">
+          <div className="bg-gradient-to-br from-[#ff7400] to-[#ff8c33] p-3 rounded-xl shadow-lg shadow-[#ff7400]/30">
             <GraduationCap className="w-7 h-7 text-white" />
           </div>
-          <span className="text-2xl font-bold tracking-tight">LoadSense</span>
+          <span className="text-2xl font-bold tracking-tight text-[#1a1a2e]">LoadSense</span>
         </motion.div>
         
-        <div className="flex-1 flex flex-col justify-center items-center relative z-10 px-6">
+        <div className="flex-1 flex flex-col justify-center items-center relative z-10 px-8">
           <motion.div 
-            className="w-full max-w-lg"
+            className="w-full max-w-xl relative"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
+            {/* Cream-Orange outer glow */}
+            <div className="absolute -inset-8 bg-gradient-to-br from-[#ff7400]/20 via-[#ffb380]/30 to-[#ffe4cc]/40 rounded-full blur-3xl" />
+            <div className="absolute -inset-4 bg-gradient-to-tr from-[#fff5eb]/60 to-[#ffcca3]/30 rounded-full blur-2xl" />
+            
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl blur-xl scale-105" />
               <img 
                 src={childrenImage}
                 alt="Students enjoying learning"
-                className="w-full h-auto rounded-3xl shadow-2xl relative z-10 border border-white/20 object-cover"
+                className="w-full h-auto relative z-10 object-contain scale-110 drop-shadow-2xl"
+                style={{ filter: 'drop-shadow(0 25px 50px rgba(255, 116, 0, 0.25))' }}
               />
             </div>
             
-            <div className="text-center mt-6">
-              <h1 className="text-3xl font-bold mb-2">
-                <span className="text-white">Create New</span>{" "}
-                <span className="text-amber-300">Password</span>
+            <motion.div 
+              className="text-center mt-4"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <h1 className="text-4xl font-bold mb-2">
+                <span className="text-[#1a1a2e]">Create New</span>{" "}
+                <span className="text-[#ff7400]">Password</span>
               </h1>
-              <p className="text-white/70 text-base">
+              <p className="text-[#64748B] text-lg">
                 Choose a strong password.
               </p>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
         
-        <div className="text-sm text-white/50 relative z-10">
+        <div className="p-8 text-sm text-[#64748B] relative z-10">
           © 2026 LoadSense. All rights reserved.
         </div>
       </div>
 
       {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      <div className="flex-1 flex items-center justify-center p-8 bg-gradient-to-br from-[#FAFBFC] to-[#F5F7FA]">
         <motion.div 
           className="w-full max-w-md"
           initial={{ x: 30, opacity: 0 }}
@@ -109,22 +141,22 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
           transition={{ duration: 0.6 }}
         >
           <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <div className="bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] p-2 rounded-xl shadow-lg shadow-[#2A7A8C]/30">
+            <div className="bg-gradient-to-br from-[#ff7400] to-[#ff8c33] p-2 rounded-xl shadow-lg shadow-[#ff7400]/30">
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-[#0F172A]">
-              Load<span className="text-[#2A7A8C]">Sense</span>
+            <span className="text-2xl font-bold text-[#1a1a2e]">
+              Load<span className="text-[#ff7400]">Sense</span>
             </span>
           </div>
 
-          <Card className="bg-white shadow-2xl shadow-[#2A7A8C]/10 border border-[#E2E8F0] rounded-2xl">
-            <CardHeader className="space-y-1 pb-4">
-              <CardTitle className="text-2xl font-bold text-[#0F172A]">Set New Password</CardTitle>
+          <Card className="bg-white/80 backdrop-blur-sm shadow-2xl shadow-black/5 border-0 rounded-3xl">
+            <CardHeader className="space-y-1 pb-4 pt-8 px-8">
+              <CardTitle className="text-2xl font-bold text-[#1a1a2e]">Set New Password</CardTitle>
               <CardDescription className="text-[#64748B]">
-                Create a new password for <span className="font-medium text-[#2A7A8C]">{email}</span>
+                Create a new password for <span className="font-medium text-[#ff7400]">{email}</span>
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-5">
+            <CardContent className="space-y-5 px-8 pb-8">
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
                   <motion.div 
@@ -137,14 +169,14 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
                 )}
                 
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-[#0F172A] font-medium">New Password</Label>
+                  <Label htmlFor="password" className="text-[#1a1a2e] font-medium">New Password</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#94a3b8]" />
                     <Input 
                       id="password" 
                       type={showPassword ? "text" : "password"}
                       placeholder="Min 6 characters"
-                      className="pl-11 pr-11 h-12 rounded-xl bg-white border-[#DCEFF2] focus:border-[#2A7A8C] focus:ring-[#2A7A8C]/20" 
+                      className="pl-12 pr-12 h-12 rounded-xl bg-[#f8fafc] border-[#e2e8f0] focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all" 
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -152,7 +184,7 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#2A7A8C] transition-colors"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94a3b8] hover:text-[#ff7400] transition-colors"
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -160,14 +192,14 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword" className="text-[#0F172A] font-medium">Confirm New Password</Label>
+                  <Label htmlFor="confirmPassword" className="text-[#1a1a2e] font-medium">Confirm New Password</Label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#94a3b8]" />
                     <Input 
                       id="confirmPassword" 
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm your password"
-                      className="pl-11 pr-11 h-12 rounded-xl bg-white border-[#DCEFF2] focus:border-[#2A7A8C] focus:ring-[#2A7A8C]/20" 
+                      className="pl-12 pr-12 h-12 rounded-xl bg-[#f8fafc] border-[#e2e8f0] focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all" 
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
@@ -175,7 +207,7 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#2A7A8C] transition-colors"
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94a3b8] hover:text-[#ff7400] transition-colors"
                     >
                       {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -183,7 +215,7 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
                 </div>
                 
                 <Button 
-                  className="w-full h-12 rounded-xl text-base font-semibold bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] hover:from-[#1F5F6E] hover:to-[#2A7A8C] shadow-lg shadow-[#2A7A8C]/30 transition-all duration-300" 
+                  className="w-full h-12 rounded-xl text-base font-semibold bg-gradient-to-r from-[#ff7400] to-[#ff8c33] hover:from-[#e66800] hover:to-[#ff7400] text-white shadow-lg shadow-[#ff7400]/30 transition-all duration-300 hover:shadow-xl hover:shadow-[#ff7400]/40 hover:-translate-y-0.5" 
                   type="submit" 
                   disabled={isLoading}
                 >
@@ -195,7 +227,7 @@ export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: Ch
                 type="button"
                 variant="outline"
                 onClick={() => onNavigate('login')}
-                className="w-full h-11 rounded-xl text-base font-semibold border-2 border-[#2A7A8C] text-[#2A7A8C] hover:bg-[#EAF4F6] transition-all duration-300 flex items-center justify-center gap-2"
+                className="w-full h-11 rounded-xl text-base font-semibold border-2 border-[#ff7400] text-[#ff7400] hover:bg-[#fff5eb] transition-all duration-300 flex items-center justify-center gap-2"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Login

@@ -7,11 +7,11 @@ const modernCardVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-white border-[#E2E8F0] shadow-xl hover:shadow-2xl",
-        elevated: "bg-white border-[#E2E8F0] shadow-2xl hover:shadow-[0_25px_60px_-15px_rgba(42,122,140,0.2)]",
-        outlined: "bg-white border-2 border-[#DCEFF2] hover:border-[#2A7A8C]/40",
-        gradient: "bg-gradient-to-br from-[#EAF4F6] to-[#DCEFF2] border-[#E2E8F0] shadow-xl hover:shadow-2xl",
-        glass: "bg-white/95 backdrop-blur-md border-[#E2E8F0] shadow-xl hover:shadow-2xl glow-primary-hover",
+        default: "bg-white border-[#FFE8D6] shadow-xl hover:shadow-2xl",
+        elevated: "bg-white border-[#FFE8D6] shadow-2xl hover:shadow-[0_25px_60px_-15px_rgba(255,116,0,0.2)]",
+        outlined: "bg-white border-2 border-[#FFE8D6] hover:border-[#ff7400]/40",
+        gradient: "bg-gradient-to-br from-[#FFF8F5] to-[#FFE8D6] border-[#FFE8D6] shadow-xl hover:shadow-2xl",
+        glass: "bg-white/95 backdrop-blur-md border-[#FFE8D6] shadow-xl hover:shadow-2xl glow-primary-hover",
       },
       padding: {
         none: "p-0",
