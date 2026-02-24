@@ -26,11 +26,9 @@ app.use("/api/workload", workloadRoutes);
 app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
-<<<<<<< samir
+
   res.send("LoadSense API Running ");
-=======
   res.send("LoadSense API Running...");
->>>>>>> main
 });
 
 const PORT = process.env.PORT || 3000;
