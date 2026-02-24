@@ -74,13 +74,13 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB]">
+    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950">
       {/* Top Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">Settings</h1>
-            <p className="text-sm text-gray-500">Manage your account and preferences</p>
+            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Settings</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Manage your account and preferences</p>
           </div>
         </div>
       </div>
@@ -95,19 +95,19 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: sectionIndex * 0.1, duration: 0.4 }}
             >
-              <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
+              <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-9 h-9 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
                     <section.icon className="w-4 h-4 text-[#ff7400]" />
                   </div>
-                  <h2 className="text-base font-semibold text-gray-800">{section.title}</h2>
+                  <h2 className="text-base font-semibold text-gray-800 dark:text-white">{section.title}</h2>
                 </div>
                 
                 <div className="space-y-3">
                   {section.items.map((item, itemIndex) => (
-                    <div key={itemIndex} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-b-0">
+                    <div key={itemIndex} className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-800 last:border-b-0">
                       <div>
-                        <label className="text-sm font-medium text-gray-700">{item.label}</label>
+                        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.label}</label>
                       </div>
                       
                       <div className="flex items-center">
@@ -120,14 +120,14 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                             readOnly
                           />
                         ) : item.type === "select" ? (
-                          <select className="w-32 px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#ff7400]/20 focus:border-[#ff7400]">
+                          <select className="w-32 px-3 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-lg text-sm text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#ff7400]/20 focus:border-[#ff7400]">
                             <option>{item.value as string}</option>
                           </select>
                         ) : item.type === "toggle" ? (
                           <button
                             className={`
                               relative inline-flex h-6 w-11 items-center rounded-full transition-colors
-                              ${item.value ? 'bg-[#ff7400]' : 'bg-gray-200'}
+                              ${item.value ? 'bg-[#ff7400]' : 'bg-gray-200 dark:bg-gray-700'}
                             `}
                           >
                             <span

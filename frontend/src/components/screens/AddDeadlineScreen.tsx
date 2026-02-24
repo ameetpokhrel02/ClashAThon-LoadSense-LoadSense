@@ -67,7 +67,7 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
   }
 
   return (
-    <LayoutWrapper pattern="centered" className="bg-[#F6FAFB]">
+    <LayoutWrapper pattern="centered" className="bg-[#F6FAFB] dark:bg-gray-950">
       <PullToRefresh onRefresh={handleRefresh}>
         {/* Mobile Header */}
         <MobileHeader 

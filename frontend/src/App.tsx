@@ -9,18 +9,28 @@ import {
 } from './components/auth'
 import LandingPage from './components/screens/LandingPage'
 import DashboardScreen from './components/screens/DashboardScreen'
+import DeadlinesScreen from './components/screens/DeadlinesScreen'
 import AddDeadlineScreen from './components/screens/AddDeadlineScreen'
+import CoursesScreen from './components/screens/CoursesScreen'
+import InsightsScreen from './components/screens/InsightsScreen'
+import ProfileScreen from './components/screens/ProfileScreen'
 import OverloadAlertScreen from './components/screens/OverloadAlertScreen'
 import SuggestionScreen from './components/screens/SuggestionScreen'
-import CoursesScreen from './components/screens/CoursesScreen'
 import CalendarScreen from './components/screens/CalendarScreen'
 import SettingsScreen from './components/screens/SettingsScreen'
 import { useAuthStore } from './store/authStore'
+import { useThemeStore } from './store/themeStore'
 
 function App() {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
+  const initializeTheme = useThemeStore((state) => state.initializeTheme)
   const [currentScreen, setCurrentScreen] = useState(isLoggedIn ? 'dashboard' : 'landing')
   const [resetEmail, setResetEmail] = useState('')
+
+  // Initialize theme on mount
+  useEffect(() => {
+    initializeTheme()
+  }, [initializeTheme])
 
   useEffect(() => {
     if (!isLoggedIn && !['landing', 'login', 'register', 'forgot-password', 'otp-verification', 'change-password', 'password-success'].includes(currentScreen)) {
@@ -96,7 +106,10 @@ function App() {
 
       {/* App Screens */}
       {currentScreen === 'dashboard' && <DashboardScreen onNavigate={handleNavigate} />}
+      {currentScreen === 'deadlines' && <DeadlinesScreen onNavigate={handleNavigate} />}
       {currentScreen === 'courses' && <CoursesScreen onNavigate={handleNavigate} />}
+      {currentScreen === 'insights' && <InsightsScreen onNavigate={handleNavigate} />}
+      {currentScreen === 'profile' && <ProfileScreen onNavigate={handleNavigate} />}
       {currentScreen === 'calendar' && <CalendarScreen onNavigate={handleNavigate} />}
       {currentScreen === 'settings' && <SettingsScreen onNavigate={handleNavigate} />}
       {currentScreen === 'add-deadline' && <AddDeadlineScreen onNavigate={handleNavigate} />}

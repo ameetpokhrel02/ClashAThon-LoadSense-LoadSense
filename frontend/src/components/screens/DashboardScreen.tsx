@@ -74,7 +74,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB] relative pb-20 md:pb-0">
+    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0 transition-colors duration-200">
       {/* Mobile Header */}
       <div className="md:hidden bg-gradient-to-r from-[#ff7400] to-[#ff7400]/90 p-4 flex justify-between items-center sticky top-0 z-20">
         <h1 className="text-lg font-semibold text-white">Dashboard</h1>
@@ -92,8 +92,8 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
         {/* Welcome Header */}
         <div className="hidden md:flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">Welcome back, {user?.firstName || 'Student'}</h1>
-            <p className="text-sm text-gray-500 mt-1">Here's your workload overview for this week.</p>
+            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Welcome back, {user?.firstName || 'Student'}</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Here's your workload overview for this week.</p>
           </div>
           <Button
             onClick={() => onNavigate('add-deadline')}
@@ -108,7 +108,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           <motion.div
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="bg-red-50 text-red-600 rounded-xl p-4 flex items-center gap-3 border border-red-200"
+            className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl p-4 flex items-center gap-3 border border-red-200 dark:border-red-800"
           >
             <AlertTriangle className="w-5 h-5 flex-shrink-0" />
             <span className="font-medium text-sm">You may experience workload overload next week. Consider redistributing tasks.</span>
@@ -121,18 +121,18 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1 }}
         >
-          <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
+          <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-800">Your Academic Load</h2>
-              <div className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Your Academic Load</h2>
+              <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-yellow-500"></span>
                 Moderate Risk
               </div>
             </div>
             <div className="flex items-end gap-4">
               <div>
-                <p className="text-sm text-gray-500 mb-1">Weekly Load Score</p>
-                <p className="text-4xl font-semibold text-gray-800">65<span className="text-lg text-gray-400 font-normal">/100</span></p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Weekly Load Score</p>
+                <p className="text-4xl font-semibold text-gray-800 dark:text-white">65<span className="text-lg text-gray-400 font-normal">/100</span></p>
               </div>
             </div>
           </div>
@@ -144,9 +144,9 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-6">Workload Heatmap</h2>
-            <div className="grid grid-cols-5 gap-3 md:gap-4 border border-gray-200 rounded-lg p-4 bg-gray-50/50">
+          <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-6">Workload Heatmap</h2>
+            <div className="grid grid-cols-5 gap-3 md:gap-4 border border-gray-200 dark:border-gray-700 rounded-lg p-4 bg-gray-50/50 dark:bg-gray-800/50">
               {weeklyIntensity.map((day) => {
                 let bgColor = 'bg-green-500';
                 if (day.intensity > 70) bgColor = 'bg-red-500';
@@ -154,8 +154,8 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
 
                 return (
                   <div key={day.day} className="flex flex-col items-center gap-2">
-                    <div className="text-xs font-medium text-gray-500">{day.day}</div>
-                    <div className="w-full h-24 md:h-28 bg-gray-100 rounded-lg relative overflow-hidden flex items-end border border-gray-200">
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400">{day.day}</div>
+                    <div className="w-full h-24 md:h-28 bg-gray-100 dark:bg-gray-800 rounded-lg relative overflow-hidden flex items-end border border-gray-200 dark:border-gray-700">
                       <div 
                         className={`w-full rounded-b-lg transition-all duration-500 ${bgColor}`}
                         style={{ height: `${day.intensity}%` }}
@@ -165,7 +165,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
                 )
               })}
             </div>
-            <div className="flex items-center justify-center gap-6 mt-5 text-xs text-gray-500">
+            <div className="flex items-center justify-center gap-6 mt-5 text-xs text-gray-500 dark:text-gray-400">
               <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-green-500"></span> Safe</div>
               <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-yellow-500"></span> Busy</div>
               <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full bg-red-500"></span> Overload</div>
@@ -179,23 +179,23 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-6">Upcoming Deadlines</h2>
+          <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6">
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-6">Upcoming Deadlines</h2>
             <div className="space-y-3">
               {priorityDeadlines.map((task, index) => {
-                let badgeColor = 'bg-green-100 text-green-700';
-                if (task.impact === 'High') badgeColor = 'bg-red-100 text-red-700';
-                else if (task.impact === 'Medium') badgeColor = 'bg-yellow-100 text-yellow-700';
+                let badgeColor = 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400';
+                if (task.impact === 'High') badgeColor = 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400';
+                else if (task.impact === 'Medium') badgeColor = 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400';
 
                 return (
-                  <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-200 hover:border-gray-300 hover:bg-gray-50/50 transition-all bg-white gap-3 sm:gap-0">
+                  <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50/50 dark:hover:bg-gray-800/50 transition-all bg-white dark:bg-gray-800 gap-3 sm:gap-0">
                     <div className="flex items-start gap-3">
                       <div className="w-9 h-9 rounded-lg bg-[#ff7400]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <Calendar className="w-4 h-4 text-[#ff7400]" />
                       </div>
                       <div>
-                        <h3 className="font-medium text-gray-800 text-sm">{task.title}</h3>
-                        <p className="text-xs text-gray-500 mt-0.5">{task.course}</p>
+                        <h3 className="font-medium text-gray-800 dark:text-white text-sm">{task.title}</h3>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{task.course}</p>
                         <div className="flex items-center gap-1.5 mt-1.5 text-xs text-gray-400">
                           <Clock className="w-3 h-3" />
                           {task.dueDate}
