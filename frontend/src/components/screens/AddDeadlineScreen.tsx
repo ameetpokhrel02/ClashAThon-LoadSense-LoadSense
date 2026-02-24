@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { BrandHeader } from "@/components/ui/brand-header"
 import { LayoutWrapper, ResponsiveContainer, MobileHeader } from "@/components/ui/layout-wrapper"
 import { Footer } from "@/components/ui/footer"
-import { MobileNavigation, MobileSidebar, MobileMenuButton } from "@/components/ui/mobile-navigation"
+import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { PullToRefresh } from "@/components/ui/pull-to-refresh"
 import { CalendarIcon, ArrowLeft, Clock, BookOpen, Target } from "lucide-react"
 import { format } from "date-fns"
@@ -67,7 +67,7 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
   }
 
   return (
-    <LayoutWrapper pattern="centered">
+    <LayoutWrapper pattern="centered" className="bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2]">
       <PullToRefresh onRefresh={handleRefresh}>
         {/* Mobile Header */}
         <MobileHeader 
@@ -110,13 +110,13 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
               
               <div className="space-y-6">
                 <motion.div 
-                  className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-8 border border-primary/30 neon-glow-purple"
+                  className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-8 border border-primary/30"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-primary/30 p-3 rounded-full neon-glow-purple">
+                    <div className="bg-primary/30 p-3 rounded-full">
                       <Target className="w-6 h-6 text-primary" />
                     </div>
                     <h3 className="text-xl font-semibold text-primary">Smart Planning</h3>
@@ -127,16 +127,16 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                 </motion.div>
 
                 <motion.div 
-                  className="bg-gradient-to-br from-accent/20 to-accent/10 rounded-2xl p-8 border border-accent/30 neon-glow-violet"
+                  className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-8 border border-primary/30"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.5, duration: 0.5 }}
                 >
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-accent/30 p-3 rounded-full neon-glow-violet">
-                      <BookOpen className="w-6 h-6 text-accent" />
+                    <div className="bg-primary/30 p-3 rounded-full">
+                      <BookOpen className="w-6 h-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-semibold text-accent">Workload Intelligence</h3>
+                    <h3 className="text-xl font-semibold text-primary">Workload Intelligence</h3>
                   </div>
                   <p className="text-foreground/80 leading-relaxed">
                     Our algorithm considers your historical completion rates and current commitments to provide accurate workload predictions.
@@ -152,7 +152,7 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <ModernCard variant="glass" className="modern-shadow-2xl neon-glow-purple mobile-card">
+              <ModernCard variant="glass" className="modern-shadow-2xl mobile-card">
                 {/* Header */}
                 <div className="border-b border-border/50 p-6 lg:p-8">
                   <div className="lg:hidden mb-6">
@@ -160,7 +160,7 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                   </div>
                   
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-primary/20 p-3 rounded-xl neon-glow-purple">
+                    <div className="bg-primary/20 p-3 rounded-xl">
                       <CalendarIcon className="w-6 h-6 text-primary" />
                     </div>
                     <div>
@@ -300,7 +300,7 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                   </Button>
                   <Button 
                     onClick={handleSave} 
-                    className="rounded-lg h-11 px-8 modern-gradient-purple text-white hover:neon-glow-purple transition-smooth touch-target"
+                    className="rounded-lg h-11 px-8 bg-primary hover:bg-primary/80 text-white transition-smooth touch-target"
                   >
                     Save Deadline
                   </Button>

@@ -54,7 +54,7 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
           {/* Brand Section */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center">
+              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <div>
@@ -78,22 +78,22 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
             <h4 className="font-semibold text-gray-900 mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
                   Dashboard
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
                   My Courses
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
                   Calendar
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
                   Add Deadline
                 </a>
               </li>
@@ -105,22 +105,22 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
             <h4 className="font-semibold text-gray-900 mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-purple-600 transition-colors">
+                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
                   Terms of Service
                 </a>
               </li>

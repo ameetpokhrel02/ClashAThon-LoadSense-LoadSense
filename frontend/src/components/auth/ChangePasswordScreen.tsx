@@ -1,0 +1,209 @@
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { GraduationCap, Loader2, Lock, ArrowLeft, Eye, EyeOff } from "lucide-react"
+import childrenImage from "@/assets/childenjooying.png"
+
+interface ChangePasswordScreenProps {
+  email: string
+  onNavigate: (screen: string) => void
+  onSubmit: () => void
+}
+
+export default function ChangePasswordScreen({ email, onNavigate, onSubmit }: ChangePasswordScreenProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    setError(null)
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters")
+      setIsLoading(false)
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      onSubmit()
+    } catch (err) {
+      setError("Failed to reset password. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen w-full flex bg-gradient-to-br from-[#FFF8F5] via-[#FFF5F0] to-[#FFEDE5]">
+      {/* Left Panel */}
+      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-gradient-to-br from-[#2A7A8C] via-[#3B8FA1] to-[#1F5F6E] p-12 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 via-transparent to-orange-400/5 pointer-events-none" />
+        <div className="absolute -bottom-20 -right-20 w-96 h-96 bg-gradient-to-br from-amber-400/20 to-orange-500/10 rounded-full blur-3xl" />
+        
+        <motion.div 
+          className="flex items-center gap-3 relative z-10"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="bg-white/20 p-3 rounded-xl backdrop-blur-sm border border-white/20 shadow-lg">
+            <GraduationCap className="w-7 h-7 text-white" />
+          </div>
+          <span className="text-2xl font-bold tracking-tight">LoadSense</span>
+        </motion.div>
+        
+        <div className="flex-1 flex flex-col justify-center items-center relative z-10 px-6">
+          <motion.div 
+            className="w-full max-w-lg"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent rounded-3xl blur-xl scale-105" />
+              <img 
+                src={childrenImage}
+                alt="Students enjoying learning"
+                className="w-full h-auto rounded-3xl shadow-2xl relative z-10 border border-white/20 object-cover"
+              />
+            </div>
+            
+            <div className="text-center mt-6">
+              <h1 className="text-3xl font-bold mb-2">
+                <span className="text-white">Create New</span>{" "}
+                <span className="text-amber-300">Password</span>
+              </h1>
+              <p className="text-white/70 text-base">
+                Choose a strong password.
+              </p>
+            </div>
+          </motion.div>
+        </div>
+        
+        <div className="text-sm text-white/50 relative z-10">
+          © 2026 LoadSense. All rights reserved.
+        </div>
+      </div>
+
+      {/* Right Panel */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        <motion.div 
+          className="w-full max-w-md"
+          initial={{ x: 30, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
+            <div className="bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] p-2 rounded-xl shadow-lg shadow-[#2A7A8C]/30">
+              <GraduationCap className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-2xl font-bold text-[#0F172A]">
+              Load<span className="text-[#2A7A8C]">Sense</span>
+            </span>
+          </div>
+
+          <Card className="bg-white shadow-2xl shadow-[#2A7A8C]/10 border border-[#E2E8F0] rounded-2xl">
+            <CardHeader className="space-y-1 pb-4">
+              <CardTitle className="text-2xl font-bold text-[#0F172A]">Set New Password</CardTitle>
+              <CardDescription className="text-[#64748B]">
+                Create a new password for <span className="font-medium text-[#2A7A8C]">{email}</span>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {error && (
+                  <motion.div 
+                    className="text-sm text-red-600 bg-red-50 p-3 rounded-xl border border-red-100"
+                    initial={{ scale: 0.95, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                  >
+                    {error}
+                  </motion.div>
+                )}
+                
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-[#0F172A] font-medium">New Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
+                    <Input 
+                      id="password" 
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Min 6 characters"
+                      className="pl-11 pr-11 h-12 rounded-xl bg-white border-[#DCEFF2] focus:border-[#2A7A8C] focus:ring-[#2A7A8C]/20" 
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#2A7A8C] transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword" className="text-[#0F172A] font-medium">Confirm New Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#64748B]" />
+                    <Input 
+                      id="confirmPassword" 
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirm your password"
+                      className="pl-11 pr-11 h-12 rounded-xl bg-white border-[#DCEFF2] focus:border-[#2A7A8C] focus:ring-[#2A7A8C]/20" 
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#2A7A8C] transition-colors"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+                
+                <Button 
+                  className="w-full h-12 rounded-xl text-base font-semibold bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] hover:from-[#1F5F6E] hover:to-[#2A7A8C] shadow-lg shadow-[#2A7A8C]/30 transition-all duration-300" 
+                  type="submit" 
+                  disabled={isLoading}
+                >
+                  {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Update Password"}
+                </Button>
+              </form>
+              
+              <Button 
+                type="button"
+                variant="outline"
+                onClick={() => onNavigate('login')}
+                className="w-full h-11 rounded-xl text-base font-semibold border-2 border-[#2A7A8C] text-[#2A7A8C] hover:bg-[#EAF4F6] transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Login
+              </Button>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
+    </div>
+  )
+}

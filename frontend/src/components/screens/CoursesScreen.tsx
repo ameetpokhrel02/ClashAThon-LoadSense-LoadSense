@@ -30,7 +30,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
       instructor: "Dr. Smith",
       students: 45,
       progress: 75,
-      color: "bg-blue-500"
+      color: "bg-primary"
     },
     {
       id: 2,
@@ -39,7 +39,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
       instructor: "Prof. Johnson",
       students: 38,
       progress: 60,
-      color: "bg-green-500"
+      color: "bg-primary/70"
     },
     {
       id: 3,
@@ -48,7 +48,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
       instructor: "Dr. Williams",
       students: 52,
       progress: 40,
-      color: "bg-purple-500"
+      color: "bg-primary/50"
     }
   ]
 
@@ -62,13 +62,13 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#F6FAFB] via-[#EAF4F6] to-[#DCEFF2]">
       {/* Top Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white shadow-sm border-b border-[#E2E8F0] px-6 py-4">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">My Courses</h1>
-            <p className="text-gray-600">Manage your enrolled courses</p>
+            <h1 className="text-2xl font-semibold text-[#0F172A]">My <span className="text-[#2A7A8C]">Courses</span></h1>
+            <p className="text-[#64748B]">Manage your enrolled courses</p>
           </div>
         </div>
       </div>
@@ -83,14 +83,14 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
             >
-              <ModernCard className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
+              <ModernCard className="p-6 hover:shadow-2xl transition-all cursor-pointer glow-primary-hover">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-12 h-12 ${course.color} rounded-lg flex items-center justify-center`}>
+                  <div className={`w-12 h-12 bg-gradient-to-r from-[#2A7A8C] to-[#3B8FA1] rounded-lg flex items-center justify-center shadow-lg shadow-[#2A7A8C]/20`}>
                     <BookOpen className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">{course.name}</h3>
-                    <p className="text-sm text-gray-500">{course.code}</p>
+                    <h3 className="font-semibold text-[#0F172A]">{course.name}</h3>
+                    <p className="text-sm text-[#64748B]">{course.code}</p>
                   </div>
                 </div>
                 
@@ -112,14 +112,14 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
                       <div 
-                        className={`h-2 rounded-full ${course.color}`}
+                        className={`h-2 rounded-full bg-gradient-to-r from-primary to-[#317E90]`}
                         style={{ width: `${course.progress}%` }}
                       ></div>
                     </div>
                   </div>
                 </div>
                 
-                <Button className="w-full mt-4 bg-purple-600 hover:bg-purple-700">
+                <Button className="w-full mt-4 btn-primary-glow rounded-lg">
                   View Course
                 </Button>
               </ModernCard>

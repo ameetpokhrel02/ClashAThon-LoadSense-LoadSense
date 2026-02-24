@@ -60,16 +60,16 @@ export function NavigationSidebar({
   return (
     <>
       <aside className={cn(
-        "w-64 bg-gradient-to-b from-purple-500 via-purple-550 to-purple-600 text-white flex flex-col shadow-2xl relative overflow-hidden",
+        "w-64 bg-gradient-to-b from-[#2A7A8C] via-[#3B8FA1] to-[#1F5F6E] text-white flex flex-col shadow-2xl shadow-[#2A7A8C]/20 relative overflow-hidden",
         className
       )}>
-        {/* Subtle overlay for depth */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none" />
+        {/* Subtle glow overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
         
         {/* Brand Header with Logo */}
         <div className="p-6 relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg border border-white/10">
+            <div className="w-12 h-12 glass-card-dark rounded-xl flex items-center justify-center shadow-lg border border-white/20 glow-primary">
               <GraduationCap className="w-6 h-6 text-white drop-shadow-sm" />
             </div>
             <div>
@@ -83,7 +83,7 @@ export function NavigationSidebar({
         <div className="px-6 mb-8 relative z-10">
           <Button 
             onClick={() => onNavigate('add-deadline')} 
-            className="w-full gap-3 bg-purple-700/80 hover:bg-purple-800 text-white border-0 rounded-xl py-4 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/10 hover:scale-[1.02]"
+            className="w-full gap-3 bg-white/20 hover:bg-white/30 text-white border-0 rounded-xl py-4 font-semibold transition-all duration-300 shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/20 hover:scale-[1.02] glow-primary"
           >
             <Plus className="w-5 h-5" />
             Add Deadline
