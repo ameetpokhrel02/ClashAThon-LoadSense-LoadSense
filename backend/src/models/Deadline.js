@@ -1,5 +1,28 @@
 import mongoose from "mongoose";
 
+<<<<<<< samir
+// Deadline schema aligned with the frontend Deadline model
+// Fields are kept simple for the hackathon use case and can
+// be extended later (e.g. user-specific scoping, courses, etc.).
+const deadlineSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    course: { type: String, required: true },
+    type: { type: String, required: true },
+    dueDate: { type: Date, required: true },
+    estimatedHours: { type: Number, required: true },
+    risk: {
+      type: String,
+      enum: ["low", "medium", "high"],
+      default: "low",
+    },
+    notes: { type: String },
+  },
+  {
+    timestamps: true,
+  }
+);
+=======
 // Impact weight used in workload score calculation
 // assignment=1, quiz=2, viva=2, group_project=3, midterm=4, final=5
 const IMPACT_WEIGHTS = {
@@ -71,5 +94,6 @@ deadlineSchema.pre("save", function (next) {
   else this.impact_level = "critical";
   next();
 });
+>>>>>>> main
 
 export default mongoose.model("Deadline", deadlineSchema);

@@ -24,7 +24,11 @@ app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/workload", workloadRoutes);
 
 app.get("/", (req, res) => {
+<<<<<<< samir
+  res.send("LoadSense API Running ");
+=======
   res.send("LoadSense API Running...");
+>>>>>>> main
 });
 
 const PORT = process.env.PORT || 3000;
