@@ -3,10 +3,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-primary: #2A7A8C;
-  --color-primary-hover: #246B7B;
-  --color-background: #F6FAFB;
-  --color-foreground: #0F172A;
+  --color-primary: #ff7400;
+  --color-primary-hover: #e66800;
+  --color-primary-mid: #ff8c33;
+  --color-primary-dark: #cc5c00;
+  --color-background: #FFF8F5;
+  --color-foreground: #1a1a2e;
   --color-muted: #64748B;
   --color-success: #22C55E;
   --color-warning: #FACC15;
@@ -14,48 +16,52 @@
 }
 
 :root {
-  --background: #F6FAFB;
-  --foreground: #0F172A;
+  --background: #ffffff;
+  --foreground: #1a1a2e;
   --card: #ffffff;
-  --card-foreground: #0F172A;
+  --card-foreground: #1a1a2e;
   --popover: #ffffff;
-  --popover-foreground: #0F172A;
-  --primary: #2A7A8C;
+  --popover-foreground: #1a1a2e;
+  --primary: #ff7400;
+  --primary-mid: #ff8c33;
+  --primary-dark: #e66800;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0F172A;
-  --muted: #f1f5f9;
+  --secondary: #f8fafc;
+  --secondary-foreground: #ff7400;
+  --muted: #f8fafc;
   --muted-foreground: #64748B;
-  --accent: #f1f5f9;
-  --accent-foreground: #0F172A;
+  --accent: #f8fafc;
+  --accent-foreground: #ff7400;
   --destructive: #EF4444;
   --destructive-foreground: #ffffff;
   --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #2A7A8C;
+  --input: #ffffff;
+  --ring: #ff7400;
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: #0f172a;
+  --background: #111827;
   --foreground: #f8fafc;
-  --card: #1e293b;
+  --card: #1f2937;
   --card-foreground: #f8fafc;
-  --popover: #1e293b;
+  --popover: #1f2937;
   --popover-foreground: #f8fafc;
-  --primary: #2A7A8C;
+  --primary: #ff7400;
+  --primary-mid: #ff8c33;
+  --primary-dark: #e66800;
   --primary-foreground: #ffffff;
-  --secondary: #1e293b;
+  --secondary: #374151;
   --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #1e293b;
+  --muted: #374151;
+  --muted-foreground: #9ca3af;
+  --accent: #374151;
   --accent-foreground: #f8fafc;
-  --destructive: #7f1d1d;
+  --destructive: #dc2626;
   --destructive-foreground: #f8fafc;
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #2A7A8C;
+  --border: #374151;
+  --input: #1f2937;
+  --ring: #ff7400;
 }
 
 * {
@@ -63,7 +69,197 @@
 }
 
 body {
-  background-color: var(--background);
+  background: #F6FAFB;
+  min-height: 100vh;
   color: var(--foreground);
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Dark mode body */
+.dark body,
+body:is(.dark *) {
+  background: #111827;
+}
+
+html.dark {
+  background: #111827;
+}
+
+html.dark body {
+  background: #111827;
+}
+
+/* Mobile Navigation - Dark Mode Support */
+.mobile-nav {
+  background: rgba(255, 255, 255, 0.98);
+  border-top: 1px solid #e2e8f0;
+}
+
+.dark .mobile-nav {
+  background: rgba(17, 24, 39, 0.98);
+  border-top: 1px solid #374151;
+}
+
+.mobile-nav-item {
+  color: #6b7280;
+}
+
+.mobile-nav-item.active {
+  color: #ff7400;
+}
+
+.dark .mobile-nav-item {
+  color: #9ca3af;
+}
+
+.dark .mobile-nav-item.active {
+  color: #ff7400;
+}
+
+/* ===== ORANGE DESIGN SYSTEM ===== */
+
+/* Primary Orange Gradient */
+.gradient-primary {
+  background: linear-gradient(to right, #ff7400, #ff8c33, #e66800);
+}
+
+.gradient-primary-warm {
+  background: linear-gradient(to right, #ff7400, #ff8c33);
+}
+
+.gradient-primary-br {
+  background: linear-gradient(to bottom right, #ff7400, #ff8c33, #e66800);
+}
+
+/* Hero Background - Cream */
+.gradient-hero {
+  background: linear-gradient(135deg, #FFF8F5 0%, #FFF5F0 50%, #FFEDE5 100%);
+}
+
+.gradient-hero-orange {
+  background: linear-gradient(135deg, #ff7400 0%, #ff8c33 50%, #e66800 100%);
+}
+
+/* Premium Card Style */
+.card-premium {
+  background: #ffffff;
+  box-shadow: 0 10px 40px -10px rgba(255, 116, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+}
+
+.card-premium:hover {
+  box-shadow: 0 20px 50px -10px rgba(255, 116, 0, 0.2), 0 8px 10px -4px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Glass Card - Cream Feel */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 40px -10px rgba(255, 116, 0, 0.1);
+}
+
+.glass-card-dark {
+  background: rgba(255, 116, 0, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Orange Glow Effects */
+.glow-primary {
+  box-shadow: 0 10px 40px -10px rgba(255, 116, 0, 0.3);
+}
+
+.glow-primary-hover:hover {
+  box-shadow: 0 20px 50px -10px rgba(255, 116, 0, 0.4);
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+.glow-success {
+  box-shadow: 0 4px 20px -4px rgba(34, 197, 94, 0.25);
+}
+
+.glow-warning {
+  box-shadow: 0 4px 20px -4px rgba(250, 204, 21, 0.3);
+}
+
+.glow-danger {
+  box-shadow: 0 4px 20px -4px rgba(239, 68, 68, 0.25);
+}
+
+/* Gradient Text - Orange */
+.gradient-text {
+  background: linear-gradient(to right, #ffffff, #fff5eb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-primary {
+  background: linear-gradient(to right, #ff7400, #ff8c33);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Primary CTA Button - Orange Glow */
+.btn-primary-glow {
+  background: linear-gradient(to right, #ff7400, #ff8c33);
+  color: white;
+  box-shadow: 0 10px 30px -10px rgba(255, 116, 0, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-primary-glow:hover {
+  box-shadow: 0 15px 40px -10px rgba(255, 116, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Secondary CTA Button */
+.btn-secondary-warm {
+  background: #fff5eb;
+  color: #ff7400;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary-warm:hover {
+  background: #ffebe0;
+  box-shadow: 0 4px 15px -4px rgba(255, 116, 0, 0.2);
+}
+
+/* Soft Input Style */
+.input-soft {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.input-soft:focus {
+  background: #ffffff;
+  border-color: #ff7400;
+  box-shadow: 0 0 0 3px rgba(255, 116, 0, 0.15);
+}
+
+/* Badge Style - Orange */
+.badge-warm {
+  background: #fff5eb;
+  color: #ff7400;
+  font-weight: 500;
+}
+
+/* Highlight Text */
+.text-highlight {
+  color: #ff7400;
+  font-weight: 600;
+}
+
+/* Orange Sidebar */
+.sidebar-warm {
+  background: linear-gradient(to bottom, #ff7400, #ff8c33, #e66800);
 }

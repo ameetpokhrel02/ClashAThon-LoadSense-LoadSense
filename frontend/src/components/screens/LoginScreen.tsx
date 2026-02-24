@@ -70,25 +70,28 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
   }
 
   return (
-    <div className="min-h-screen w-full flex bg-background">
+    <div className="min-h-screen w-full flex bg-gradient-to-br from-[#FFF8F5] via-[#FFF5F0] to-[#FFEDE5]">
       {/* Left Panel - Illustration & Branding */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-gradient-to-br from-primary to-[#4A9EAE] p-12 text-white">
-        <div className="flex items-center gap-2">
-          <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-gradient-to-br from-[#ff7400] via-[#ff8c33] to-[#e66800] p-12 text-white relative overflow-hidden">
+        {/* Subtle glow overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10 pointer-events-none" />
+        
+        <div className="flex items-center gap-2 relative z-10">
+          <div className="bg-white/20 p-2 rounded-lg backdrop-blur-sm border border-white/10 glow-primary">
             <Calendar className="w-6 h-6 text-white" />
           </div>
           <span className="text-2xl font-bold tracking-tight">LoadSense</span>
         </div>
         
-        <div className="flex-1 flex flex-col justify-center max-w-md mx-auto">
-          {/* Placeholder for the illustration */}
-          <div className="w-full aspect-square bg-white/10 rounded-2xl backdrop-blur-sm border border-white/20 flex items-center justify-center mb-8 shadow-2xl">
+        <div className="flex-1 flex flex-col justify-center max-w-md mx-auto relative z-10">
+          {/* Glass card illustration */}
+          <div className="w-full aspect-square glass-card-dark rounded-2xl border border-white/20 flex items-center justify-center mb-8 shadow-2xl glow-primary">
             <div className="text-center">
-              <BookOpen className="w-24 h-24 mx-auto mb-4 opacity-80" />
+              <BookOpen className="w-24 h-24 mx-auto mb-4 opacity-90" />
               <p className="text-lg font-medium opacity-90">Smart Workload Management</p>
             </div>
           </div>
-          <h1 className="text-4xl font-bold mb-4 leading-tight">
+          <h1 className="text-4xl font-bold mb-4 leading-tight gradient-text">
             Master your academic schedule.
           </h1>
           <p className="text-lg text-white/80">
@@ -96,7 +99,7 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
           </p>
         </div>
         
-        <div className="text-sm text-white/60">
+        <div className="text-sm text-white/60 relative z-10">
           © 2026 LoadSense. All rights reserved.
         </div>
       </div>
@@ -105,22 +108,22 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <div className="bg-primary/10 p-2 rounded-lg">
-              <Calendar className="w-6 h-6 text-primary" />
+            <div className="bg-gradient-to-r from-[#ff7400] to-[#ff8c33] p-2 rounded-lg glow-primary">
+              <Calendar className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold tracking-tight text-primary">LoadSense</span>
+            <span className="text-2xl font-bold tracking-tight gradient-text-primary">LoadSense</span>
           </div>
 
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsList className="grid w-full grid-cols-2 mb-8 bg-[#FFF5F0] border border-[#FFE8D6]">
               <TabsTrigger value="login">Login</TabsTrigger>
               <TabsTrigger value="register">Register</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login">
-              <Card className="border-0 shadow-xl shadow-primary/5">
+              <Card className="card-premium border border-[#E2E8F0]">
                 <CardHeader className="space-y-1">
-                  <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
+                  <CardTitle className="text-2xl font-semibold text-[#0F172A]">Welcome back</CardTitle>
                   <CardDescription>
                     Enter your email and password to access your dashboard.
                   </CardDescription>
@@ -134,7 +137,7 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
                         id="email" 
                         type="email" 
                         placeholder="student@university.edu" 
-                        className="rounded-lg" 
+                        className="rounded-lg input-soft" 
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -143,18 +146,18 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <Label htmlFor="password">Password</Label>
-                        <a href="#" className="text-sm text-primary hover:underline">Forgot password?</a>
+                        <a href="#" className="text-sm text-[#ff7400] hover:underline">Forgot password?</a>
                       </div>
                       <Input 
                         id="password" 
                         type="password" 
-                        className="rounded-lg" 
+                        className="rounded-lg input-soft" 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                       />
                     </div>
-                    <Button className="w-full rounded-lg mt-2" size="lg" type="submit" disabled={isLoading}>
+                    <Button className="w-full rounded-lg mt-2 btn-primary-glow" size="lg" type="submit" disabled={isLoading}>
                       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Sign In"}
                     </Button>
                   </form>
@@ -163,9 +166,9 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
             </TabsContent>
             
             <TabsContent value="register">
-              <Card className="border-0 shadow-xl shadow-primary/5">
+              <Card className="card-premium border border-[#E2E8F0]">
                 <CardHeader className="space-y-1">
-                  <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+                  <CardTitle className="text-2xl font-bold text-[#0F172A]">Create an account</CardTitle>
                   <CardDescription>
                     Start managing your academic workload intelligently.
                   </CardDescription>
