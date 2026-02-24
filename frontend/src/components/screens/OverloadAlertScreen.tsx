@@ -1,0 +1,110 @@
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { AlertTriangle, ArrowLeft, Calendar, Clock, CheckCircle2, XCircle } from "lucide-react"
+
+export default function OverloadAlertScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
+  return (
+    <div className="min-h-screen bg-background p-8 flex flex-col items-center justify-center">
+      <div className="w-full max-w-3xl mb-6">
+        <Button variant="ghost" className="gap-2 text-muted-foreground hover:text-foreground" onClick={() => onNavigate('dashboard')}>
+          <ArrowLeft className="w-4 h-4" />
+          Back to Dashboard
+        </Button>
+      </div>
+
+      <Card className="w-full max-w-3xl shadow-2xl shadow-destructive/10 border-destructive/20 overflow-hidden">
+        <div className="bg-destructive/10 p-8 border-b border-destructive/20 flex items-start gap-6">
+          <div className="bg-destructive/20 p-4 rounded-full shrink-0">
+            <AlertTriangle className="w-10 h-10 text-destructive" />
+          </div>
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <h1 className="text-3xl font-bold text-destructive">Workload Overload Detected</h1>
+              <Badge variant="destructive" className="text-sm px-3 py-1 uppercase tracking-wider font-bold">High Risk</Badge>
+            </div>
+            <p className="text-lg text-destructive/80 max-w-xl">
+              You have scheduled 3 major assignments due within a 48-hour window next week. This exceeds your recommended capacity.
+            </p>
+          </div>
+        </div>
+
+        <CardContent className="p-8 space-y-8">
+          <div>
+            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-primary" />
+              The Conflict Zone (Feb 26 - Feb 27)
+            </h3>
+            <div className="space-y-3">
+              {[
+                { title: "CS301 Midterm Project", course: "Computer Science", hours: 15, type: "Project" },
+                { title: "ENG205 Essay Draft", course: "Literature", hours: 8, type: "Essay" },
+                { title: "MATH210 Problem Set 4", course: "Mathematics", hours: 5, type: "Homework" },
+              ].map((task, i) => (
+                <div key={i} className="flex items-center justify-between p-4 rounded-lg border border-border bg-secondary/30">
+                  <div>
+                    <h4 className="font-medium text-foreground">{task.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">{task.course} • {task.type}</p>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm font-medium text-destructive">
+                    <Clock className="w-4 h-4" />
+                    Est. {task.hours}h
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 p-4 bg-secondary rounded-lg flex justify-between items-center border border-border/50">
+              <span className="font-medium">Total Estimated Effort:</span>
+              <span className="text-xl font-bold text-destructive">28 Hours</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-4 text-primary">Recommended Actions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Card className="border-primary/20 shadow-sm hover:border-primary/50 transition-colors cursor-pointer" onClick={() => onNavigate('suggestion')}>
+                <CardContent className="p-5 flex items-start gap-4">
+                  <div className="bg-primary/10 p-2 rounded-full shrink-0 mt-1">
+                    <CheckCircle2 className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Start Early Plan</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Begin the CS301 project this weekend to spread the 15 hours over 5 days.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="border-border hover:border-muted-foreground/50 transition-colors cursor-pointer">
+                <CardContent className="p-5 flex items-start gap-4">
+                  <div className="bg-secondary p-2 rounded-full shrink-0 mt-1">
+                    <XCircle className="w-5 h-5 text-muted-foreground" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground mb-1">Request Extension</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Draft an email to your ENG205 professor requesting a 24h extension.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </CardContent>
+
+        <CardFooter className="bg-secondary/30 p-6 border-t border-border flex justify-between items-center">
+          <p className="text-sm text-muted-foreground">
+            LoadSense analyzes your historical completion rates to estimate effort.
+          </p>
+          <div className="flex gap-3">
+            <Button variant="outline" onClick={() => onNavigate('dashboard')}>Ignore Warning</Button>
+            <Button className="bg-primary hover:bg-primary-hover text-white shadow-md shadow-primary/20" onClick={() => onNavigate('suggestion')}>
+              View Study Plan
+            </Button>
+          </div>
+        </CardFooter>
+      </Card>
+    </div>
+  )
+}
