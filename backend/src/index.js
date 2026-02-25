@@ -9,6 +9,7 @@ import deadlineRoutes from "./routes/deadlineRoutes.js";
 import workloadRoutes from "./routes/workloadRoutes.js";
 import dashboardRoutes from "./routes/dashboardscreenRoutes.js";
 import adminFeedbackRatingRoutes from "./routes/adminFeedbackRatingRoutes.js";
+import insightsRoutes from "./routes/insightsRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
@@ -27,6 +28,7 @@ app.use("/api/modules", moduleRoutes);
 app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/workload", workloadRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/insights", insightsRoutes);
 app.use("/api/feedback-ratings", adminFeedbackRatingRoutes);
 
 app.get("/", (req, res) => {

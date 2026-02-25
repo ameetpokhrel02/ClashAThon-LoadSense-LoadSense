@@ -15,7 +15,7 @@ router.post("/", protect, createModule);
 
 // Get all modules
 router.get("/", protect, getAllModules);
-
+  
 // Get, Update, and Delete a single module by ID
 router
   .route("/:id")
