@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { fetchDeadlines, createDeadline, type CreateDeadlinePayload } from '@/lib/deadlineApi'
 
 export type RiskLevel = 'low' | 'medium' | 'high'
 
@@ -20,28 +21,50 @@ interface DeadlineState {
   
   // Actions
   setDeadlines: (deadlines: Deadline[]) => void
-  addDeadline: (deadline: Deadline) => void
-  removeDeadline: (id: string) => void
+  addDeadlineLocal: (deadline: Deadline) => void
+  removeDeadlineLocal: (id: string) => void
   updateWorkloadScore: (score: number) => void
   setLoading: (isLoading: boolean) => void
   setError: (error: string | null) => void
+
+  // Async actions that talk to the API
+  loadDeadlines: () => Promise<void>
+  createDeadline: (payload: CreateDeadlinePayload) => Promise<Deadline | null>
 }
 
-export const useDeadlineStore = create<DeadlineState>((set) => ({
-  deadlines: [
-    // Initial mock data for the hackathon MVP
-    { id: '1', title: "CS301 Midterm Project", course: "Computer Science", dueDate: new Date(Date.now() + 86400000).toISOString(), estimatedHours: 15, risk: "high", type: "Project" },
-    { id: '2', title: "ENG205 Essay Draft", course: "Literature", dueDate: new Date(Date.now() + 86400000 * 3).toISOString(), estimatedHours: 8, risk: "medium", type: "Essay" },
-    { id: '3', title: "MATH210 Problem Set 4", course: "Mathematics", dueDate: new Date(Date.now() + 86400000 * 4).toISOString(), estimatedHours: 5, risk: "low", type: "Homework" },
-  ],
-  workloadScore: 65,
+export const useDeadlineStore = create<DeadlineState>((set, get) => ({
+  deadlines: [],
+  workloadScore: 0,
   isLoading: false,
   error: null,
 
   setDeadlines: (deadlines) => set({ deadlines }),
-  addDeadline: (deadline) => set((state) => ({ deadlines: [...state.deadlines, deadline] })),
-  removeDeadline: (id) => set((state) => ({ deadlines: state.deadlines.filter(d => d.id !== id) })),
+  addDeadlineLocal: (deadline) => set((state) => ({ deadlines: [...state.deadlines, deadline] })),
+  removeDeadlineLocal: (id) => set((state) => ({ deadlines: state.deadlines.filter(d => d.id !== id) })),
   updateWorkloadScore: (score) => set({ workloadScore: score }),
   setLoading: (isLoading) => set({ isLoading }),
   setError: (error) => set({ error }),
+
+  loadDeadlines: async () => {
+    try {
+      set({ isLoading: true, error: null })
+      const deadlines = await fetchDeadlines()
+      set({ deadlines, isLoading: false })
+    } catch (error: any) {
+      set({ error: error?.message || 'Failed to load deadlines', isLoading: false })
+    }
+  },
+
+  createDeadline: async (payload) => {
+    try {
+      set({ isLoading: true, error: null })
+      const deadline = await createDeadline(payload)
+      const { deadlines } = get()
+      set({ deadlines: [...deadlines, deadline], isLoading: false })
+      return deadline
+    } catch (error: any) {
+      set({ error: error?.message || 'Failed to create deadline', isLoading: false })
+      return null
+    }
+  },
 }))
