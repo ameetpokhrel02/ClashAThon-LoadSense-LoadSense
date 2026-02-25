@@ -5,33 +5,37 @@ import { upload } from "../config/cloudinary.js";
 
 const router = express.Router();
 
-// Custom error handler for Multer
-const handleUploadErrors = (err, req, res, next) => {
-  if (err) {
-    // Log the full error for debugging
-    console.error("Multer Error:", err);
-
-    // Send a user-friendly JSON response
-    return res.status(400).json({
-      success: false,
-      message: "File upload failed. Please check the file or try again.",
-      error: err.message,
-    });
-  }
-  next();
-};
-
 // A user can only get their own profile
 router.get("/profile", protect, getProfile);
 
 // A user can only update their own profile
+// upload.single("avatar") handles file upload (optional - passes through if no file)
 router.patch(
   "/profile",
   protect,
   (req, res, next) => {
     upload.single("avatar")(req, res, (err) => {
-      // This wrapper catches errors from the upload middleware
-      handleUploadErrors(err, req, res, next);
+      if (err) {
+        console.error("Multer/Cloudinary Error:", err.message);
+        // Return specific error messages for common issues
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          return res.status(400).json({
+            success: false,
+            message: "File too large. Maximum size is 2MB.",
+          });
+        }
+        if (err.message?.includes("credentials") || err.message?.includes("cloud_name")) {
+          return res.status(500).json({
+            success: false,
+            message: "Server configuration error. Please contact support.",
+          });
+        }
+        return res.status(400).json({
+          success: false,
+          message: err.message || "File upload failed. Please try again.",
+        });
+      }
+      next();
     });
   },
   updateProfile

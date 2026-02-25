@@ -104,8 +104,10 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
       await updateProfile(formData)
       setSaveMessage({ type: 'success', text: 'Profile updated successfully!' })
       setAvatarFile(null)
-    } catch {
-      setSaveMessage({ type: 'error', text: 'Failed to update profile. Please try again.' })
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { message?: string } }, message?: string }
+      const errorMessage = err.response?.data?.message || err.message || 'Failed to update profile. Please try again.'
+      setSaveMessage({ type: 'error', text: errorMessage })
     } finally {
       setIsSaving(false)
     }

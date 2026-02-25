@@ -8,7 +8,20 @@ export const getProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.json({ user });
+    // Return user with `id` field for frontend consistency
+    res.json({
+      user: {
+        id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        ward: user.ward,
+        role: user.role,
+        avatar: user.avatar,
+      }
+    });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
@@ -21,13 +34,8 @@ export const updateProfile = async (req, res) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-      console.error("User not found for ID:", req.user._id);
       return res.status(404).json({ message: "User not found" });
     }
-
-    console.log("Updating fields for user:", user.email);
-    console.log("Req body:", req.body);
-    console.log("Req file:", req.file ? "File present" : "No file");
 
     if (firstName) user.firstName = firstName.trim();
     if (lastName) user.lastName = lastName.trim();
@@ -78,7 +86,6 @@ export const updateProfile = async (req, res) => {
     }
 
     // Generic server error
-    console.error("Update Profile Error details:", err.message, err.stack); // Log the full error for debugging
     res.status(500).json({
       success: false,
       message: "An unexpected error occurred on the server."

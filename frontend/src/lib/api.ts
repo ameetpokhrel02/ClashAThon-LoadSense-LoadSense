@@ -10,12 +10,16 @@ export const api = axios.create({
   },
 })
 
-// Request interceptor to add the auth token
+// Request interceptor to add the auth token and handle FormData
 api.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().token
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
+    }
+    // Let axios set the correct Content-Type for FormData (multipart/form-data with boundary)
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type']
     }
     return config
   },
