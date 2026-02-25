@@ -43,7 +43,7 @@ export const createModule = async (req, res) => {
     }
 
     // Duplicate moduleCode check for this user only
-    const existingModule = await Module.findOne({ moduleCode, user: req.user._id });
+    const existingModule = await Module.findOne({ moduleCode, user: req.user.id });
     if (existingModule) {
       return res.status(409).json({
         success: false,
@@ -58,7 +58,7 @@ export const createModule = async (req, res) => {
       credits,
       semester,
       year,
-      user: req.user._id  // associate module with logged-in user
+      user: req.user.id  // associate module with logged-in user
     });
 
     const savedModule = await newModule.save();
@@ -82,7 +82,7 @@ export const getAllModules = async (req, res) => {
     const filters = req.query || {};
 
     // Always filter by user
-    const modules = await Module.find({ user: req.user._id, ...filters })
+    const modules = await Module.find({ user: req.user.id, ...filters })
       .sort({ semester: 1, moduleCode: 1 });
 
     res.status(200).json({
@@ -110,7 +110,7 @@ export const getModuleById = async (req, res) => {
 
     const module = await Module.findOne({
       _id: req.params.id,
-      user: req.user._id
+      user: req.user.id
     });
 
     if (!module) {

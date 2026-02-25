@@ -1,6 +1,7 @@
 import * as React from "react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
+import { TopNavbar } from "./top-navbar"
 
 interface LayoutWrapperProps {
   children: React.ReactNode
@@ -69,6 +70,7 @@ interface SidebarLayoutProps {
   sidebarClassName?: string
   contentClassName?: string
   mobileNavigation?: React.ReactNode
+  onNavigate?: (screen: string) => void
 }
 
 export function SidebarLayout({ 
@@ -76,22 +78,29 @@ export function SidebarLayout({
   content, 
   sidebarClassName, 
   contentClassName,
-  mobileNavigation
+  mobileNavigation,
+  onNavigate
 }: SidebarLayoutProps) {
   return (
-    <>
+    <div className="flex flex-col lg:flex-row min-h-screen w-full">
       {/* Desktop Sidebar */}
-      <div className={cn("hidden lg:block", sidebarClassName)}>
+      <div className={cn("hidden lg:block flex-shrink-0", sidebarClassName)}>
         {sidebar}
       </div>
       
-      {/* Main Content */}
-      <main className={cn(
-        "flex-1 overflow-y-auto pb-20 lg:pb-0", // Add bottom padding for mobile nav
-        contentClassName
-      )}>
-        {content}
-      </main>
+      {/* Main Content Area with Top Navbar */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        {/* Top Navbar - only show when onNavigate is provided */}
+        {onNavigate && <TopNavbar onNavigate={onNavigate} />}
+        
+        {/* Main Content */}
+        <main className={cn(
+          "flex-1 overflow-y-auto pb-20 lg:pb-0",
+          contentClassName
+        )}>
+          {content}
+        </main>
+      </div>
       
       {/* Mobile Navigation */}
       {mobileNavigation && (
@@ -99,7 +108,7 @@ export function SidebarLayout({
           {mobileNavigation}
         </div>
       )}
-    </>
+    </div>
   )
 }
 

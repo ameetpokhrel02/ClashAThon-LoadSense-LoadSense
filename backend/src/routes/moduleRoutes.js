@@ -21,10 +21,4 @@ router.get("/", protect, getAllModules);
 // Get a single module by ID
 router.get("/:id", protect, getModuleById);
 
-// Update a module by ID
-router.patch("/:id", protect, updateModule);
-
-// Delete a module by ID
-router.delete("/:id", protect, deleteModule);
-
 export default router;

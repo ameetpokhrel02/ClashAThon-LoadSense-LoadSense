@@ -6,21 +6,27 @@ import {
   User, 
   Mail, 
   GraduationCap,
-  Calendar,
   LogOut,
   Edit2,
   Shield,
   Bell,
   Moon,
-  ChevronRight
+  ChevronRight,
+  Phone,
+  MapPin,
+  Loader2
 } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
 
 export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
-  const { user, logout } = useAuthStore()
+  const { user, logout, fetchProfile, isLoadingProfile } = useAuthStore()
+
+  useEffect(() => {
+    fetchProfile()
+  }, [fetchProfile])
 
   const handleLogout = () => {
     logout()
@@ -75,16 +81,11 @@ export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: str
 
   const mainContent = (
     <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0">
-      {/* Mobile Header */}
-      <div className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 sticky top-0 z-20">
-        <h1 className="text-lg font-semibold text-gray-800 dark:text-white">Profile</h1>
-      </div>
-
       <div className="p-4 md:p-8 max-w-2xl mx-auto space-y-6">
         {/* Header */}
-        <div className="hidden md:block">
+        <div>
           <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Profile</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your account and preferences.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 hidden md:block">Manage your account and preferences.</p>
         </div>
 
         {/* Profile Card */}
@@ -93,55 +94,82 @@ export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: str
           animate={{ y: 0, opacity: 1 }}
           className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6"
         >
-          <div className="flex items-start justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-[#ff7400] to-[#ff8c33] rounded-2xl flex items-center justify-center text-white text-2xl font-semibold shadow-lg">
-                {user?.firstName?.[0]}{user?.lastName?.[0] || 'U'}
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
-                  {user?.firstName} {user?.lastName || 'User'}
-                </h2>
-                <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">Student</p>
-                <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 mt-2">
-                  <Mail className="w-4 h-4" />
-                  {user?.email || 'student@university.edu'}
-                </div>
-              </div>
+          {isLoadingProfile ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="w-8 h-8 animate-spin text-[#ff7400]" />
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10"
-              onClick={() => onNavigate('settings')}
-            >
-              <Edit2 className="w-4 h-4" />
-            </Button>
-          </div>
+          ) : (
+            <>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-4">
+                  {user?.avatar ? (
+                    <img 
+                      src={user.avatar} 
+                      alt="Profile" 
+                      className="w-20 h-20 rounded-2xl object-cover shadow-lg"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#ff7400] to-[#ff8c33] rounded-2xl flex items-center justify-center text-white text-2xl font-semibold shadow-lg">
+                      {user?.firstName?.[0]}{user?.lastName?.[0] || 'U'}
+                    </div>
+                  )}
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
+                      {user?.firstName} {user?.lastName || 'User'}
+                    </h2>
+                    <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5 capitalize">{user?.role || 'Student'}</p>
+                    <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 mt-2">
+                      <Mail className="w-4 h-4" />
+                      {user?.email || 'user@example.com'}
+                    </div>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10"
+                  onClick={() => onNavigate('settings')}
+                >
+                  <Edit2 className="w-4 h-4" />
+                </Button>
+              </div>
 
-          {/* Academic Info */}
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
-                  <GraduationCap className="w-5 h-5 text-[#ff7400]" />
+              {/* Contact Info */}
+              <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
+                      <Phone className="w-5 h-5 text-[#ff7400]" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Phone</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-white">{user?.phone || 'Not set'}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
+                      <MapPin className="w-5 h-5 text-[#ff7400]" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Address</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-white">{user?.address || 'Not set'}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Program</p>
-                  <p className="text-sm font-medium text-gray-800 dark:text-white">Computer Science</p>
-                </div>
+                {user?.ward && (
+                  <div className="mt-4 flex items-center gap-3">
+                    <div className="w-10 h-10 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
+                      <GraduationCap className="w-5 h-5 text-[#ff7400]" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Ward</p>
+                      <p className="text-sm font-medium text-gray-800 dark:text-white">{user.ward}</p>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-[#ff7400]" />
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Academic Year</p>
-                  <p className="text-sm font-medium text-gray-800 dark:text-white">3rd Year</p>
-                </div>
-              </div>
-            </div>
-          </div>
+            </>
+          )}
         </motion.div>
 
         {/* Stats */}
@@ -218,6 +246,7 @@ export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: str
       <SidebarLayout
         sidebar={sidebarContent}
         content={mainContent}
+        onNavigate={onNavigate}
         mobileNavigation={
           <>
             <MobileNavigation

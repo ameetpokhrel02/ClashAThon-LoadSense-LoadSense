@@ -27,11 +27,12 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
   const [hours, setHours] = useState("")
   const [notes, setNotes] = useState("")
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
   
-  const addDeadline = useDeadlineStore(state => state.addDeadline)
+  const createDeadline = useDeadlineStore(state => state.createDeadline)
   const { triggerHaptic } = useHapticFeedback()
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title || !course || !type || !date || !hours) {
       triggerHaptic('medium')
       alert("Please fill in all required fields")
@@ -43,18 +44,28 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
     if (estimatedHours > 10) risk = 'high'
     else if (estimatedHours > 5) risk = 'medium'
 
-    addDeadline({
-      id: Math.random().toString(36).substring(7),
-      title,
-      course,
-      type,
-      dueDate: date.toISOString(),
-      estimatedHours,
-      risk
-    })
+    try {
+      setIsSaving(true)
+      const created = await createDeadline({
+        title,
+        course,
+        type,
+        dueDate: date.toISOString(),
+        estimatedHours,
+        risk,
+        notes,
+      })
 
-    triggerHaptic('light')
-    onNavigate('dashboard')
+      if (!created) {
+        alert('Failed to save deadline. Please try again.')
+        return
+      }
+
+      triggerHaptic('light')
+      onNavigate('dashboard')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const toggleMobileSidebar = () => {
@@ -215,7 +226,11 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Assignment">Assignment</SelectItem>
+                          <SelectItem value="Quiz">Quiz</SelectItem>
+                          <SelectItem value="Viva">Viva</SelectItem>
                           <SelectItem value="Project">Project</SelectItem>
+                          <SelectItem value="Midterm">Midterm</SelectItem>
+                          <SelectItem value="Final">Final</SelectItem>
                           <SelectItem value="Exam">Exam</SelectItem>
                           <SelectItem value="Reading">Reading</SelectItem>
                         </SelectContent>
@@ -299,10 +314,11 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                     Cancel
                   </Button>
                   <Button 
-                    onClick={handleSave} 
-                    className="rounded-lg h-11 px-8 bg-primary hover:bg-primary/80 text-white transition-smooth touch-target"
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="rounded-lg h-11 px-8 modern-gradient-purple text-white hover:neon-glow-purple transition-smooth touch-target"
                   >
-                    Save Deadline
+                    {isSaving ? 'Saving...' : 'Save Deadline'}
                   </Button>
                 </motion.div>
               </ModernCard>

@@ -114,16 +114,11 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
 
   const mainContent = (
     <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0">
-      {/* Mobile Header */}
-      <div className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 sticky top-0 z-20">
-        <h1 className="text-lg font-semibold text-gray-800 dark:text-white">Workload Insights</h1>
-      </div>
-
       <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6">
         {/* Header */}
-        <div className="hidden md:block">
+        <div>
           <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Workload Insights</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Predictive analysis to help you stay ahead of academic overload.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 hidden md:block">Predictive analysis to help you stay ahead of academic overload.</p>
         </div>
 
         {/* Loading State */}
@@ -385,6 +380,7 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
       <SidebarLayout
         sidebar={sidebarContent}
         content={mainContent}
+        onNavigate={onNavigate}
         mobileNavigation={
           <>
             <MobileNavigation

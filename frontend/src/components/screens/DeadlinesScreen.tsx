@@ -13,25 +13,21 @@ import {
   AlertCircle,
   CheckCircle2
 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
-
-interface Deadline {
-  id: string
-  title: string
-  course: string
-  dueDate: string
-  impact: 'High' | 'Medium' | 'Low'
-  status: 'pending' | 'completed'
-  estimatedHours: number
-}
+import { useDeadlineStore } from "@/store/deadlineStore"
 
 export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterImpact, setFilterImpact] = useState<string>('all')
   const { user, logout } = useAuthStore()
+
+  const deadlines = useDeadlineStore((state) => state.deadlines)
+  const loadDeadlines = useDeadlineStore((state) => state.loadDeadlines)
+  const deleteDeadline = useDeadlineStore((state) => state.deleteDeadline)
+  const setDeadlineCompleted = useDeadlineStore((state) => state.setDeadlineCompleted)
 
   const handleLogout = () => {
     logout()
@@ -42,75 +38,45 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
     setIsMobileSidebarOpen(!isMobileSidebarOpen)
   }
 
-  // Sample deadlines data
-  const [deadlines, setDeadlines] = useState<Deadline[]>([
-    {
-      id: '1',
-      title: "Neural Networks Project",
-      course: "CS402: Artificial Intelligence",
-      dueDate: "Feb 26, 2026",
-      impact: "High",
-      status: 'pending',
-      estimatedHours: 8
-    },
-    {
-      id: '2',
-      title: "Database Normalization Quiz",
-      course: "CS301: Database Systems",
-      dueDate: "Feb 25, 2026",
-      impact: "Medium",
-      status: 'pending',
-      estimatedHours: 2
-    },
-    {
-      id: '3',
-      title: "Term Paper: Ethics in Tech",
-      course: "HU305: Tech Ethics",
-      dueDate: "Mar 01, 2026",
-      impact: "Medium",
-      status: 'pending',
-      estimatedHours: 6
-    },
-    {
-      id: '4',
-      title: "Calculus III Problem Set",
-      course: "MA301: Advanced Math",
-      dueDate: "Mar 02, 2026",
-      impact: "Low",
-      status: 'pending',
-      estimatedHours: 3
-    },
-    {
-      id: '5',
-      title: "Physics Lab Report",
-      course: "PH202: Physics II",
-      dueDate: "Mar 03, 2026",
-      impact: "High",
-      status: 'pending',
-      estimatedHours: 4
-    },
-    {
-      id: '6',
-      title: "Weekly Reading Summary",
-      course: "EN201: Literature",
-      dueDate: "Feb 22, 2026",
-      impact: "Low",
-      status: 'completed',
-      estimatedHours: 1
-    }
-  ])
+  useEffect(() => {
+    loadDeadlines()
+  }, [loadDeadlines])
 
-  const handleDelete = (id: string) => {
-    setDeadlines(deadlines.filter(d => d.id !== id))
+  const toImpact = (risk: string): 'High' | 'Medium' | 'Low' => {
+    if (risk === 'high') return 'High'
+    if (risk === 'medium') return 'Medium'
+    return 'Low'
   }
 
-  const handleToggleStatus = (id: string) => {
-    setDeadlines(deadlines.map(d => 
-      d.id === id ? { ...d, status: d.status === 'pending' ? 'completed' : 'pending' } : d
-    ))
+  const formatDueDate = (iso: string) => {
+    const d = new Date(iso)
+    if (Number.isNaN(d.getTime())) return iso
+    return d.toLocaleDateString(undefined, { month: 'short', day: '2-digit', year: 'numeric' })
   }
 
-  const filteredDeadlines = deadlines.filter(d => {
+  const uiDeadlines = useMemo(() => {
+    return deadlines.map(d => ({
+      id: d.id,
+      title: d.title,
+      course: d.course,
+      dueDate: formatDueDate(d.dueDate),
+      impact: toImpact(d.risk),
+      status: d.isCompleted ? 'completed' as const : 'pending' as const,
+      estimatedHours: d.estimatedHours,
+    }))
+  }, [deadlines])
+
+  const handleDelete = async (id: string) => {
+    await deleteDeadline(id)
+  }
+
+  const handleToggleStatus = async (id: string) => {
+    const current = deadlines.find(d => d.id === id)
+    if (!current) return
+    await setDeadlineCompleted(id, !current.isCompleted)
+  }
+
+  const filteredDeadlines = uiDeadlines.filter(d => {
     const matchesSearch = d.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           d.course.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesFilter = filterImpact === 'all' || d.impact === filterImpact
