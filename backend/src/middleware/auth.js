@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import User from "../models/User.js";
 
-const protect = (req, res, next) => {
+const protect = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -16,8 +17,17 @@ const protect = (req, res, next) => {
   }
 
   try {
+    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { _id: decoded._id || decoded.id, email: decoded.email };
+
+    // Get user from the token using the _id from the token payload
+    req.user = await User.findById(decoded._id).select("-password");
+
+    if (!req.user) {
+      // This case handles a valid token for a user that has been deleted
+      return res.status(401).json({ message: "Not authorized, user not found" });
+    }
+
     return next();
   } catch (err) {
     console.error("JWT verify error:", err.name, err.message);

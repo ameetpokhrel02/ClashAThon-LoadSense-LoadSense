@@ -10,6 +10,7 @@ import workloadRoutes from "./routes/workloadRoutes.js";
 
 import dashboardRoutes from "./routes/dashboardscreenRoutes.js";
 import adminFeedbackRatingRoutes from "./routes/adminFeedbackRatingRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 import userRoutes from "./routes/userRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
@@ -26,6 +27,7 @@ connectDB();
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/modules", moduleRoutes);
 app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/workload", workloadRoutes);
