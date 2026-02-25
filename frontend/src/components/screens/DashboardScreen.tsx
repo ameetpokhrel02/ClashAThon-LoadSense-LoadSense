@@ -32,21 +32,24 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
   const getRiskDisplay = (riskLevel: string | undefined) => {
     switch (riskLevel) {
       case 'critical':
-        return { color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400', label: 'Critical Risk', dotColor: 'bg-red-500' }
+        return { color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400', label: 'Overload', dotColor: 'bg-red-500' }
       case 'high':
-        return { color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400', label: 'High Risk', dotColor: 'bg-orange-500' }
+        return { color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400', label: 'High', dotColor: 'bg-orange-500' }
       case 'moderate':
-        return { color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400', label: 'Moderate Risk', dotColor: 'bg-yellow-500' }
+        return { color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400', label: 'Moderate', dotColor: 'bg-yellow-500' }
       default:
-        return { color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400', label: 'Low Risk', dotColor: 'bg-green-500' }
+        return { color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400', label: 'Safe', dotColor: 'bg-green-500' }
     }
   }
+
+  // Backend now returns a credit-adjusted load_score with overload threshold at ~81.
+  const HEATMAP_MAX_SCORE = 120
 
   // Map upcoming weeks to heatmap format (show first 5 days/weeks)
   const weeklyIntensity = summary?.upcoming_weeks?.slice(0, 5).map((week, index) => {
     const weekLabel = index === 0 ? 'This' : index === 1 ? 'Next' : `Wk ${index + 1}`
-    // Normalize load score to percentage (assuming max of 20)
-    const intensity = Math.min((week.load_score / 20) * 100, 100)
+    // Normalize load score to percentage (cap around overload threshold)
+    const intensity = Math.min((week.load_score / HEATMAP_MAX_SCORE) * 100, 100)
     return { day: weekLabel, intensity, riskLevel: week.risk_level }
   }) || []
 
@@ -54,8 +57,8 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
   const priorityDeadlines = summary?.upcoming_weeks?.flatMap(week => 
     week.deadlines?.map(deadline => ({
       title: deadline.title,
-      course: deadline.course_id?.course_code || 'General',
-      dueDate: new Date(deadline.due_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+      course: deadline.course || 'General',
+      dueDate: new Date(deadline.dueDate).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
       impact: deadline.impact_level || 'Medium',
     })) || []
   ).slice(0, 5) || []
@@ -131,7 +134,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
                 <div className="flex items-end gap-4">
                   <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Weekly Load Score</p>
-                    <p className="text-4xl font-semibold text-gray-800 dark:text-white">{loadScore}<span className="text-lg text-gray-400 font-normal">/20</span></p>
+                    <p className="text-4xl font-semibold text-gray-800 dark:text-white">{loadScore}</p>
                   </div>
                   {summary?.total_overload_weeks && summary.total_overload_weeks > 0 && (
                     <div className="ml-auto text-right">

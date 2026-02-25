@@ -6,14 +6,10 @@ interface Deadline {
   _id: string
   title: string
   type: string
-  due_date: string
+  dueDate: string
   weight: number
   impact_level: string
-  course_id?: {
-    _id: string
-    course_name: string
-    course_code: string
-  }
+  course: string
 }
 
 interface WorkloadWeek {
@@ -101,7 +97,7 @@ export const useWorkloadStore = create<WorkloadState>((set, get) => ({
   fetchAlerts: async () => {
     set({ isLoading: true, error: null })
     try {
-      const response = await api.get('/workload/alert')
+      const response = await api.get('/dashboard/alert')
       set({ alerts: response.data.alerts || [], isLoading: false })
     } catch (error) {
       set({ error: handleApiError(error), isLoading: false })
@@ -112,7 +108,7 @@ export const useWorkloadStore = create<WorkloadState>((set, get) => ({
   fetchSummary: async () => {
     set({ isLoading: true, error: null })
     try {
-      const response = await api.get('/workload/summary')
+      const response = await api.get('/dashboard/summary')
       set({ summary: response.data, isLoading: false })
     } catch (error) {
       set({ error: handleApiError(error), isLoading: false })

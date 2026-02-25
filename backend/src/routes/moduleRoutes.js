@@ -15,6 +15,6 @@ router.post("/", protect, createModule);
 router.get("/", protect, getAllModules);
 
 // Get a single module by ID
-router.get("/:id", getModuleById);
+router.get("/:id", protect, getModuleById);
 
 export default router;

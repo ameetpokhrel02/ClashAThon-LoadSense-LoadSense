@@ -1,4 +1,3 @@
-// ModernCard removed - using plain divs
 import { Button } from "@/components/ui/button"
 import { ModernInput } from "@/components/ui/modern-input"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"

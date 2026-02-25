@@ -11,7 +11,7 @@ import { LayoutWrapper, ResponsiveContainer, MobileHeader } from "@/components/u
 import { Footer } from "@/components/ui/footer"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { PullToRefresh } from "@/components/ui/pull-to-refresh"
-import { CalendarIcon, ArrowLeft, Clock, BookOpen, Target, Loader2 } from "lucide-react"
+import { CalendarIcon, ArrowLeft, Clock, BookOpen, Target } from "lucide-react"
 import { format } from "date-fns"
 import { useState } from "react"
 import { motion } from "framer-motion"
@@ -28,7 +28,6 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
   const [notes, setNotes] = useState("")
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   
   const createDeadline = useDeadlineStore(state => state.createDeadline)
   const { triggerHaptic } = useHapticFeedback()
@@ -36,7 +35,7 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
   const handleSave = async () => {
     if (!title || !course || !type || !date || !hours) {
       triggerHaptic('medium')
-      setError("Please fill in all required fields")
+      alert("Please fill in all required fields")
       return
     }
 
@@ -45,25 +44,25 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
     if (estimatedHours > 10) risk = 'high'
     else if (estimatedHours > 5) risk = 'medium'
 
-    setIsSaving(true)
-    setError(null)
-
     try {
-      await createDeadline({
+      setIsSaving(true)
+      const created = await createDeadline({
         title,
         course,
         type,
         dueDate: date.toISOString(),
         estimatedHours,
         risk,
-        notes: notes || undefined
+        notes,
       })
 
+      if (!created) {
+        alert('Failed to save deadline. Please try again.')
+        return
+      }
+
       triggerHaptic('light')
-      onNavigate('deadlines')
-    } catch {
-      setError('Failed to create deadline. Please try again.')
-      triggerHaptic('medium')
+      onNavigate('dashboard')
     } finally {
       setIsSaving(false)
     }
@@ -227,7 +226,11 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Assignment">Assignment</SelectItem>
+                          <SelectItem value="Quiz">Quiz</SelectItem>
+                          <SelectItem value="Viva">Viva</SelectItem>
                           <SelectItem value="Project">Project</SelectItem>
+                          <SelectItem value="Midterm">Midterm</SelectItem>
+                          <SelectItem value="Final">Final</SelectItem>
                           <SelectItem value="Exam">Exam</SelectItem>
                           <SelectItem value="Reading">Reading</SelectItem>
                         </SelectContent>
@@ -294,17 +297,6 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                       onChange={(e) => setNotes(e.target.value)}
                     />
                   </motion.div>
-
-                  {/* Error Message */}
-                  {error && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="p-4 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800 rounded-lg"
-                    >
-                      {error}
-                    </motion.div>
-                  )}
                 </div>
                 
                 {/* Footer */}
@@ -316,25 +308,17 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                 >
                   <Button 
                     variant="outline" 
-                    onClick={() => onNavigate('deadlines')} 
-                    disabled={isSaving}
+                    onClick={() => onNavigate('dashboard')} 
                     className="rounded-lg h-11 px-6 border-muted-foreground/30 text-muted-foreground hover:border-primary/50 hover:text-primary touch-target"
                   >
                     Cancel
                   </Button>
                   <Button 
-                    onClick={handleSave} 
+                    onClick={handleSave}
                     disabled={isSaving}
-                    className="rounded-lg h-11 px-8 bg-primary hover:bg-primary/80 text-white transition-smooth touch-target disabled:opacity-50"
+                    className="rounded-lg h-11 px-8 modern-gradient-purple text-white hover:neon-glow-purple transition-smooth touch-target"
                   >
-                    {isSaving ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Saving...
-                      </>
-                    ) : (
-                      'Save Deadline'
-                    )}
+                    {isSaving ? 'Saving...' : 'Save Deadline'}
                   </Button>
                 </motion.div>
               </ModernCard>

@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar, BookOpen, Loader2 } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
-import { handleApiError } from "@/lib/api"
+import { api, handleApiError } from "@/lib/api"
 
 export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
   const setAuth = useAuthStore((state) => state.setAuth)
@@ -25,18 +25,8 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
     setError(null)
 
     try {
-      // Mock API call for Hackathon MVP
-      // const response = await api.post('/auth/login', { email, password })
-      // setAuth(response.data.user, response.data.token)
-      
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Mock successful login
-      setAuth(
-        { id: '1', firstName: 'Alex', lastName: 'Student', email },
-        'mock-jwt-token-123'
-      )
+      const response = await api.post("/auth/login", { email, password })
+      setAuth(response.data.user, response.data.token)
       onLogin()
     } catch (err) {
       setError(handleApiError(err))
@@ -51,16 +41,13 @@ export default function LoginScreen({ onLogin }: { onLogin: () => void }) {
     setError(null)
 
     try {
-      // Mock API call for Hackathon MVP
-      // const response = await api.post('/auth/register', { firstName, lastName, email, password })
-      // setAuth(response.data.user, response.data.token)
-      
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      setAuth(
-        { id: '1', firstName, lastName, email },
-        'mock-jwt-token-123'
-      )
+      const response = await api.post("/auth/register", {
+        firstName,
+        lastName,
+        email,
+        password,
+      })
+      setAuth(response.data.user, response.data.token)
       onLogin()
     } catch (err) {
       setError(handleApiError(err))

@@ -7,11 +7,12 @@ import authRoutes from "./routes/authRoutes.js";
 import moduleRoutes from "./routes/moduleRoutes.js";
 import deadlineRoutes from "./routes/deadlineRoutes.js";
 import workloadRoutes from "./routes/workloadRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import dashboardRoutes from "./routes/dashboardscreenRoutes.js";
+import adminFeedbackRatingRoutes from "./routes/adminFeedbackRatingRoutes.js";
 
 dotenv.config();
 
-const app = express();   // ← THIS WAS MISSING
+const app = express();   
 
 app.use(cors());
 app.use(express.json());
@@ -23,15 +24,15 @@ app.use("/api/auth", authRoutes);
 app.use("/api/modules", moduleRoutes);
 app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/workload", workloadRoutes);
-app.use("/api/users", userRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/feedback-ratings", adminFeedbackRatingRoutes);
 
 app.get("/", (req, res) => {
-
   res.send("LoadSense API Running ");
-  res.send("LoadSense API Running...");
+
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
