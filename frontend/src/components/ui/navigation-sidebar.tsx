@@ -11,7 +11,8 @@ import {
   LogOut,
   Plus,
   GraduationCap,
-  Brain
+  Brain,
+  CalendarDays
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -40,6 +41,19 @@ export function NavigationSidebar({
       active: currentScreen === 'dashboard'
     },
     {
+      id: 'calendar',
+      label: 'Workload View',
+      icon: CalendarDays,
+      active: currentScreen === 'calendar'
+    },
+    {
+      id: 'smart-plan',
+      label: 'Smart Planning',
+      icon: Brain,
+      active: currentScreen === 'smart-plan' || currentScreen === 'suggestion',
+      highlight: true
+    },
+    {
       id: 'deadlines',
       label: 'Deadlines',
       icon: CalendarCheck,
@@ -50,13 +64,6 @@ export function NavigationSidebar({
       label: 'Courses',
       icon: BookOpen,
       active: currentScreen === 'courses'
-    },
-    {
-      id: 'smart-plan',
-      label: 'Smart Planning',
-      icon: Brain,
-      active: currentScreen === 'smart-plan' || currentScreen === 'suggestion',
-      highlight: true
     },
     {
       id: 'insights',

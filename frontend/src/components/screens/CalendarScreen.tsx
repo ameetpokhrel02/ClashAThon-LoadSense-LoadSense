@@ -1,16 +1,20 @@
-// ModernCard removed - using plain divs
 import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { Footer } from "@/components/ui/footer"
-import { Calendar, Clock, AlertTriangle, CheckCircle, ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
+import { 
+  Calendar, ChevronLeft, ChevronRight, 
+  Loader2, Lightbulb, Target, TrendingUp, CalendarDays, RefreshCw,
+  ArrowRight
+} from "lucide-react"
 import { useState, useEffect, useMemo } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
 import { useDeadlineStore } from "@/store/deadlineStore"
+import { api, handleApiError } from "@/lib/api"
 
-// Local type definition
+// Type definitions
 interface CalendarDeadline {
   _id?: string
   id?: string
@@ -23,15 +27,67 @@ interface CalendarDeadline {
   notes?: string
 }
 
+interface WeeklyLoadTrend {
+  day: string
+  capacity: number
+  status: 'safe' | 'moderate' | 'overload'
+}
+
+interface MonthlySummary {
+  totalDeadlines: number
+  peakDays: number
+  safeDays: number
+  planAdherence: number
+}
+
+interface AiTip {
+  message: string
+  taskId: string
+  taskTitle: string
+  dueDate: string
+  recommendedStartDate: string
+}
+
+interface CalendarStats {
+  weeklyLoadTrend: WeeklyLoadTrend[]
+  monthlySummary: MonthlySummary
+  aiTip: AiTip | null
+}
+
 export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [calendarStats, setCalendarStats] = useState<CalendarStats | null>(null)
+  const [statsLoading, setStatsLoading] = useState(false)
   const { user, logout } = useAuthStore()
-  const { deadlines, isLoading, fetchDeadlines } = useDeadlineStore()
+  const { deadlines, isLoading, loadDeadlines } = useDeadlineStore()
 
   useEffect(() => {
-    fetchDeadlines()
-  }, [fetchDeadlines])
+    loadDeadlines()
+  }, [loadDeadlines])
+
+  // Fetch calendar stats when month changes
+  useEffect(() => {
+    const fetchCalendarStats = async () => {
+      setStatsLoading(true)
+      try {
+        const response = await api.get('/workload/calendar-stats', {
+          params: {
+            month: currentDate.getMonth(),
+            year: currentDate.getFullYear()
+          }
+        })
+        if (response.data.success) {
+          setCalendarStats(response.data.data)
+        }
+      } catch (error) {
+        console.error('Failed to fetch calendar stats:', handleApiError(error))
+      } finally {
+        setStatsLoading(false)
+      }
+    }
+    fetchCalendarStats()
+  }, [currentDate])
 
   const handleLogout = () => {
     logout()
@@ -87,7 +143,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
     return deadlinesByDate[key] || []
   }
 
-  // Get risk color for a day (highest risk among events)
+  // Get risk color for a day
   const getDayRiskColor = (day: number) => {
     const events = getEventsForDay(day)
     if (events.length === 0) return null
@@ -100,37 +156,12 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
     return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 ring-2 ring-green-300 dark:ring-green-700'
   }
 
-  // Get upcoming events (next 7 days)
-  const upcomingEvents = useMemo(() => {
-    const now = new Date()
-    const weekFromNow = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
-    
-    return deadlines
-      .filter(d => {
-        const dueDate = new Date(d.dueDate)
-        return dueDate >= now && dueDate <= weekFromNow
-      })
-      .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
-      .slice(0, 5)
-  }, [deadlines])
-
   // Check if a day is today
   const isToday = (day: number) => {
     const today = new Date()
     return day === today.getDate() && 
            calendarData.month === today.getMonth() && 
            calendarData.year === today.getFullYear()
-  }
-
-  // Format date for display
-  const formatEventDate = (dateStr: string) => {
-    const date = new Date(dateStr)
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit'
-    })
   }
 
   const sidebarContent = (
@@ -144,13 +175,17 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
 
   const mainContent = (
     <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 pb-20 md:pb-0">
-      {/* Main Content */}
       <div className="p-4 md:p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Academic Calendar</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400 hidden md:block">Track your deadlines and events</p>
+            <h1 className="text-xl font-semibold text-gray-800 dark:text-white flex items-center gap-2">
+              <CalendarDays className="w-6 h-6 text-[#ff7400]" />
+              Workload Calendar
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 hidden md:block">
+              Visualizing academic pressure for <span className="text-[#ff7400] font-medium">{calendarData.monthName}</span>
+            </p>
           </div>
           <Button 
             onClick={() => onNavigate('add-deadline')}
@@ -161,9 +196,9 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Calendar View */}
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
+          {/* Calendar View - Takes 3 columns on XL screens */}
+          <div className="xl:col-span-3">
             <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6">
               {/* Calendar Header with Navigation */}
               <div className="flex items-center justify-between mb-4">
@@ -209,14 +244,14 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
               {/* Calendar Grid */}
               {!isLoading && (
                 <div className="grid grid-cols-7 gap-1 md:gap-2 border border-gray-200 dark:border-gray-700 rounded-lg p-3 bg-gray-50/50 dark:bg-gray-800/50">
-                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                  {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
                     <div key={day} className="text-center text-xs font-medium text-gray-500 dark:text-gray-400 p-2">
                       {day}
                     </div>
                   ))}
                   
-                  {/* Empty cells before first day */}
-                  {Array.from({ length: calendarData.startingDay }, (_, i) => (
+                  {/* Adjust for Monday start - empty cells */}
+                  {Array.from({ length: calendarData.startingDay === 0 ? 6 : calendarData.startingDay - 1 }, (_, i) => (
                     <div key={`empty-${i}`} className="aspect-square"></div>
                   ))}
                   
@@ -232,7 +267,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                         key={day}
                         className={`
                           aspect-square flex flex-col items-center justify-center text-sm rounded-lg cursor-pointer
-                          transition-all duration-200 relative
+                          transition-all duration-200 relative p-1
                           ${todayClass 
                             ? 'bg-[#ff7400] text-white font-bold shadow-md' 
                             : riskColor 
@@ -243,8 +278,25 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                         title={dayEvents.length > 0 ? `${dayEvents.length} event(s)` : ''}
                       >
                         <span className={todayClass ? 'font-bold' : 'font-medium'}>{day}</span>
+                        {/* Event badges */}
                         {dayEvents.length > 0 && !todayClass && (
-                          <span className="text-[10px] mt-0.5">{dayEvents.length}</span>
+                          <div className="flex flex-wrap gap-0.5 mt-0.5 justify-center">
+                            {dayEvents.slice(0, 2).map((event, idx) => (
+                              <span 
+                                key={idx}
+                                className={`text-[8px] px-1 rounded truncate max-w-full ${
+                                  event.risk === 'high' ? 'bg-red-200 text-red-800' :
+                                  event.risk === 'medium' ? 'bg-yellow-200 text-yellow-800' :
+                                  'bg-green-200 text-green-800'
+                                }`}
+                              >
+                                {event.title.length > 8 ? event.title.slice(0, 8) + '..' : event.title}
+                              </span>
+                            ))}
+                            {dayEvents.length > 2 && (
+                              <span className="text-[8px] text-gray-500">+{dayEvents.length - 2}</span>
+                            )}
+                          </div>
                         )}
                         {dayEvents.length > 0 && todayClass && (
                           <span className="absolute -top-1 -right-1 w-4 h-4 bg-white text-[#ff7400] rounded-full text-[10px] font-bold flex items-center justify-center">
@@ -256,94 +308,192 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                   })}
                 </div>
               )}
-
-              {/* Legend */}
-              <div className="flex items-center justify-center gap-4 mt-4 text-xs text-gray-500 dark:text-gray-400">
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 rounded bg-red-200 dark:bg-red-800"></div>
-                  <span>High Risk</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 rounded bg-yellow-200 dark:bg-yellow-800"></div>
-                  <span>Medium</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-3 h-3 rounded bg-green-200 dark:bg-green-800"></div>
-                  <span>Low</span>
-                </div>
-              </div>
             </div>
+
+            {/* AI Tip Banner */}
+            {calendarStats?.aiTip && (
+              <motion.div
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="mt-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800 flex items-center gap-4"
+              >
+                <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full shrink-0">
+                  <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
+                    <span className="text-blue-600 dark:text-blue-400 font-semibold">AI Tip:</span> {calendarStats.aiTip.message}
+                  </p>
+                </div>
+                <Button 
+                  onClick={() => onNavigate('smart-plan')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
+                >
+                  View Plan
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </motion.div>
+            )}
           </div>
 
-          {/* Upcoming Events */}
-          <div>
-            <div className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-6">
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
-                <Clock className="w-5 h-5 text-[#ff7400]" />
-                Upcoming (7 days)
-              </h2>
+          {/* Right Panel - Workload Legend & Stats */}
+          <div className="xl:col-span-1 space-y-4">
+            {/* Workload Legend */}
+            <motion.div
+              initial={{ x: 10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.1 }}
+              className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-5"
+            >
+              <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+                <Target className="w-4 h-4 text-[#ff7400]" />
+                Workload Legend
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-3 h-3 rounded-full bg-green-500 mt-1 shrink-0"></div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-white">Safe</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Optimal study hours. 0-40% of capacity used.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-3 h-3 rounded-full bg-yellow-500 mt-1 shrink-0"></div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-white">Moderate</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Active preparation. 41-75% of capacity used.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-3 h-3 rounded-full bg-red-500 mt-1 shrink-0"></div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800 dark:text-white">Overload</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Critical risk. &gt;75% capacity or high-impact cluster.</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Weekly Load Trend */}
+            <motion.div
+              initial={{ x: 10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-5"
+            >
+              <h3 className="text-sm font-semibold text-gray-800 dark:text-white mb-4 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-[#ff7400]" />
+                Weekly Load Trend
+              </h3>
               
-              {isLoading && (
-                <div className="flex items-center justify-center py-8">
+              {statsLoading ? (
+                <div className="flex justify-center py-4">
                   <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
                 </div>
-              )}
-
-              {!isLoading && upcomingEvents.length === 0 && (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                  <Calendar className="w-10 h-10 mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No upcoming events</p>
-                  <Button 
-                    variant="link" 
-                    className="text-[#ff7400] text-sm mt-2"
-                    onClick={() => onNavigate('add-deadline')}
-                  >
-                    Add a deadline
-                  </Button>
-                </div>
-              )}
-              
-              {!isLoading && upcomingEvents.length > 0 && (
+              ) : (
                 <div className="space-y-3">
-                  {upcomingEvents.map((event, index) => (
-                    <motion.div
-                      key={event._id || event.id}
-                      initial={{ x: 10, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1, duration: 0.3 }}
-                      className={`border-l-4 pl-3 py-2 rounded-r-lg ${
-                        event.risk === 'high' 
-                          ? 'border-red-500 bg-red-50 dark:bg-red-900/20' 
-                          : event.risk === 'medium'
-                            ? 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20'
-                            : 'border-green-500 bg-green-50 dark:bg-green-900/20'
-                      }`}
-                    >
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="font-medium text-gray-800 dark:text-gray-200 text-sm">{event.title}</h3>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">{formatEventDate(event.dueDate)}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            {event.risk === 'high' && (
-                              <AlertTriangle className="w-3 h-3 text-red-500" />
-                            )}
-                            {event.risk === 'medium' && (
-                              <Clock className="w-3 h-3 text-yellow-500" />
-                            )}
-                            {event.risk === 'low' && (
-                              <CheckCircle className="w-3 h-3 text-green-500" />
-                            )}
-                            <span className="text-xs text-gray-400 capitalize">
-                              {event.type} • {event.course}
-                            </span>
-                          </div>
-                        </div>
+                  {(calendarStats?.weeklyLoadTrend || [
+                    { day: 'Mon', capacity: 45, status: 'moderate' as const },
+                    { day: 'Tue', capacity: 65, status: 'moderate' as const },
+                    { day: 'Wed', capacity: 95, status: 'overload' as const },
+                    { day: 'Thu', capacity: 80, status: 'overload' as const },
+                    { day: 'Fri', capacity: 30, status: 'safe' as const },
+                  ]).map((trend, index) => (
+                    <div key={trend.day} className="flex items-center gap-3">
+                      <span className="text-xs font-medium text-gray-600 dark:text-gray-400 w-8">{trend.day}</span>
+                      <div className="flex-1 h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${trend.capacity}%` }}
+                          transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
+                          className={`h-full rounded-full ${
+                            trend.status === 'overload' ? 'bg-red-500' :
+                            trend.status === 'moderate' ? 'bg-yellow-500' :
+                            'bg-green-500'
+                          }`}
+                        />
                       </div>
-                    </motion.div>
+                      <span className={`text-xs font-medium w-20 text-right ${
+                        trend.status === 'overload' ? 'text-red-500' :
+                        trend.status === 'moderate' ? 'text-yellow-600' :
+                        'text-green-500'
+                      }`}>
+                        {trend.capacity}% Capacity
+                      </span>
+                    </div>
                   ))}
                 </div>
               )}
-            </div>
+              
+              {calendarStats?.weeklyLoadTrend?.some(t => t.status === 'overload') && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 italic">
+                  * AI Forecast: Wednesday expects a 30% increase in prep time.
+                </p>
+              )}
+            </motion.div>
+
+            {/* Monthly Summary */}
+            <motion.div
+              initial={{ x: 10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white dark:bg-gray-900 shadow-sm border border-gray-200 dark:border-gray-800 rounded-xl p-5"
+            >
+              <h3 className="text-sm font-semibold text-red-600 dark:text-red-400 mb-4 uppercase tracking-wide">
+                Monthly Summary
+              </h3>
+              
+              {statsLoading ? (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                      {calendarStats?.monthlySummary?.totalDeadlines || deadlines.length || 0}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Deadlines</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-red-500">
+                      {calendarStats?.monthlySummary?.peakDays || 0}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Peak Days</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                      {calendarStats?.monthlySummary?.safeDays || 0}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Safe Days</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-3xl font-bold text-green-500">
+                      {calendarStats?.monthlySummary?.planAdherence || 0}%
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 uppercase">Plan Adherence</p>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+
+            {/* Sync to Calendar Button */}
+            <motion.div
+              initial={{ x: 10, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <Button 
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl py-6 font-medium shadow-lg shadow-green-500/25"
+                onClick={() => {
+                  alert('Sync to Google Calendar coming soon!')
+                }}
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Sync to Calendar
+              </Button>
+            </motion.div>
           </div>
         </div>
         

@@ -11,12 +11,17 @@ import {
   Search,
   Filter,
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  BookOpen,
+  BarChart3
 } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog"
 import { motion } from "framer-motion"
+
 import { useAuthStore } from "@/store/authStore"
 import { useDeadlineStore } from "@/store/deadlineStore"
+import type { Deadline as StoreDeadline } from "@/store/deadlineStore"
 
 export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
@@ -54,15 +59,21 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
     return d.toLocaleDateString(undefined, { month: 'short', day: '2-digit', year: 'numeric' })
   }
 
-  const uiDeadlines = useMemo(() => {
-    return deadlines.map(d => ({
-      id: d.id,
-      title: d.title,
-      course: d.course,
+  // Explicitly define the UI deadline type with all needed fields
+  type UIDeadline = StoreDeadline & {
+    impact: string;
+    status: 'completed' | 'pending';
+    notes?: string;
+    impactLevel?: string;
+    weight?: number;
+    risk?: string;
+  };
+  const uiDeadlines: UIDeadline[] = useMemo(() => {
+    return deadlines.map((d) => ({
+      ...d,
       dueDate: formatDueDate(d.dueDate),
       impact: toImpact(d.risk),
-      status: d.isCompleted ? 'completed' as const : 'pending' as const,
-      estimatedHours: d.estimatedHours,
+      status: d.isCompleted ? 'completed' : 'pending',
     }))
   }, [deadlines])
 
@@ -104,69 +115,114 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
     />
   )
 
-  const DeadlineCard = ({ deadline, index }: { deadline: Deadline; index: number }) => (
-    <motion.div
-      initial={{ y: 10, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: index * 0.05 }}
-      className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm transition-all ${
-        deadline.status === 'completed' ? 'opacity-60' : ''
-      }`}
-    >
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-start gap-3 flex-1">
-          <button
-            onClick={() => handleToggleStatus(deadline.id)}
-            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
-              deadline.status === 'completed' 
-                ? 'bg-green-500 border-green-500' 
-                : 'border-gray-300 hover:border-[#ff7400]'
-            }`}
-          >
-            {deadline.status === 'completed' && (
-              <CheckCircle2 className="w-3 h-3 text-white" />
-            )}
-          </button>
-          <div className="flex-1">
-            <h3 className={`font-medium text-gray-800 dark:text-white ${deadline.status === 'completed' ? 'line-through' : ''}`}>
-              {deadline.title}
-            </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{deadline.course}</p>
-            <div className="flex flex-wrap items-center gap-3 mt-2">
-              <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
-                <Calendar className="w-3.5 h-3.5" />
-                {deadline.dueDate}
+  const [openDetailId, setOpenDetailId] = useState<string | null>(null)
+
+  const DeadlineCard = ({ deadline, index }: { deadline: any; index: number }) => (
+    <>
+      <motion.div
+        initial={{ y: 10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: index * 0.05 }}
+        className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm transition-all ${
+          deadline.status === 'completed' ? 'opacity-60' : ''
+        }`}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex items-start gap-3 flex-1">
+            <button
+              onClick={() => handleToggleStatus(deadline.id)}
+              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
+                deadline.status === 'completed' 
+                  ? 'bg-green-500 border-green-500' 
+                  : 'border-gray-300 hover:border-[#ff7400]'
+              }`}
+            >
+              {deadline.status === 'completed' && (
+                <CheckCircle2 className="w-3 h-3 text-white" />
+              )}
+            </button>
+            <div className="flex-1">
+              <h3 className={`font-medium text-gray-800 dark:text-white ${deadline.status === 'completed' ? 'line-through' : ''}`}>
+                {deadline.title}
+              </h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{deadline.course}</p>
+              <div className="flex flex-wrap items-center gap-3 mt-2">
+                <div className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {deadline.dueDate}
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <Clock className="w-3.5 h-3.5" />
+                  {deadline.estimatedHours}h estimated
+                </div>
+                <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  {deadline.type}
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                <Clock className="w-3.5 h-3.5" />
-                {deadline.estimatedHours}h estimated
-              </div>
+              {deadline.notes && (
+                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 italic">
+                  Notes: {deadline.notes}
+                </div>
+              )}
             </div>
           </div>
+          <div className="flex items-center gap-2">
+            <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getImpactBadgeColor(deadline.impact)}`}>
+              {deadline.impact}
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-8 h-8 p-0 text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10"
+              onClick={() => setOpenDetailId(deadline.id)}
+            >
+              <BarChart3 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-8 h-8 p-0 text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10"
+              onClick={() => onNavigate('add-deadline')}
+            >
+              <Edit2 className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-8 h-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30"
+              onClick={() => handleDelete(deadline.id)}
+            >
+              <Trash2 className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${getImpactBadgeColor(deadline.impact)}`}>
-            {deadline.impact}
-          </span>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-8 h-8 p-0 text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10"
-            onClick={() => onNavigate('add-deadline')}
-          >
-            <Edit2 className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="w-8 h-8 p-0 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30"
-            onClick={() => handleDelete(deadline.id)}
-          >
-            <Trash2 className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
-    </motion.div>
+      </motion.div>
+      {/* Details Modal */}
+      <Dialog open={openDetailId === deadline.id} onOpenChange={(open) => !open && setOpenDetailId(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Deadline Details</DialogTitle>
+            <DialogDescription>All information for this deadline</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 text-sm">
+            <div><strong>Title:</strong> {deadline.title}</div>
+            <div><strong>Course:</strong> {deadline.course}</div>
+            <div><strong>Type:</strong> {deadline.type}</div>
+            <div><strong>Due Date:</strong> {deadline.dueDate}</div>
+            <div><strong>Estimated Hours:</strong> {deadline.estimatedHours}</div>
+            <div><strong>Notes:</strong> {deadline.notes || <span className="text-gray-400">None</span>}</div>
+            <div><strong>Impact Level:</strong> {deadline.impactLevel || <span className="text-gray-400">N/A</span>}</div>
+            <div><strong>Weight:</strong> {deadline.weight ?? <span className="text-gray-400">N/A</span>}</div>
+            <div><strong>Risk:</strong> {deadline.risk || <span className="text-gray-400">N/A</span>}</div>
+            <div><strong>Status:</strong> {deadline.status}</div>
+          </div>
+          <DialogClose asChild>
+            <Button className="mt-4 w-full" variant="outline">Close</Button>
+          </DialogClose>
+        </DialogContent>
+      </Dialog>
+    </>
   )
 
   const mainContent = (
