@@ -2,19 +2,29 @@ import express from "express";
 import {
   createModule,
   getAllModules,
-  getModuleById
+  getModuleById,
+  updateModule,
+  deleteModule
 } from "../controllers/moduleController.js";
 import protect from "../middleware/auth.js";
 
 const router = express.Router();
 
 // Create a new module
+// router.post("/", protect, createModule);
 router.post("/", protect, createModule);
 
 // Get all modules (with optional query filters like ?semester=4)
 router.get("/", protect, getAllModules);
 
+
 // Get a single module by ID
-router.get("/:id", getModuleById);
+router.get("/:id", protect, getModuleById);
+
+// Update a module by ID
+router.patch("/:id", protect, updateModule);
+
+// Delete a module by ID
+router.delete("/:id", protect, deleteModule);
 
 export default router;
