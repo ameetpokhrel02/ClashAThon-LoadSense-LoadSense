@@ -10,6 +10,7 @@ import workloadRoutes from "./routes/workloadRoutes.js";
 
 import dashboardRoutes from "./routes/dashboardscreenRoutes.js";
 import adminFeedbackRatingRoutes from "./routes/adminFeedbackRatingRoutes.js";
+import insightsRoutes from "./routes/insightsRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 import userRoutes from "./routes/userRoutes.js";
@@ -33,6 +34,7 @@ app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/workload", workloadRoutes);
 
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/insights", insightsRoutes);
 app.use("/api/feedback-ratings", adminFeedbackRatingRoutes);
 
 app.use("/api/users", userRoutes);
