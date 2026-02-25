@@ -226,7 +226,11 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Assignment">Assignment</SelectItem>
+                          <SelectItem value="Quiz">Quiz</SelectItem>
+                          <SelectItem value="Viva">Viva</SelectItem>
                           <SelectItem value="Project">Project</SelectItem>
+                          <SelectItem value="Midterm">Midterm</SelectItem>
+                          <SelectItem value="Final">Final</SelectItem>
                           <SelectItem value="Exam">Exam</SelectItem>
                           <SelectItem value="Reading">Reading</SelectItem>
                         </SelectContent>
