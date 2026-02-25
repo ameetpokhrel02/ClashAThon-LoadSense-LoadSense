@@ -12,6 +12,26 @@ const userSchema = new mongoose.Schema(
       required: [true, "Last name is required"],
       trim: true,
     },
+    phone: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    address: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    ward: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
     email: {
       type: String,
       required: [true, "Email is required"],
@@ -31,6 +51,14 @@ const userSchema = new mongoose.Schema(
     },
     otpExpiry: {
       type: Date,
+      default: null,
+    },
+    avatar: {
+      type: String,
+      default: null,
+    },
+    avatarPublicId: {
+      type: String,
       default: null,
     },
   },

@@ -67,25 +67,24 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB]">
-      {/* Top Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 pb-20 md:pb-0">
+      {/* Main Content */}
+      <div className="p-4 md:p-6">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-xl font-semibold text-gray-800">Academic Calendar</h1>
-            <p className="text-sm text-gray-500">Track your deadlines and events</p>
+            <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Academic Calendar</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 hidden md:block">Track your deadlines and events</p>
           </div>
           <Button 
             onClick={() => onNavigate('add-deadline')}
-            className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg font-medium shadow-sm"
+            className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg font-medium shadow-sm flex items-center gap-2"
           >
-            Add Event
+            <span className="hidden sm:inline">Add Event</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Calendar View */}
           <div className="lg:col-span-2">
@@ -183,6 +182,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
       <SidebarLayout
         sidebar={sidebarContent}
         content={mainContent}
+        onNavigate={onNavigate}
         mobileNavigation={
           <>
             <MobileNavigation 

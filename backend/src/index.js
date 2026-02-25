@@ -12,7 +12,7 @@ import adminFeedbackRatingRoutes from "./routes/adminFeedbackRatingRoutes.js";
 
 dotenv.config();
 
-const app = express();   // ← THIS WAS MISSING
+const app = express();   
 
 app.use(cors());
 app.use(express.json());
