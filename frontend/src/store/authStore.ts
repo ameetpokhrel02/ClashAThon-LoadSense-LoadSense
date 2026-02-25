@@ -4,6 +4,7 @@ import { api } from '@/lib/api'
 
 export interface User {
   id: string
+  _id?: string  // MongoDB ID fallback
   firstName: string
   lastName: string
   email: string
@@ -13,6 +14,9 @@ export interface User {
   role?: string
   avatar?: string | null
 }
+
+// Helper to get user ID (handles both id and _id)
+const getUserId = (user: User | null): string | undefined => user?.id || user?._id
 
 interface AuthState {
   user: User | null
@@ -41,7 +45,7 @@ export const useAuthStore = create<AuthState>()(
 
       fetchProfile: async () => {
         const { user } = get()
-        if (!user?.id) {
+        if (!getUserId(user)) {
           set({ profileError: 'No user logged in' })
           return
         }
@@ -60,7 +64,7 @@ export const useAuthStore = create<AuthState>()(
 
       updateProfile: async (data: FormData) => {
         const { user } = get()
-        if (!user?.id) {
+        if (!getUserId(user)) {
           set({ profileError: 'No user logged in' })
           throw new Error('No user logged in')
         }
@@ -70,7 +74,6 @@ export const useAuthStore = create<AuthState>()(
           set({ user: response.data.user, isLoadingProfile: false })
         } catch (error: unknown) {
           const err = error as { response?: { data?: { message?: string } }, message: string }
-          console.error("DEBUG FRONTEND PROFILE UPDATE ERROR:", err.response?.data || err.message);
           set({
             isLoadingProfile: false,
             profileError: err.response?.data?.message || 'Failed to update profile'
