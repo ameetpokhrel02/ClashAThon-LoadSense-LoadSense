@@ -11,14 +11,16 @@ import protect from "../middleware/auth.js";
 const router = express.Router();
 
 // Create a new module
-// router.post("/", protect, createModule);
 router.post("/", protect, createModule);
 
-// Get all modules (with optional query filters like ?semester=4)
+// Get all modules
 router.get("/", protect, getAllModules);
 
-
-// Get a single module by ID
-router.get("/:id", protect, getModuleById);
+// Get, Update, and Delete a single module by ID
+router
+  .route("/:id")
+  .get(protect, getModuleById)
+  .patch(protect, updateModule)      // This is the update route
+  .delete(protect, deleteModule);  // This is the delete route
 
 export default router;
