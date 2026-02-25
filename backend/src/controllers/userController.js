@@ -3,7 +3,8 @@ import { cloudinary } from "../config/cloudinary.js";
 
 export const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select("-password -otp -otpExpiry");
+    // Get user from the protect middleware, no need for params
+    const user = await User.findById(req.user.id).select("-password -otp -otpExpiry");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -16,7 +17,8 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { firstName, lastName, phone, address, ward } = req.body;
-    const user = await User.findById(req.params.id);
+    // Get user from the protect middleware
+    const user = await User.findById(req.user.id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -39,26 +41,42 @@ export const updateProfile = async (req, res) => {
       }
 
       user.avatar = req.file.path;
-      user.avatarPublicId = req.file.filename; // filename is the public_id for multer-storage-cloudinary
+      // ...existing code...
+      user.avatarPublicId = req.file.filename;
     }
 
-    await user.save();
+    const updatedUser = await user.save();
 
-    res.json({
+    res.status(200).json({
+      success: true,
       message: "Profile updated successfully",
       user: {
-        id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone,
-        address: user.address,
-        ward: user.ward,
-        role: user.role,
-        avatar: user.avatar,
+        id: updatedUser._id,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        phone: updatedUser.phone,
+        address: updatedUser.address,
+        ward: updatedUser.ward,
+        role: updatedUser.role,
+        avatar: updatedUser.avatar,
       },
     });
   } catch (err) {
-    res.status(500).json({ message: "Server error", error: err.message });
+    // Handle Mongoose validation errors
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed. Please check your input.",
+        errors: err.errors,
+      });
+    }
+    
+    // Generic server error
+    console.error("Update Profile Error:", err); // Log the full error for debugging
+    res.status(500).json({ 
+      success: false,
+      message: "An unexpected error occurred on the server." 
+    });
   }
 };
