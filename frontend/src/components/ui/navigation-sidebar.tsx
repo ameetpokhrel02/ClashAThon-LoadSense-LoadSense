@@ -2,11 +2,11 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { LogoutDialog } from "@/components/ui/logout-dialog"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
-import { 
-  LayoutDashboard, 
-  BookOpen, 
-  CalendarCheck, 
-  BarChart3, 
+import {
+  LayoutDashboard,
+  BookOpen,
+  CalendarCheck,
+  BarChart3,
   User,
   LogOut,
   Plus,
@@ -24,12 +24,12 @@ interface NavigationSidebarProps {
   className?: string
 }
 
-export function NavigationSidebar({ 
-  currentScreen, 
-  onNavigate, 
-  user, 
+export function NavigationSidebar({
+  currentScreen,
+  onNavigate,
+  user,
   onLogout,
-  className 
+  className
 }: NavigationSidebarProps) {
   const [showLogoutDialog, setShowLogoutDialog] = React.useState(false)
 
@@ -61,7 +61,7 @@ export function NavigationSidebar({
     },
     {
       id: 'courses',
-      label: 'Courses',
+      label: 'Modules',
       icon: BookOpen,
       active: currentScreen === 'courses'
     },
@@ -82,7 +82,7 @@ export function NavigationSidebar({
   return (
     <>
       <aside className={cn(
-        "w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-colors duration-200",
+        "hidden lg:flex w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex-col transition-colors duration-200 h-full min-h-screen",
         className
       )}>
         {/* Brand Header with Main Logo */}
@@ -98,18 +98,18 @@ export function NavigationSidebar({
             <ThemeToggle />
           </div>
         </div>
-        
+
         {/* Quick Action - Add Deadline */}
         <div className="px-6 mb-6">
-          <Button 
-            onClick={() => onNavigate('add-deadline')} 
+          <Button
+            onClick={() => onNavigate('add-deadline')}
             className="w-full gap-3 bg-[#ff7400] hover:bg-[#e66800] text-white border-0 rounded-xl py-3.5 font-medium transition-all duration-200"
           >
             <Plus className="w-5 h-5" />
             Add Deadline
           </Button>
         </div>
-        
+
         {/* Navigation */}
         <nav className="flex-1 px-4 space-y-1">
           {navigationItems.map((item) => {
@@ -153,9 +153,9 @@ export function NavigationSidebar({
               </div>
             </div>
           )}
-          <Button 
-            variant="ghost" 
-            className="w-full justify-start gap-3 text-gray-600 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm" 
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-gray-600 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm"
             onClick={() => setShowLogoutDialog(true)}
           >
             <LogOut className="w-5 h-5" />

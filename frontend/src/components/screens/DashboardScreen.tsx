@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
+import { Footer } from "@/components/ui/footer"
 import { Clock, AlertTriangle, Plus, Calendar, Loader2 } from "lucide-react"
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
@@ -80,8 +81,8 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0 transition-colors duration-200">
-      <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6">
+    <div className="min-h-screen flex flex-col bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0 transition-colors duration-200">
+      <div className="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full space-y-6">
         {/* Welcome Header */}
         <div className="flex items-center justify-between">
           <div>
@@ -264,6 +265,11 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
             </motion.div>
           </>
         )}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-auto block w-full">
+        <Footer variant="minimal" />
       </div>
     </div>
   )

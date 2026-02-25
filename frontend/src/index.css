@@ -68,6 +68,19 @@
   border-color: var(--border);
 }
 
+/* Ensure all interactive elements have pointer cursors globally */
+button, 
+a, 
+input[type="submit"], 
+input[type="button"], 
+input[type="reset"], 
+select, 
+[role="button"],
+.cursor-pointer,
+.touch-target {
+  cursor: pointer;
+}
+
 body {
   background: #F6FAFB;
   min-height: 100vh;

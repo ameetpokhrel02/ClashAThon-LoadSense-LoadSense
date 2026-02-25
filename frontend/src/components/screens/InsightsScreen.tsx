@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
+import { Footer } from "@/components/ui/footer"
 import {
   TrendingUp,
   TrendingDown,
@@ -88,8 +89,8 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0">
-      <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-6">
+    <div className="min-h-screen flex flex-col bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0">
+      <div className="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full space-y-6">
         {/* Header */}
         <div>
           <h1 className="text-xl font-semibold text-gray-800 dark:text-white">Workload Insights</h1>
@@ -111,10 +112,10 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
                 initial={{ y: -10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 className={`rounded-xl p-4 flex items-start gap-3 border ${riskLevel === 'Overload'
-                    ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400'
-                    : riskLevel === 'High'
-                      ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400'
-                      : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400'
+                  ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400'
+                  : riskLevel === 'High'
+                    ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400'
+                    : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400'
                   }`}
               >
                 <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
@@ -281,10 +282,10 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: 0.4 + index * 0.1 }}
                     className={`p-4 rounded-xl border ${insight.color === 'red'
-                        ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
-                        : insight.color === 'yellow'
-                          ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
-                          : 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                      ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                      : insight.color === 'yellow'
+                        ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
+                        : 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
                       }`}
                   >
                     <div className="flex items-start gap-3">
@@ -294,16 +295,16 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
                       {insight.color === 'blue' && <Info className="w-5 h-5 flex-shrink-0 text-blue-600 dark:text-blue-400" />}
                       <div>
                         <p className={`font-medium ${insight.color === 'red'
-                            ? 'text-red-800 dark:text-red-300'
-                            : insight.color === 'yellow'
-                              ? 'text-yellow-800 dark:text-yellow-300'
-                              : 'text-green-800 dark:text-green-300'
+                          ? 'text-red-800 dark:text-red-300'
+                          : insight.color === 'yellow'
+                            ? 'text-yellow-800 dark:text-yellow-300'
+                            : 'text-green-800 dark:text-green-300'
                           }`}>{insight.title}</p>
                         <p className={`text-sm mt-0.5 ${insight.color === 'red'
-                            ? 'text-red-700 dark:text-red-400'
-                            : insight.color === 'yellow'
-                              ? 'text-yellow-700 dark:text-yellow-400'
-                              : 'text-green-700 dark:text-green-400'
+                          ? 'text-red-700 dark:text-red-400'
+                          : insight.color === 'yellow'
+                            ? 'text-yellow-700 dark:text-yellow-400'
+                            : 'text-green-700 dark:text-green-400'
                           }`}>{insight.message}</p>
                       </div>
                     </div>
@@ -339,6 +340,11 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
             </motion.div>
           </>
         )}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-auto block w-full">
+        <Footer variant="minimal" />
       </div>
     </div>
   )

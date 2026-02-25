@@ -26,22 +26,22 @@ import { useThemeStore } from './store/themeStore'
 // Protected Route wrapper - redirects to login if not authenticated
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
-  
+
   if (!isLoggedIn) {
     return <Navigate to="/login" replace />
   }
-  
+
   return <>{children}</>
 }
 
 // Public Route wrapper - redirects to dashboard if already logged in
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn)
-  
+
   if (isLoggedIn) {
     return <Navigate to="/dashboard" replace />
   }
-  
+
   return <>{children}</>
 }
 
@@ -58,7 +58,7 @@ function AppRoutes() {
   }, [initializeTheme])
 
   // Navigation helper that maps screen names to routes
-  const handleNavigate = (screen: string) => {
+  const handleNavigate = (screen: string, data?: any) => {
     const routeMap: Record<string, string> = {
       'landing': '/',
       'login': '/login',
@@ -79,7 +79,7 @@ function AppRoutes() {
       'suggestion': '/suggestion',
       'smart-plan': '/smart-plan',
     }
-    navigate(routeMap[screen] || '/')
+    navigate(routeMap[screen] || '/', { state: data })
   }
 
   const handleForgotPasswordSubmit = (email: string) => {
@@ -105,48 +105,48 @@ function AppRoutes() {
             <LandingPage onNavigate={handleNavigate} />
           </PublicRoute>
         } />
-        
+
         <Route path="/login" element={
           <PublicRoute>
-            <LoginScreen 
-              onLogin={() => navigate('/dashboard')} 
+            <LoginScreen
+              onLogin={() => navigate('/dashboard')}
               onNavigate={handleNavigate}
             />
           </PublicRoute>
         } />
-        
+
         <Route path="/register" element={
           <PublicRoute>
-            <RegisterScreen 
-              onRegister={() => navigate('/login')} 
+            <RegisterScreen
+              onRegister={() => navigate('/login')}
               onNavigate={handleNavigate}
             />
           </PublicRoute>
         } />
-        
+
         <Route path="/forgot-password" element={
           <PublicRoute>
-            <ForgotPasswordScreen 
+            <ForgotPasswordScreen
               onNavigate={handleNavigate}
               onSubmit={handleForgotPasswordSubmit}
             />
           </PublicRoute>
         } />
-        
+
         <Route path="/otp-verification" element={
           <PublicRoute>
-            <OTPVerificationScreen 
+            <OTPVerificationScreen
               email={resetEmail}
               onNavigate={handleNavigate}
               onVerify={handleOTPVerify}
-              onResend={() => {}}
+              onResend={() => { }}
             />
           </PublicRoute>
         } />
-        
+
         <Route path="/change-password" element={
           <PublicRoute>
-            <ChangePasswordScreen 
+            <ChangePasswordScreen
               email={resetEmail}
               otp={resetOtp}
               onNavigate={handleNavigate}
@@ -154,10 +154,10 @@ function AppRoutes() {
             />
           </PublicRoute>
         } />
-        
+
         <Route path="/password-success" element={
           <PublicRoute>
-            <PasswordSuccessScreen 
+            <PasswordSuccessScreen
               onNavigate={handleNavigate}
             />
           </PublicRoute>
@@ -169,61 +169,61 @@ function AppRoutes() {
             <DashboardScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/deadlines" element={
           <ProtectedRoute>
             <DeadlinesScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/add-deadline" element={
           <ProtectedRoute>
             <AddDeadlineScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/courses" element={
           <ProtectedRoute>
             <CoursesScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/insights" element={
           <ProtectedRoute>
             <InsightsScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/profile" element={
           <ProtectedRoute>
             <ProfileScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/calendar" element={
           <ProtectedRoute>
             <CalendarScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/settings" element={
           <ProtectedRoute>
             <SettingsScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/overload-alert" element={
           <ProtectedRoute>
             <OverloadAlertScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/suggestion" element={
           <ProtectedRoute>
             <SuggestionScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
-        
+
         <Route path="/smart-plan" element={
           <ProtectedRoute>
             <SmartPlanScreen onNavigate={handleNavigate} />

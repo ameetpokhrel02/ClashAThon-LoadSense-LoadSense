@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { fetchDeadlines, createDeadline, deleteDeadline as apiDeleteDeadline, setDeadlineCompleted, type CreateDeadlinePayload } from '@/lib/deadlineApi'
+import { fetchDeadlines, createDeadline, deleteDeadline as apiDeleteDeadline, setDeadlineCompleted, updateDeadline as apiUpdateDeadline, type CreateDeadlinePayload, type UpdateDeadlinePayload } from '@/lib/deadlineApi'
 
 export type RiskLevel = 'low' | 'medium' | 'high'
 
@@ -22,7 +22,7 @@ interface DeadlineState {
   workloadScore: number // 0 to 100
   isLoading: boolean
   error: string | null
-  
+
   // Actions
   setDeadlines: (deadlines: Deadline[]) => void
   addDeadlineLocal: (deadline: Deadline) => void
@@ -36,6 +36,7 @@ interface DeadlineState {
   createDeadline: (payload: CreateDeadlinePayload) => Promise<Deadline | null>
   deleteDeadline: (id: string) => Promise<boolean>
   setDeadlineCompleted: (id: string, isCompleted: boolean) => Promise<Deadline | null>
+  updateDeadline: (id: string, payload: UpdateDeadlinePayload) => Promise<Deadline | null>
 }
 
 export const useDeadlineStore = create<DeadlineState>((set, get) => ({
@@ -91,6 +92,22 @@ export const useDeadlineStore = create<DeadlineState>((set, get) => ({
     try {
       set({ isLoading: true, error: null })
       const updated = await setDeadlineCompleted(id, isCompleted)
+      const { deadlines } = get()
+      set({
+        deadlines: deadlines.map(d => (d.id === id ? updated : d)),
+        isLoading: false,
+      })
+      return updated
+    } catch (error: any) {
+      set({ error: error?.message || 'Failed to update deadline status', isLoading: false })
+      return null
+    }
+  },
+
+  updateDeadline: async (id, payload) => {
+    try {
+      set({ isLoading: true, error: null })
+      const updated = await apiUpdateDeadline(id, payload)
       const { deadlines } = get()
       set({
         deadlines: deadlines.map(d => (d.id === id ? updated : d)),

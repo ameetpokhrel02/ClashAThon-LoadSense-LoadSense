@@ -189,7 +189,7 @@ export default function RegisterScreen({ onRegister, onNavigate }: RegisterScree
                       <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <Input 
                         id="firstName" 
-                        placeholder="John" 
+                        placeholder="John"
                         className="pl-12 h-12 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all" 
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
@@ -203,7 +203,7 @@ export default function RegisterScreen({ onRegister, onNavigate }: RegisterScree
                       <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <Input 
                         id="lastName" 
-                        placeholder="Doe" 
+                        placeholder="Doe"
                         className="pl-12 h-12 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all" 
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}

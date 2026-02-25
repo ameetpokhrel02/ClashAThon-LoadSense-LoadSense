@@ -102,7 +102,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 pb-20 md:pb-0">
+    <div className="min-h-screen flex flex-col bg-[#F6FAFB] dark:bg-gray-950 pb-20 md:pb-0">
       {/* Header */}
       <div className="p-4 md:px-6 md:py-4 flex items-center justify-between">
         <div>
@@ -153,7 +153,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
                       <SelectValue placeholder="Credits" />
                     </SelectTrigger>
                     <SelectContent>
-                      {[1, 2, 3, 4, 5, 6].map(c => (
+                      {[15, 30].map(c => (
                         <SelectItem key={c} value={c.toString()}>{c}</SelectItem>
                       ))}
                     </SelectContent>
@@ -208,7 +208,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
       </div>
 
       {/* Main Content */}
-      <div className="p-4 md:p-6">
+      <div className="flex-1 p-4 md:p-6">
         {/* Filter */}
         <div className="flex items-center gap-3 mb-6">
           <Filter className="w-4 h-4 text-gray-400" />
@@ -282,18 +282,18 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
                       {module.credits} credits
                     </span>
                   </div>
-                  
+
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                       <Building2 className="w-4 h-4" />
                       <span>{module.department}</span>
                     </div>
-                    
+
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                       <GraduationCap className="w-4 h-4" />
                       <span>{getYearLabel(module.year)}</span>
                     </div>
-                    
+
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                       <Clock className="w-4 h-4" />
                       <span>Semester {module.semester}</span>
@@ -304,8 +304,11 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
             ))}
           </div>
         )}
-        
-        {/* Footer */}
+
+      </div>
+
+      {/* Footer */}
+      <div className="mt-auto">
         <Footer variant="minimal" />
       </div>
     </div>
@@ -319,7 +322,7 @@ export default function CoursesScreen({ onNavigate }: { onNavigate: (screen: str
         onNavigate={onNavigate}
         mobileNavigation={
           <>
-            <MobileNavigation 
+            <MobileNavigation
               currentScreen="courses"
               onNavigate={onNavigate}
             />

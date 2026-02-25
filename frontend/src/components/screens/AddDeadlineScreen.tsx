@@ -22,6 +22,7 @@ import { useWorkloadStore } from "@/store/workloadStore"
 import { useRemindersStore } from "@/store/reminderStore"
 import { useModuleStore } from "@/store/moduleStore"
 import { useHapticFeedback } from "@/hooks/useMobileGestures"
+import { useLocation } from "react-router-dom"
 
 import type { Deadline } from '@/store/deadlineStore'
 
@@ -30,7 +31,10 @@ interface AddDeadlineScreenProps {
   editDeadline?: Deadline
 }
 
-export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadlineScreenProps) {
+export default function AddDeadlineScreen({ onNavigate, editDeadline: propEditDeadline }: AddDeadlineScreenProps) {
+  const location = useLocation()
+  const editDeadline = propEditDeadline || (location.state as Deadline | undefined)
+
   const [date, setDate] = useState<Date | undefined>(editDeadline ? new Date(editDeadline.dueDate) : undefined)
   const [title, setTitle] = useState(editDeadline?.title || "")
   const [course, setCourse] = useState(editDeadline?.course || "")
@@ -47,8 +51,9 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
   useEffect(() => {
     fetchModules()
   }, [fetchModules])
-  
+
   const createDeadline = useDeadlineStore(state => state.createDeadline)
+  const updateDeadline = useDeadlineStore(state => state.updateDeadline)
   const fetchSummary = useWorkloadStore(state => state.fetchSummary)
   const fetchWorkload = useWorkloadStore(state => state.fetchWorkload)
   const fetchReminders = useRemindersStore(state => state.fetchReminders)
@@ -71,11 +76,16 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
     try {
       setIsSaving(true)
       let result
-      if (editDeadline) {
-        // TODO: Call updateDeadline API here
-        // result = await updateDeadline({ ...fields, id: editDeadline.id })
-        alert('Update logic not yet implemented!')
-        result = true // Remove this after implementing update
+      if (editDeadline && editDeadline.id) {
+        result = await updateDeadline(editDeadline.id, {
+          title,
+          course: selectedCourse,
+          type,
+          dueDate: date.toISOString(),
+          estimatedHours,
+          risk,
+          notes,
+        })
       } else {
         result = await createDeadline({
           title,
@@ -117,14 +127,14 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
     <LayoutWrapper pattern="centered" className="bg-[#F6FAFB] dark:bg-gray-950">
       <PullToRefresh onRefresh={handleRefresh}>
         {/* Mobile Header */}
-        <MobileHeader 
+        <MobileHeader
           title="Add Deadline"
           onMenuToggle={toggleMobileSidebar}
           actions={
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               size="sm"
-              className="touch-target" 
+              className="touch-target"
               onClick={() => onNavigate('dashboard')}
             >
               <ArrowLeft className="w-4 h-4" />
@@ -135,9 +145,9 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
         <ResponsiveContainer maxWidth="full" className="pb-20 lg:pb-8">
           {/* Back Navigation - Desktop Only */}
           <div className="hidden lg:block mb-8">
-            <Button 
-              variant="ghost" 
-              className="gap-2 text-muted-foreground hover:text-foreground transition-smooth" 
+            <Button
+              variant="ghost"
+              className="gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition-smooth"
               onClick={() => onNavigate('dashboard')}
             >
               <ArrowLeft className="w-4 h-4" />
@@ -147,45 +157,45 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left Panel - Branding - Desktop Only */}
-            <motion.div 
+            <motion.div
               className="hidden lg:flex flex-col justify-center space-y-8"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
               <BrandHeader variant="full" className="text-primary" />
-              
+
               <div className="space-y-6">
-                <motion.div 
-                  className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-8 border border-primary/30"
+                <motion.div
+                  className="bg-orange-50 dark:bg-[#ff7400]/10 rounded-2xl p-8 border border-orange-200 dark:border-[#ff7400]/20"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-primary/30 p-3 rounded-full">
-                      <Target className="w-6 h-6 text-primary" />
+                    <div className="bg-[#ff7400]/20 p-3 rounded-full">
+                      <Target className="w-6 h-6 text-[#ff7400]" />
                     </div>
-                    <h3 className="text-xl font-semibold text-primary">Smart Planning</h3>
+                    <h3 className="text-xl font-semibold text-[#ff7400]">Smart Planning</h3>
                   </div>
-                  <p className="text-foreground/80 leading-relaxed">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     Add your assignments and let LoadSense analyze your workload to prevent burnout and optimize your study schedule.
                   </p>
                 </motion.div>
 
-                <motion.div 
-                  className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-8 border border-primary/30"
+                <motion.div
+                  className="bg-orange-50 dark:bg-[#ff7400]/10 rounded-2xl p-8 border border-orange-200 dark:border-[#ff7400]/20"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.5, duration: 0.5 }}
                 >
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-primary/30 p-3 rounded-full">
-                      <BookOpen className="w-6 h-6 text-primary" />
+                    <div className="bg-[#ff7400]/20 p-3 rounded-full">
+                      <BookOpen className="w-6 h-6 text-[#ff7400]" />
                     </div>
-                    <h3 className="text-xl font-semibold text-primary">Workload Intelligence</h3>
+                    <h3 className="text-xl font-semibold text-[#ff7400]">Workload Intelligence</h3>
                   </div>
-                  <p className="text-foreground/80 leading-relaxed">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                     Our algorithm considers your historical completion rates and current commitments to provide accurate workload predictions.
                   </p>
                 </motion.div>
@@ -193,7 +203,7 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
             </motion.div>
 
             {/* Right Panel - Form */}
-            <motion.div 
+            <motion.div
               className="w-full"
               initial={{ x: 20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -205,18 +215,22 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
                   <div className="lg:hidden mb-6">
                     <BrandHeader variant="compact" />
                   </div>
-                  
+
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-primary/20 p-3 rounded-xl">
-                      <CalendarIcon className="w-6 h-6 text-primary" />
+                    <div className="bg-[#ff7400]/10 p-3 rounded-xl">
+                      <CalendarIcon className="w-6 h-6 text-[#ff7400]" />
                     </div>
                     <div>
-                      <h1 className="text-responsive-xl lg:text-2xl font-bold text-foreground">Add New Deadline</h1>
-                      <p className="text-muted-foreground text-responsive-sm">Track your upcoming assignments and exams</p>
+                      <h1 className="text-responsive-xl lg:text-2xl font-bold text-gray-800 dark:text-white">
+                        {editDeadline ? "Edit Deadline" : "Add New Deadline"}
+                      </h1>
+                      <p className="text-gray-500 dark:text-gray-400 text-responsive-sm">
+                        {editDeadline ? "Update your academic assignment details" : "Track your upcoming assignments and exams"}
+                      </p>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Form Content */}
                 <div className="p-6 lg:p-8 space-y-6">
                   <motion.div
@@ -234,14 +248,14 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
                     />
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     className="grid grid-cols-1 md:grid-cols-2 gap-6"
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.3, duration: 0.5 }}
                   >
                     <div className="space-y-2">
-                      <Label htmlFor="course" className="text-sm font-medium">Course</Label>
+                      <Label htmlFor="course" className="text-sm font-medium text-gray-700 dark:text-gray-300">Course</Label>
                       <Select value={course} onValueChange={setCourse}>
                         <SelectTrigger id="course" className="h-11 rounded-lg touch-target">
                           <SelectValue placeholder="Select a course" />
@@ -266,7 +280,7 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="type" className="text-sm font-medium">Task Type</Label>
+                      <Label htmlFor="type" className="text-sm font-medium text-gray-700 dark:text-gray-300">Task Type</Label>
                       <Select value={type} onValueChange={setType}>
                         <SelectTrigger id="type" className="h-11 rounded-lg touch-target">
                           <SelectValue placeholder="Select task type" />
@@ -285,21 +299,21 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
                     </div>
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     className="grid grid-cols-1 md:grid-cols-2 gap-6"
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.5 }}
                   >
                     <div className="space-y-2">
-                      <Label className="text-sm font-medium">Due Date</Label>
+                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Due Date</Label>
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
                             className={cn(
-                              "w-full justify-start text-left font-normal h-11 rounded-lg touch-target",
-                              !date && "text-muted-foreground"
+                              "w-full justify-start text-left font-normal h-11 rounded-lg touch-target border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-800 dark:text-white",
+                              !date && "text-gray-400 dark:text-gray-500"
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -329,41 +343,41 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
                     />
                   </motion.div>
 
-                  <motion.div 
+                  <motion.div
                     className="space-y-2"
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.5, duration: 0.5 }}
                   >
-                    <Label htmlFor="notes" className="text-sm font-medium">Additional Notes (Optional)</Label>
-                    <Textarea 
-                      id="notes" 
-                      placeholder="Add any specific requirements, links, or reminders..." 
-                      className="min-h-[100px] rounded-lg resize-none"
+                    <Label htmlFor="notes" className="text-sm font-medium text-gray-700 dark:text-gray-300">Additional Notes (Optional)</Label>
+                    <Textarea
+                      id="notes"
+                      placeholder="Add any specific requirements, links, or reminders..."
+                      className="min-h-[100px] rounded-lg resize-none bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-800 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus-visible:ring-[#ff7400]/20 focus-visible:border-[#ff7400]"
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
                     />
                   </motion.div>
                 </div>
-                
+
                 {/* Footer */}
-                <motion.div 
-                  className="flex flex-col lg:flex-row justify-end gap-4 p-6 lg:p-8 border-t border-border/50 bg-secondary/20"
+                <motion.div
+                  className="flex flex-col lg:flex-row justify-end gap-4 p-6 lg:p-8 border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.6, duration: 0.5 }}
                 >
-                  <Button 
-                    variant="outline" 
-                    onClick={() => onNavigate('dashboard')} 
-                    className="rounded-lg h-11 px-6 border-muted-foreground/30 text-muted-foreground hover:border-primary/50 hover:text-primary touch-target"
+                  <Button
+                    variant="outline"
+                    onClick={() => onNavigate('dashboard')}
+                    className="rounded-lg h-11 px-6 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-[#ff7400]/50 hover:text-[#ff7400] hover:bg-[#ff7400]/10 touch-target"
                   >
                     Cancel
                   </Button>
-                  <Button 
+                  <Button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="rounded-lg h-11 px-8 modern-gradient-purple text-white hover:neon-glow-purple transition-smooth touch-target"
+                    className="rounded-lg h-11 px-8 bg-[#ff7400] text-white hover:bg-[#e66800] transition-smooth touch-target"
                   >
                     {isSaving ? 'Saving...' : 'Save Deadline'}
                   </Button>
@@ -372,13 +386,13 @@ export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadl
             </motion.div>
           </div>
         </ResponsiveContainer>
-        
+
         {/* Footer */}
         <Footer variant="minimal" />
 
         {/* Mobile Navigation */}
         <div className="lg:hidden">
-          <MobileNavigation 
+          <MobileNavigation
             currentScreen="add-deadline"
             onNavigate={onNavigate}
           />

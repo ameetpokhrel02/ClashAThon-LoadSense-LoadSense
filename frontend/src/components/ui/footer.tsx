@@ -12,12 +12,12 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
   if (variant === 'minimal') {
     return (
       <footer className={cn(
-        "py-4 px-6 border-t border-gray-200 bg-white",
+        "py-4 px-6 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 w-full",
         className
       )}>
         <div className="text-center">
-          <p className="text-sm text-gray-500">
-            © {currentYear} LoadSense. All rights reserved.
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            © {currentYear} LoadSense. A ClashAThon The Final Battle Project.
           </p>
         </div>
       </footer>
@@ -30,8 +30,8 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
         "py-6 px-6 text-center",
         className
       )}>
-        <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-          <span>© {currentYear} LoadSense</span>
+        <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <span>© {currentYear} LoadSense. A ClashAThon The Final Battle Project.</span>
           <span>•</span>
           <span>Smart Workload Management</span>
           <span>•</span>
@@ -45,7 +45,7 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
 
   return (
     <footer className={cn(
-      "bg-white border-t border-gray-200 py-8 px-6",
+      "bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 py-8 px-6 w-full",
       className
     )}>
       <div className="max-w-6xl mx-auto">
@@ -57,15 +57,15 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
                 <GraduationCap className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h3 className="font-bold text-lg text-gray-900">LoadSense</h3>
-                <p className="text-sm text-gray-600">Smart Workload Management</p>
+                <h3 className="font-bold text-lg text-gray-900 dark:text-white">LoadSense</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Smart Workload Management</p>
               </div>
             </div>
-            <p className="text-gray-600 text-sm leading-relaxed mb-4">
-              Empowering students to manage their academic workload intelligently. 
+            <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
+              Empowering students to manage their academic workload intelligently.
               Detect overload, plan smarter, and achieve academic success without burnout.
             </p>
-            <div className="flex items-center gap-1 text-sm text-gray-500">
+            <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
               <span>Made with</span>
               <Heart className="w-4 h-4 text-red-500 fill-current" />
               <span>for students worldwide</span>
@@ -74,25 +74,25 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Quick Links</h4>
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                   Dashboard
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                   My Courses
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                   Calendar
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                   Add Deadline
                 </a>
               </li>
@@ -101,25 +101,25 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
 
           {/* Support */}
           <div>
-            <h4 className="font-semibold text-gray-900 mb-4">Support</h4>
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Support</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                   Help Center
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-primary transition-colors">
+                <a href="#" className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors">
                   Terms of Service
                 </a>
               </li>
@@ -128,11 +128,11 @@ export function Footer({ className, variant = 'default' }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-200 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">
-            © {currentYear} LoadSense. All rights reserved.
+        <div className="border-t border-gray-200 dark:border-gray-800 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            © {currentYear} LoadSense. A ClashAThon The Final Battle Project.
           </p>
-          <div className="flex items-center gap-6 text-sm text-gray-500">
+          <div className="flex items-center gap-6 text-sm text-gray-500 dark:text-gray-400">
             <span>Version 1.0.0</span>
             <span>•</span>
             <span>Built for academic success</span>

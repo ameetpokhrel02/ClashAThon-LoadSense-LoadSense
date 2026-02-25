@@ -11,7 +11,7 @@ interface LayoutWrapperProps {
 
 export function LayoutWrapper({ children, pattern, className }: LayoutWrapperProps) {
   const baseClasses = "min-h-screen bg-[#F6FAFB] dark:bg-gray-950 text-gray-800 dark:text-white font-sans antialiased"
-  
+
   const patternClasses = {
     split: "flex flex-col lg:flex-row",
     sidebar: "flex flex-col lg:flex-row",
@@ -33,11 +33,11 @@ interface SplitLayoutProps {
   rightPanelClassName?: string
 }
 
-export function SplitLayout({ 
-  leftPanel, 
-  rightPanel, 
-  leftPanelClassName, 
-  rightPanelClassName 
+export function SplitLayout({
+  leftPanel,
+  rightPanel,
+  leftPanelClassName,
+  rightPanelClassName
 }: SplitLayoutProps) {
   return (
     <>
@@ -50,7 +50,7 @@ export function SplitLayout({
           {leftPanel}
         </div>
       </div>
-      
+
       {/* Right panel - responsive */}
       <div className={cn(
         "flex-1 flex items-center justify-center p-4 lg:p-8 bg-[#F6FAFB] dark:bg-gray-950 min-h-screen lg:min-h-auto",
@@ -73,10 +73,10 @@ interface SidebarLayoutProps {
   onNavigate?: (screen: string) => void
 }
 
-export function SidebarLayout({ 
-  sidebar, 
-  content, 
-  sidebarClassName, 
+export function SidebarLayout({
+  sidebar,
+  content,
+  sidebarClassName,
   contentClassName,
   mobileNavigation,
   onNavigate
@@ -84,15 +84,15 @@ export function SidebarLayout({
   return (
     <div className="flex flex-col lg:flex-row min-h-screen w-full">
       {/* Desktop Sidebar */}
-      <div className={cn("hidden lg:block flex-shrink-0", sidebarClassName)}>
+      <div className={cn("hidden lg:block flex-shrink-0 min-h-screen", sidebarClassName)}>
         {sidebar}
       </div>
-      
+
       {/* Main Content Area with Top Navbar */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top Navbar - only show when onNavigate is provided */}
         {onNavigate && <TopNavbar onNavigate={onNavigate} />}
-        
+
         {/* Main Content */}
         <main className={cn(
           "flex-1 overflow-y-auto pb-20 lg:pb-0",
@@ -101,7 +101,7 @@ export function SidebarLayout({
           {content}
         </main>
       </div>
-      
+
       {/* Mobile Navigation */}
       {mobileNavigation && (
         <div className="lg:hidden">
@@ -119,22 +119,22 @@ interface ResponsiveContainerProps {
   className?: string
 }
 
-export function ResponsiveContainer({ 
-  children, 
-  maxWidth = 'lg', 
-  padding = true, 
-  className 
+export function ResponsiveContainer({
+  children,
+  maxWidth = 'lg',
+  padding = true,
+  className
 }: ResponsiveContainerProps) {
   const maxWidthClasses = {
     sm: 'max-w-sm',
-    md: 'max-w-md', 
+    md: 'max-w-md',
     lg: 'max-w-lg',
     xl: 'max-w-xl',
     full: 'max-w-full'
   }
 
   return (
-    <motion.div 
+    <motion.div
       className={cn(
         "mx-auto w-full",
         maxWidthClasses[maxWidth],
@@ -159,7 +159,7 @@ interface MobileHeaderProps {
 
 export function MobileHeader({ title, onMenuToggle, actions, className }: MobileHeaderProps) {
   return (
-    <motion.header 
+    <motion.header
       className={cn(
         "lg:hidden sticky top-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 p-4",
         className

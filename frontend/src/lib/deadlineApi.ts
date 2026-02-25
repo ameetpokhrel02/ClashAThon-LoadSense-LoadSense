@@ -39,6 +39,17 @@ export interface CreateDeadlinePayload {
   notes?: string
 }
 
+export interface UpdateDeadlinePayload {
+  title?: string
+  course?: string
+  type?: string
+  dueDate?: string
+  estimatedHours?: number
+  risk?: RiskLevel
+  notes?: string
+  is_completed?: boolean
+}
+
 export const fetchDeadlines = async (): Promise<Deadline[]> => {
   const response = await api.get<BackendDeadline[]>("/deadlines")
   return response.data.map(mapDeadline)
@@ -62,5 +73,13 @@ export const setDeadlineCompleted = async (
   const response = await api.patch<BackendDeadline>(`/deadlines/${id}`, {
     is_completed: isCompleted,
   })
+  return mapDeadline(response.data)
+}
+
+export const updateDeadline = async (
+  id: string,
+  payload: UpdateDeadlinePayload
+): Promise<Deadline> => {
+  const response = await api.patch<BackendDeadline>(`/deadlines/${id}`, payload)
   return mapDeadline(response.data)
 }

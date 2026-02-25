@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
+import { TopNavbar } from "@/components/ui/top-navbar"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
-import { 
-  Plus, 
-  Calendar, 
-  Clock, 
-  Edit2, 
+import { Footer } from "@/components/ui/footer"
+import {
+  Plus,
+  Calendar,
+  Clock,
+  Edit2,
   Trash2,
   Search,
   Filter,
@@ -88,8 +90,8 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
   }
 
   const filteredDeadlines = uiDeadlines.filter(d => {
-    const matchesSearch = d.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          d.course.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchesSearch = d.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      d.course.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesFilter = filterImpact === 'all' || d.impact === filterImpact
     return matchesSearch && matchesFilter
   })
@@ -123,19 +125,17 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
         initial={{ y: 10, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: index * 0.05 }}
-        className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm transition-all ${
-          deadline.status === 'completed' ? 'opacity-60' : ''
-        }`}
+        className={`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-sm transition-all ${deadline.status === 'completed' ? 'opacity-60' : ''
+          }`}
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3 flex-1">
             <button
               onClick={() => handleToggleStatus(deadline.id)}
-              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${
-                deadline.status === 'completed' 
-                  ? 'bg-green-500 border-green-500' 
+              className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 transition-all ${deadline.status === 'completed'
+                  ? 'bg-green-500 border-green-500'
                   : 'border-gray-300 hover:border-[#ff7400]'
-              }`}
+                }`}
             >
               {deadline.status === 'completed' && (
                 <CheckCircle2 className="w-3 h-3 text-white" />
@@ -226,7 +226,11 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
   )
 
   const mainContent = (
-    <div className="min-h-screen bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0">
+    <div className="min-h-screen flex flex-col bg-[#F6FAFB] dark:bg-gray-950 relative pb-20 md:pb-0">
+      {/* Desktop Top Navbar */}
+      <div className="hidden md:block sticky top-0 z-30">
+        <TopNavbar onNavigate={onNavigate} />
+      </div>
       {/* Mobile Header */}
       <div className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 flex justify-between items-center sticky top-0 z-20">
         <h1 className="text-lg font-semibold text-gray-800 dark:text-white">Deadlines</h1>
@@ -240,7 +244,7 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
         </Button>
       </div>
 
-      <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-6">
+      <div className="flex-1 p-4 md:p-8 max-w-4xl mx-auto w-full space-y-6">
         {/* Header */}
         <div className="hidden md:flex items-center justify-between">
           <div>
@@ -367,6 +371,11 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
             </div>
           </div>
         )}
+      </div>
+
+      {/* Footer */}
+      <div className="mt-auto block w-full">
+        <Footer variant="minimal" />
       </div>
     </div>
   )

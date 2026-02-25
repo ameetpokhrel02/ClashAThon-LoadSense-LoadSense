@@ -3,8 +3,8 @@ import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
 import { Footer } from "@/components/ui/footer"
-import { 
-  Calendar, ChevronLeft, ChevronRight, 
+import {
+  Calendar, ChevronLeft, ChevronRight,
   Loader2, Lightbulb, Target, TrendingUp, CalendarDays, RefreshCw,
   ArrowRight
 } from "lucide-react"
@@ -55,6 +55,8 @@ interface CalendarStats {
 }
 
 export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
+  // State for selected day
+  const [selectedDay, setSelectedDay] = useState<number | null>(null)
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [currentDate, setCurrentDate] = useState(new Date())
   const [calendarStats, setCalendarStats] = useState<CalendarStats | null>(null)
@@ -119,9 +121,9 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
     const lastDay = new Date(year, month + 1, 0)
     const daysInMonth = lastDay.getDate()
     const startingDay = firstDay.getDay()
-    
+
     const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    
+
     return { year, month, daysInMonth, startingDay, monthName }
   }, [currentDate])
 
@@ -147,10 +149,10 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
   const getDayRiskColor = (day: number) => {
     const events = getEventsForDay(day)
     if (events.length === 0) return null
-    
+
     const hasHigh = events.some(e => e.risk === 'high')
     const hasMedium = events.some(e => e.risk === 'medium')
-    
+
     if (hasHigh) return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 ring-2 ring-red-300 dark:ring-red-700'
     if (hasMedium) return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 ring-2 ring-yellow-300 dark:ring-yellow-700'
     return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 ring-2 ring-green-300 dark:ring-green-700'
@@ -159,9 +161,9 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
   // Check if a day is today
   const isToday = (day: number) => {
     const today = new Date()
-    return day === today.getDate() && 
-           calendarData.month === today.getMonth() && 
-           calendarData.year === today.getFullYear()
+    return day === today.getDate() &&
+      calendarData.month === today.getMonth() &&
+      calendarData.year === today.getFullYear()
   }
 
   const sidebarContent = (
@@ -187,7 +189,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
               Visualizing academic pressure for <span className="text-[#ff7400] font-medium">{calendarData.monthName}</span>
             </p>
           </div>
-          <Button 
+          <Button
             onClick={() => onNavigate('add-deadline')}
             className="bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg font-medium shadow-sm flex items-center gap-2"
           >
@@ -207,25 +209,25 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                   {calendarData.monthName}
                 </h2>
                 <div className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
+                  <Button
+                    variant="outline"
+                    size="sm"
                     onClick={goToToday}
                     className="text-xs"
                   >
                     Today
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={goToPreviousMonth}
                     className="h-8 w-8"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={goToNextMonth}
                     className="h-8 w-8"
                   >
@@ -233,7 +235,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                   </Button>
                 </div>
               </div>
-              
+
               {/* Loading State */}
               {isLoading && (
                 <div className="flex items-center justify-center py-8">
@@ -249,46 +251,45 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                       {day}
                     </div>
                   ))}
-                  
+
                   {/* Adjust for Monday start - empty cells */}
                   {Array.from({ length: calendarData.startingDay === 0 ? 6 : calendarData.startingDay - 1 }, (_, i) => (
                     <div key={`empty-${i}`} className="aspect-square"></div>
                   ))}
-                  
+
                   {/* Calendar Days */}
                   {Array.from({ length: calendarData.daysInMonth }, (_, i) => {
                     const day = i + 1
                     const dayEvents = getEventsForDay(day)
                     const riskColor = getDayRiskColor(day)
                     const todayClass = isToday(day)
-                    
                     return (
                       <div
                         key={day}
                         className={`
                           aspect-square flex flex-col items-center justify-center text-sm rounded-lg cursor-pointer
                           transition-all duration-200 relative p-1
-                          ${todayClass 
-                            ? 'bg-[#ff7400] text-white font-bold shadow-md' 
-                            : riskColor 
-                              ? riskColor 
+                          ${todayClass
+                            ? 'bg-[#ff7400] text-white font-bold shadow-md'
+                            : riskColor
+                              ? riskColor
                               : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                           }
                         `}
                         title={dayEvents.length > 0 ? `${dayEvents.length} event(s)` : ''}
+                        onClick={() => dayEvents.length > 0 ? setSelectedDay(day) : setSelectedDay(null)}
                       >
                         <span className={todayClass ? 'font-bold' : 'font-medium'}>{day}</span>
                         {/* Event badges */}
                         {dayEvents.length > 0 && !todayClass && (
                           <div className="flex flex-wrap gap-0.5 mt-0.5 justify-center">
                             {dayEvents.slice(0, 2).map((event, idx) => (
-                              <span 
+                              <span
                                 key={idx}
-                                className={`text-[8px] px-1 rounded truncate max-w-full ${
-                                  event.risk === 'high' ? 'bg-red-200 text-red-800' :
-                                  event.risk === 'medium' ? 'bg-yellow-200 text-yellow-800' :
-                                  'bg-green-200 text-green-800'
-                                }`}
+                                className={`text-[8px] px-1 rounded truncate max-w-full ${event.risk === 'high' ? 'bg-red-200 text-red-800' :
+                                    event.risk === 'medium' ? 'bg-yellow-200 text-yellow-800' :
+                                      'bg-green-200 text-green-800'
+                                  }`}
                               >
                                 {event.title.length > 8 ? event.title.slice(0, 8) + '..' : event.title}
                               </span>
@@ -306,6 +307,30 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                       </div>
                     )
                   })}
+                  {/* Workload Detail Panel for Selected Day - Always at bottom */}
+                  <div className="col-span-7 w-full flex justify-center">
+                    {selectedDay && getEventsForDay(selectedDay).length > 0 && (
+                      <div className="mt-4 w-full max-w-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm">
+                        <h3 className="text-md font-semibold text-gray-800 dark:text-white mb-2 text-center">Workload Details for {calendarData.monthName} {selectedDay}</h3>
+                        <ul className="space-y-2">
+                          {getEventsForDay(selectedDay).map(event => (
+                            <li key={event._id || event.id} className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
+                              <span className={`px-2 py-1 rounded text-xs font-medium ${event.risk === 'high' ? 'bg-red-200 text-red-800' :
+                                  event.risk === 'medium' ? 'bg-yellow-200 text-yellow-800' :
+                                    'bg-green-200 text-green-800'
+                                }`}>{event.type}</span>
+                              <span className="font-semibold text-gray-700 dark:text-gray-200">{event.title}</span>
+                              <span className="text-xs text-gray-500">{event.course}</span>
+                              <span className="text-xs text-gray-500">Due: {new Date(event.dueDate).toLocaleString()}</span>
+                              {event.notes && <span className="text-xs text-gray-400">Notes: {event.notes}</span>}
+                              <span className="text-xs text-gray-500">Estimated Hours: {event.estimatedHours}</span>
+                            </li>
+                          ))}
+                        </ul>
+                        <Button className="mt-3 w-full" variant="outline" onClick={() => setSelectedDay(null)}>Close</Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
@@ -326,7 +351,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                     <span className="text-blue-600 dark:text-blue-400 font-semibold">AI Tip:</span> {calendarStats.aiTip.message}
                   </p>
                 </div>
-                <Button 
+                <Button
                   onClick={() => onNavigate('smart-plan')}
                   className="bg-blue-600 hover:bg-blue-700 text-white shrink-0"
                 >
@@ -386,7 +411,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                 <TrendingUp className="w-4 h-4 text-[#ff7400]" />
                 Weekly Load Trend
               </h3>
-              
+
               {statsLoading ? (
                 <div className="flex justify-center py-4">
                   <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
@@ -407,25 +432,23 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
                           initial={{ width: 0 }}
                           animate={{ width: `${trend.capacity}%` }}
                           transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
-                          className={`h-full rounded-full ${
-                            trend.status === 'overload' ? 'bg-red-500' :
-                            trend.status === 'moderate' ? 'bg-yellow-500' :
-                            'bg-green-500'
-                          }`}
+                          className={`h-full rounded-full ${trend.status === 'overload' ? 'bg-red-500' :
+                              trend.status === 'moderate' ? 'bg-yellow-500' :
+                                'bg-green-500'
+                            }`}
                         />
                       </div>
-                      <span className={`text-xs font-medium w-20 text-right ${
-                        trend.status === 'overload' ? 'text-red-500' :
-                        trend.status === 'moderate' ? 'text-yellow-600' :
-                        'text-green-500'
-                      }`}>
+                      <span className={`text-xs font-medium w-20 text-right ${trend.status === 'overload' ? 'text-red-500' :
+                          trend.status === 'moderate' ? 'text-yellow-600' :
+                            'text-green-500'
+                        }`}>
                         {trend.capacity}% Capacity
                       </span>
                     </div>
                   ))}
                 </div>
               )}
-              
+
               {calendarStats?.weeklyLoadTrend?.some(t => t.status === 'overload') && (
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-4 italic">
                   * AI Forecast: Wednesday expects a 30% increase in prep time.
@@ -443,7 +466,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
               <h3 className="text-sm font-semibold text-red-600 dark:text-red-400 mb-4 uppercase tracking-wide">
                 Monthly Summary
               </h3>
-              
+
               {statsLoading ? (
                 <div className="flex justify-center py-4">
                   <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
@@ -484,7 +507,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              <Button 
+              <Button
                 className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl py-6 font-medium shadow-lg shadow-green-500/25"
                 onClick={() => {
                   alert('Sync to Google Calendar coming soon!')
@@ -496,7 +519,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
             </motion.div>
           </div>
         </div>
-        
+
         {/* Footer */}
         <Footer variant="minimal" />
       </div>
@@ -511,7 +534,7 @@ export default function CalendarScreen({ onNavigate }: { onNavigate: (screen: st
         onNavigate={onNavigate}
         mobileNavigation={
           <>
-            <MobileNavigation 
+            <MobileNavigation
               currentScreen="calendar"
               onNavigate={onNavigate}
             />
