@@ -120,7 +120,7 @@ export default function OverloadAlertScreen({ onNavigate }: { onNavigate: (scree
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="border-border hover:border-muted-foreground/50 transition-colors cursor-pointer">
                 <CardContent className="p-5 flex items-start gap-4">
                   <div className="bg-secondary p-2 rounded-full shrink-0 mt-1">
@@ -140,7 +140,7 @@ export default function OverloadAlertScreen({ onNavigate }: { onNavigate: (scree
 
         <CardFooter className="bg-secondary/30 p-6 border-t border-border flex justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            LoadSense analyzes your historical completion rates to estimate effort.
+            Our intelligent analysis uses your historical completion rates to estimate effort.
           </p>
           <div className="flex gap-3">
             <Button variant="outline" onClick={() => onNavigate('dashboard')}>Ignore Warning</Button>

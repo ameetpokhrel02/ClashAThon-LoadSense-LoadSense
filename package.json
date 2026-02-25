@@ -1,0 +1,8 @@
+{
+    "name": "loadsense-root",
+    "private": true,
+    "workspaces": [
+        "src/frontend",
+        "src/backend"
+    ]
+}

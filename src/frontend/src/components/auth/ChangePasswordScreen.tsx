@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { GraduationCap, Loader2, Lock, ArrowLeft, Eye, EyeOff, BookOpen, Pencil } from "lucide-react"
+import { Loader2, Lock, ArrowLeft, Eye, EyeOff, BookOpen, Pencil } from "lucide-react"
 import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
+import logo from "@/assets/logo.png"
 
 interface ChangePasswordScreenProps {
   email: string
@@ -83,21 +84,18 @@ export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit 
             <BookOpen className="w-10 h-10 text-[#ff7400]/20" />
           </motion.div>
         </div>
-        
-        <motion.div 
-          className="p-8 flex items-center gap-3 relative z-10"
+
+        <motion.div
+          className="p-8 flex items-center relative z-10"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="bg-gradient-to-br from-[#ff7400] to-[#ff8c33] p-3 rounded-xl shadow-lg shadow-[#ff7400]/30">
-            <GraduationCap className="w-7 h-7 text-white" />
-          </div>
-          <span className="text-2xl font-bold tracking-tight text-gray-800 dark:text-white">LoadSense</span>
+          <img src={logo} alt="LoadSense Logo" className="h-12 w-auto" />
         </motion.div>
-        
+
         <div className="flex-1 flex flex-col justify-center items-center relative z-10 px-8">
-          <motion.div 
+          <motion.div
             className="w-full max-w-xl relative"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -106,17 +104,17 @@ export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit 
             {/* Soft shadow underneath */}
             <div className="absolute -inset-4 bg-gradient-to-b from-transparent via-transparent to-gray-900/10 rounded-full blur-2xl" />
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-gray-900/15 dark:bg-black/30 blur-xl rounded-full" />
-            
+
             <div className="relative">
-              <img 
+              <img
                 src={childrenImage}
                 alt="Students enjoying learning"
                 className="w-full h-auto relative z-10 object-contain scale-110"
                 style={{ filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1))' }}
               />
             </div>
-            
-            <motion.div 
+
+            <motion.div
               className="text-center mt-4"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -132,7 +130,7 @@ export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit 
             </motion.div>
           </motion.div>
         </div>
-        
+
         <div className="p-8 text-sm text-gray-500 dark:text-gray-400 relative z-10">
           © 2026 LoadSense. All rights reserved.
         </div>
@@ -140,19 +138,14 @@ export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit 
 
       {/* Right Panel */}
       <div className="flex-1 flex items-center justify-center p-8 bg-white dark:bg-gray-950">
-        <motion.div 
+        <motion.div
           className="w-full max-w-md"
           initial={{ x: 30, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
           <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <div className="bg-gradient-to-br from-[#ff7400] to-[#ff8c33] p-2 rounded-xl shadow-lg shadow-[#ff7400]/30">
-              <GraduationCap className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900 dark:text-white">
-              Load<span className="text-[#ff7400]">Sense</span>
-            </span>
+            <img src={logo} alt="LoadSense Logo" className="h-12 w-auto" />
           </div>
 
           <Card className="bg-white dark:bg-gray-900 shadow-xl shadow-black/5 dark:shadow-black/20 border border-gray-100 dark:border-gray-800 rounded-3xl">
@@ -165,7 +158,7 @@ export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit 
             <CardContent className="space-y-6 px-10 pb-10">
               <form onSubmit={handleSubmit} className="space-y-6">
                 {error && (
-                  <motion.div 
+                  <motion.div
                     className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-100 dark:border-red-800"
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -173,16 +166,16 @@ export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit 
                     {error}
                   </motion.div>
                 )}
-                
+
                 <div className="space-y-3">
                   <Label htmlFor="password" className="text-gray-700 dark:text-gray-300 font-medium">New Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input 
-                      id="password" 
+                    <Input
+                      id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Min 6 characters"
-                      className="pl-12 pr-12 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all" 
+                      className="pl-12 pr-12 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -196,16 +189,16 @@ export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit 
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="space-y-3">
                   <Label htmlFor="confirmPassword" className="text-gray-700 dark:text-gray-300 font-medium">Confirm New Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input 
-                      id="confirmPassword" 
+                    <Input
+                      id="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm your password"
-                      className="pl-12 pr-12 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all" 
+                      className="pl-12 pr-12 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
@@ -219,17 +212,17 @@ export default function ChangePasswordScreen({ email, otp, onNavigate, onSubmit 
                     </button>
                   </div>
                 </div>
-                
-                <Button 
-                  className="w-full h-14 rounded-xl text-base font-semibold bg-[#ff7400] hover:bg-[#e66800] text-white shadow-lg shadow-[#ff7400]/25 transition-all duration-300" 
-                  type="submit" 
+
+                <Button
+                  className="w-full h-14 rounded-xl text-base font-semibold bg-[#ff7400] hover:bg-[#e66800] text-white shadow-lg shadow-[#ff7400]/25 transition-all duration-300"
+                  type="submit"
                   disabled={isLoading}
                 >
                   {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Update Password"}
                 </Button>
               </form>
-              
-              <Button 
+
+              <Button
                 type="button"
                 variant="outline"
                 onClick={() => onNavigate('login')}

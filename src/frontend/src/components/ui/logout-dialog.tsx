@@ -27,7 +27,7 @@ export function LogoutDialog({ open, onOpenChange, onConfirm }: LogoutDialogProp
             Are you sure you want to logout?
           </DialogTitle>
           <DialogDescription className="text-base text-gray-500 dark:text-gray-400">
-            You will be signed out of your LoadSense account and redirected to the login screen.
+            You will be signed out of your account and redirected to the login screen.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex gap-4 sm:gap-4 mt-6">

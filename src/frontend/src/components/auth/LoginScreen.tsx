@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { GraduationCap, Loader2, Mail, Lock, BookOpen, Pencil, Eye, EyeOff } from "lucide-react"
+import { Loader2, Mail, Lock, BookOpen, Pencil, Eye, EyeOff } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
 import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
+import logo from "@/assets/logo.png"
 
 interface LoginScreenProps {
   onLogin: () => void
@@ -76,23 +77,20 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
             <Pencil className="w-6 h-6 text-[#ff7400]/50" />
           </motion.div>
         </div>
-        
+
         {/* Logo */}
-        <motion.div 
-          className="p-8 flex items-center gap-3 relative z-10"
+        <motion.div
+          className="p-8 flex items-center relative z-10"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="bg-gradient-to-br from-[#ff7400] to-[#ff8c33] p-3 rounded-xl shadow-lg shadow-[#ff7400]/30">
-            <GraduationCap className="w-7 h-7 text-white" />
-          </div>
-          <span className="text-2xl font-bold tracking-tight text-[#1a1a2e]">LoadSense</span>
+          <img src={logo} alt="LoadSense Logo" className="h-12 w-auto" />
         </motion.div>
-        
+
         {/* Hero Image - Large & Centered with Orange Glow */}
         <div className="flex-1 flex flex-col justify-center items-center relative z-10 px-8">
-          <motion.div 
+          <motion.div
             className="w-full max-w-xl relative"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -101,19 +99,19 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
             {/* Soft shadow underneath */}
             <div className="absolute -inset-4 bg-gradient-to-b from-transparent via-transparent to-gray-900/10 rounded-full blur-2xl" />
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-gray-900/15 dark:bg-black/30 blur-xl rounded-full" />
-            
+
             {/* Main Image */}
             <div className="relative">
-              <img 
+              <img
                 src={childrenImage}
                 alt="Students enjoying learning"
                 className="w-full h-auto relative z-10 object-contain scale-110"
                 style={{ filter: 'drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1))' }}
               />
             </div>
-            
+
             {/* Text Below Image */}
-            <motion.div 
+            <motion.div
               className="text-center mt-4"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -129,7 +127,7 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
             </motion.div>
           </motion.div>
         </div>
-        
+
         <div className="p-8 text-sm text-[#64748B] relative z-10">
           © 2026 LoadSense. All rights reserved.
         </div>
@@ -137,7 +135,7 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
 
       {/* Right Panel - Login Form */}
       <div className="flex-1 flex items-center justify-center p-8 bg-white dark:bg-gray-950">
-        <motion.div 
+        <motion.div
           className="w-full max-w-md"
           initial={{ x: 30, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -145,12 +143,7 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
         >
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <div className="bg-gradient-to-br from-[#ff7400] to-[#ff8c33] p-2 rounded-xl shadow-lg shadow-[#ff7400]/30">
-              <GraduationCap className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold text-gray-900 dark:text-white">
-              Load<span className="text-[#ff7400]">Sense</span>
-            </span>
+            <img src={logo} alt="LoadSense Logo" className="h-12 w-auto" />
           </div>
 
           <Card className="bg-white dark:bg-gray-900 shadow-xl shadow-black/5 dark:shadow-black/20 border border-gray-100 dark:border-gray-800 rounded-3xl">
@@ -163,7 +156,7 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
             <CardContent className="space-y-6 px-10 pb-10">
               <form onSubmit={handleSignIn} className="space-y-6">
                 {error && (
-                  <motion.div 
+                  <motion.div
                     className="text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border border-red-100 dark:border-red-800"
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
@@ -171,27 +164,27 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
                     {error}
                   </motion.div>
                 )}
-                
+
                 <div className="space-y-3">
                   <Label htmlFor="email" className="text-gray-700 dark:text-gray-300 font-medium">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input 
-                      id="email" 
-                      type="email" 
-                      placeholder="student@university.edu" 
-                      className="pl-12 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all" 
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="student@university.edu"
+                      className="pl-12 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password" className="text-gray-700 dark:text-gray-300 font-medium">Password</Label>
-                    <button 
+                    <button
                       type="button"
                       onClick={() => onNavigate('forgot-password')}
                       className="text-sm text-[#ff7400] hover:text-[#e66800] font-medium hover:underline transition-colors"
@@ -201,11 +194,11 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
                   </div>
                   <div className="relative">
                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input 
-                      id="password" 
+                    <Input
+                      id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
-                      className="pl-12 pr-12 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all" 
+                      className="pl-12 pr-12 h-14 rounded-xl bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus:border-[#ff7400] focus:ring-[#ff7400]/20 transition-all"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
@@ -219,16 +212,16 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
                     </button>
                   </div>
                 </div>
-                
-                <Button 
-                  className="w-full h-14 rounded-xl text-base font-semibold bg-[#ff7400] hover:bg-[#e66800] text-white shadow-lg shadow-[#ff7400]/25 transition-all duration-300 hover:shadow-xl hover:shadow-[#ff7400]/35" 
-                  type="submit" 
+
+                <Button
+                  className="w-full h-14 rounded-xl text-base font-semibold bg-[#ff7400] hover:bg-[#e66800] text-white shadow-lg shadow-[#ff7400]/25 transition-all duration-300 hover:shadow-xl hover:shadow-[#ff7400]/35"
+                  type="submit"
                   disabled={isLoading}
                 >
                   {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Sign In"}
                 </Button>
               </form>
-              
+
               <div className="relative py-2">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200 dark:border-gray-700"></div>
@@ -237,8 +230,8 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
                   <span className="bg-white dark:bg-gray-900 px-4 text-gray-500 dark:text-gray-400">Don't have an account?</span>
                 </div>
               </div>
-              
-              <Button 
+
+              <Button
                 type="button"
                 variant="outline"
                 onClick={() => onNavigate('register')}

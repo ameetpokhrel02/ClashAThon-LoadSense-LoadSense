@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { Home, Plus, CalendarCheck, BarChart3, User, Menu, X, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import logo from "@/assets/logo.png"
 
 interface MobileNavigationProps {
   currentScreen: string
@@ -68,7 +69,7 @@ export function MobileSidebar({
         <div className="p-6 h-full flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">LoadSense</h2>
+            <img src={logo} alt="LoadSense Logo" className="h-10 w-auto" />
             <Button
               variant="ghost"
               size="sm"

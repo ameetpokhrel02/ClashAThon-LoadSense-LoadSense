@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import {
-  GraduationCap,
   Calendar,
   BarChart3,
   Shield,
@@ -23,6 +22,7 @@ import {
   Calculator
 } from "lucide-react"
 import heroImage from "@/assets/STUDENT1-Photoroom.png"
+import logo from "@/assets/logo.png"
 
 interface LandingPageProps {
   onNavigate: (screen: string) => void
@@ -120,11 +120,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       <nav className="bg-white sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-[#ff7400] rounded-xl flex items-center justify-center">
-                <GraduationCap className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xl font-semibold text-gray-800">LoadSense</span>
+            <div className="flex items-center gap-2">
+              <img src={logo} alt="LoadSense Logo" className="h-10 w-auto" />
             </div>
             <div className="flex items-center gap-3">
               <Button
@@ -269,7 +266,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     </div>
                   </motion.div>
 
-                  {/* Graduation Cap - Bottom Left */}
+                  {/* Logo Icon - Bottom Left */}
                   <motion.div
                     className="absolute bottom-1/3 left-4"
                     animate={{
@@ -278,8 +275,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
                   >
-                    <div className="w-12 h-12 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
-                      <GraduationCap className="w-6 h-6 text-[#ff7400]" />
+                    <div className="w-12 h-12 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center p-2">
+                      <img src={logo} alt="Logo" className="w-full h-full object-contain" />
                     </div>
                   </motion.div>
                 </div>
@@ -496,11 +493,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       <footer className="bg-white py-8">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#ff7400] rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-semibold text-gray-800">LoadSense</span>
+            <div className="flex items-center">
+              <img src={logo} alt="LoadSense Logo" className="h-8 w-auto opacity-80" />
             </div>
             <p className="text-sm text-gray-500">
               © 2026 LoadSense. Smart Academic Workload Management.

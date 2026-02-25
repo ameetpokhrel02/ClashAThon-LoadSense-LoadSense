@@ -88,12 +88,8 @@ export function NavigationSidebar({
         {/* Brand Header with Main Logo */}
         <div className="p-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center">
               <img src={logo} alt="Site Logo" className="w-16 h-16 rounded-xl shadow-sm object-contain bg-white dark:bg-gray-900 p-1" />
-              <div>
-                <h2 className="font-semibold text-lg text-gray-800 dark:text-white">LoadSense</h2>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Workload Management</p>
-              </div>
             </div>
             <ThemeToggle />
           </div>
