@@ -42,7 +42,7 @@ export default function RegisterScreen({ onRegister, onNavigate }: RegisterScree
     }
 
     try {
-      const response = await api.post('/auth/register', {
+      await api.post('/auth/register', {
         firstName,
         lastName,
         email,

@@ -33,8 +33,9 @@ export const generateStudyPlan = async (req, res) => {
   try {
     const userId = req.user._id || req.user.id;
 
-    // 1. Fetch user's upcoming deadlines
+    // 1. Fetch ONLY the logged-in user's upcoming deadlines
     const deadlines = await Deadline.find({
+      user: userId,
       dueDate: { $gte: new Date() },
     }).sort({ dueDate: 1 });
 

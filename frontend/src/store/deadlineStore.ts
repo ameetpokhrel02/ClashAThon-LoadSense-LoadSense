@@ -12,6 +12,7 @@ export interface Deadline {
   estimatedHours: number
   risk: RiskLevel
   isCompleted: boolean
+  notes?: string
   impactLevel?: 'low' | 'medium' | 'high' | 'critical'
   weight?: number
 }

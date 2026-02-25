@@ -13,27 +13,51 @@ import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigati
 import { PullToRefresh } from "@/components/ui/pull-to-refresh"
 import { CalendarIcon, ArrowLeft, Clock, BookOpen, Target } from "lucide-react"
 import { format } from "date-fns"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
+
 import { useDeadlineStore, type RiskLevel } from "@/store/deadlineStore"
+import { useWorkloadStore } from "@/store/workloadStore"
+import { useRemindersStore } from "@/store/reminderStore"
+import { useModuleStore } from "@/store/moduleStore"
 import { useHapticFeedback } from "@/hooks/useMobileGestures"
 
-export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
-  const [date, setDate] = useState<Date>()
-  const [title, setTitle] = useState("")
-  const [course, setCourse] = useState("")
-  const [type, setType] = useState("")
-  const [hours, setHours] = useState("")
-  const [notes, setNotes] = useState("")
+import type { Deadline } from '@/store/deadlineStore'
+
+interface AddDeadlineScreenProps {
+  onNavigate: (screen: string, data?: Deadline) => void
+  editDeadline?: Deadline
+}
+
+export default function AddDeadlineScreen({ onNavigate, editDeadline }: AddDeadlineScreenProps) {
+  const [date, setDate] = useState<Date | undefined>(editDeadline ? new Date(editDeadline.dueDate) : undefined)
+  const [title, setTitle] = useState(editDeadline?.title || "")
+  const [course, setCourse] = useState(editDeadline?.course || "")
+  const [type, setType] = useState(editDeadline?.type || "")
+  const [hours, setHours] = useState(editDeadline?.estimatedHours ? String(editDeadline.estimatedHours) : "")
+  const [notes, setNotes] = useState(editDeadline?.notes || "");
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [manualCourse, setManualCourse] = useState("")
+
+  // Module store
+  const { modules, fetchModules } = useModuleStore()
+
+  useEffect(() => {
+    fetchModules()
+  }, [fetchModules])
   
   const createDeadline = useDeadlineStore(state => state.createDeadline)
+  const fetchSummary = useWorkloadStore(state => state.fetchSummary)
+  const fetchWorkload = useWorkloadStore(state => state.fetchWorkload)
+  const fetchReminders = useRemindersStore(state => state.fetchReminders)
   const { triggerHaptic } = useHapticFeedback()
 
   const handleSave = async () => {
-    if (!title || !course || !type || !date || !hours) {
+    // If "Other" is selected, use manualCourse
+    const selectedCourse = course === "__other__" ? manualCourse : course
+    if (!title || !selectedCourse || !type || !date || !hours) {
       triggerHaptic('medium')
       alert("Please fill in all required fields")
       return
@@ -46,21 +70,33 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
 
     try {
       setIsSaving(true)
-      const created = await createDeadline({
-        title,
-        course,
-        type,
-        dueDate: date.toISOString(),
-        estimatedHours,
-        risk,
-        notes,
-      })
+      let result
+      if (editDeadline) {
+        // TODO: Call updateDeadline API here
+        // result = await updateDeadline({ ...fields, id: editDeadline.id })
+        alert('Update logic not yet implemented!')
+        result = true // Remove this after implementing update
+      } else {
+        result = await createDeadline({
+          title,
+          course: selectedCourse,
+          type,
+          dueDate: date.toISOString(),
+          estimatedHours,
+          risk,
+          notes,
+        })
+      }
 
-      if (!created) {
+      if (!result) {
         alert('Failed to save deadline. Please try again.')
         return
       }
 
+      // Refresh dashboard data so new deadline appears immediately
+      await fetchSummary()
+      await fetchWorkload()
+      await fetchReminders()
       triggerHaptic('light')
       onNavigate('dashboard')
     } finally {
@@ -211,11 +247,22 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                           <SelectValue placeholder="Select a course" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="CS301">CS301 - Data Structures</SelectItem>
-                          <SelectItem value="ENG205">ENG205 - Modern Literature</SelectItem>
-                          <SelectItem value="MATH210">MATH210 - Linear Algebra</SelectItem>
+                          {modules && modules.length > 0 && modules.map((mod) => (
+                            <SelectItem key={mod._id} value={mod.moduleCode}>{mod.moduleCode} - {mod.title}</SelectItem>
+                          ))}
+                          <SelectItem value="__other__">Other (Add manually...)</SelectItem>
                         </SelectContent>
                       </Select>
+                      {course === "__other__" && (
+                        <ModernInput
+                          id="manual-course"
+                          label="Enter Course Name or Code"
+                          placeholder="e.g., BIO101 - Biology"
+                          value={manualCourse}
+                          onChange={e => setManualCourse(e.target.value)}
+                          className="mt-2"
+                        />
+                      )}
                     </div>
 
                     <div className="space-y-2">
@@ -259,7 +306,7 @@ export default function AddDeadlineScreen({ onNavigate }: { onNavigate: (screen:
                             {date ? format(date, "PPP") : <span>Pick a date</span>}
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
+                        <PopoverContent className="w-auto p-0 z-[9999]" align="start" side="bottom" sideOffset={8} forceMount>
                           <Calendar
                             mode="single"
                             selected={date}

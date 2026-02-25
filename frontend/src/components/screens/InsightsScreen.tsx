@@ -24,7 +24,7 @@ import { useInsightsStore } from "@/store/insightsStore"
 export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const { user, logout } = useAuthStore()
-  const { weeks, summary, alerts, isLoading: isWorkloadLoading, fetchWorkload, fetchSummary, fetchAlerts } = useWorkloadStore()
+  const { weeks, summary, isLoading: isWorkloadLoading, fetchWorkload, fetchSummary, fetchAlerts } = useWorkloadStore()
   const { insights, isLoading: isInsightsLoading, fetchInsights } = useInsightsStore()
 
   useEffect(() => {

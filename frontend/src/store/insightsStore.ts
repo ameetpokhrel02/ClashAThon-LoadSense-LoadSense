@@ -23,7 +23,7 @@ export const useInsightsStore = create<InsightsState>((set) => ({
         set({ isLoading: true, error: null })
         try {
             const response = await api.get('/insights')
-            set({ insights: response.data.data, isLoading: false })
+            set({ insights: response.data.smart_insights ?? [], isLoading: false })
         } catch (error) {
             set({ error: handleApiError(error), isLoading: false })
         }

@@ -61,15 +61,7 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
 
   return (
     <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 md:px-6 py-3 sticky top-0 z-30">
-      <div className="flex items-center justify-between">
-        {/* Left - Logo/Brand */}
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-[#ff7400] to-[#ff8c33] rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">LS</span>
-          </div>
-          <span className="text-lg font-semibold text-gray-800 dark:text-white hidden sm:block">LoadSense</span>
-        </div>
-
+      <div className="flex items-center justify-end">
         {/* Right - Notifications & Profile */}
         <div className="flex items-center gap-2 md:gap-4">
           {/* Notification Bell */}

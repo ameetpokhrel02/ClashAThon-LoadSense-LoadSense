@@ -23,7 +23,7 @@ import { useAuthStore } from "@/store/authStore"
 import { useDeadlineStore } from "@/store/deadlineStore"
 import type { Deadline as StoreDeadline } from "@/store/deadlineStore"
 
-export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
+export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: string, data?: StoreDeadline) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterImpact, setFilterImpact] = useState<string>('all')
@@ -183,7 +183,7 @@ export default function DeadlinesScreen({ onNavigate }: { onNavigate: (screen: s
               variant="ghost"
               size="sm"
               className="w-8 h-8 p-0 text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10"
-              onClick={() => onNavigate('add-deadline')}
+              onClick={() => onNavigate('add-deadline', deadline)}
             >
               <Edit2 className="w-4 h-4" />
             </Button>

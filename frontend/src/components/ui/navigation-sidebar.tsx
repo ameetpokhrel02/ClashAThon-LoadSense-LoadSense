@@ -10,11 +10,11 @@ import {
   User,
   LogOut,
   Plus,
-  GraduationCap,
   Brain,
   CalendarDays
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import logo from "@/assets/logo.png"
 
 interface NavigationSidebarProps {
   currentScreen: string
@@ -85,13 +85,11 @@ export function NavigationSidebar({
         "w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-colors duration-200",
         className
       )}>
-        {/* Brand Header with Logo */}
+        {/* Brand Header with Main Logo */}
         <div className="p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 bg-[#ff7400] rounded-xl flex items-center justify-center shadow-sm">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
+              <img src={logo} alt="Site Logo" className="w-16 h-16 rounded-xl shadow-sm object-contain bg-white dark:bg-gray-900 p-1" />
               <div>
                 <h2 className="font-semibold text-lg text-gray-800 dark:text-white">LoadSense</h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Workload Management</p>
