@@ -4,6 +4,7 @@ import {
   addDeadline,
   getDeadlines,
   deleteDeadline,
+  updateDeadline,
 } from "../controllers/deadlineController.js";
 import protect from "../middleware/auth.js";
 
@@ -13,6 +14,7 @@ const router = express.Router();
 router.post("/", protect, addDeadline);
 router.get("/", protect, getDeadlines);
 router.delete("/:id", protect, deleteDeadline);
+router.patch("/:id", protect, updateDeadline);
 
 export default router;
 

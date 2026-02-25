@@ -4,9 +4,11 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 
 import authRoutes from "./routes/authRoutes.js";
-import courseRoutes from "./routes/courseRoutes.js";
+import moduleRoutes from "./routes/moduleRoutes.js";
 import deadlineRoutes from "./routes/deadlineRoutes.js";
 import workloadRoutes from "./routes/workloadRoutes.js";
+import dashboardRoutes from "./routes/dashboardscreenRoutes.js";
+import adminFeedbackRatingRoutes from "./routes/adminFeedbackRatingRoutes.js";
 
 dotenv.config();
 
@@ -19,12 +21,15 @@ connectDB();
 
 // Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/courses", courseRoutes);
+app.use("/api/modules", moduleRoutes);
 app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/workload", workloadRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/feedback-ratings", adminFeedbackRatingRoutes);
 
 app.get("/", (req, res) => {
   res.send("LoadSense API Running ");
+
 });
 
 const PORT = process.env.PORT || 5000;

@@ -9,7 +9,7 @@ interface LayoutWrapperProps {
 }
 
 export function LayoutWrapper({ children, pattern, className }: LayoutWrapperProps) {
-  const baseClasses = "min-h-screen bg-background text-foreground font-sans antialiased"
+  const baseClasses = "min-h-screen bg-[#F6FAFB] dark:bg-gray-950 text-gray-800 dark:text-white font-sans antialiased"
   
   const patternClasses = {
     split: "flex flex-col lg:flex-row",
@@ -52,7 +52,7 @@ export function SplitLayout({
       
       {/* Right panel - responsive */}
       <div className={cn(
-        "flex-1 flex items-center justify-center p-4 lg:p-8 bg-background min-h-screen lg:min-h-auto",
+        "flex-1 flex items-center justify-center p-4 lg:p-8 bg-[#F6FAFB] dark:bg-gray-950 min-h-screen lg:min-h-auto",
         rightPanelClassName
       )}>
         <div className="w-full max-w-md">
@@ -152,7 +152,7 @@ export function MobileHeader({ title, onMenuToggle, actions, className }: Mobile
   return (
     <motion.header 
       className={cn(
-        "lg:hidden sticky top-0 z-30 bg-card/95 backdrop-blur-sm border-b border-border p-4",
+        "lg:hidden sticky top-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 p-4",
         className
       )}
       initial={{ y: -50, opacity: 0 }}
@@ -164,7 +164,7 @@ export function MobileHeader({ title, onMenuToggle, actions, className }: Mobile
           {onMenuToggle && (
             <button
               onClick={onMenuToggle}
-              className="touch-target p-2 -ml-2 rounded-lg hover:bg-muted/50 transition-colors"
+              className="touch-target p-2 -ml-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />

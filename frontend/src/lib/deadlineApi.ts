@@ -11,6 +11,9 @@ interface BackendDeadline {
   estimatedHours: number
   risk: RiskLevel
   notes?: string
+  is_completed?: boolean
+  impact_level?: 'low' | 'medium' | 'high' | 'critical'
+  weight?: number
 }
 
 const mapDeadline = (d: BackendDeadline): Deadline => ({
@@ -21,6 +24,9 @@ const mapDeadline = (d: BackendDeadline): Deadline => ({
   dueDate: d.dueDate,
   estimatedHours: d.estimatedHours,
   risk: d.risk,
+  isCompleted: Boolean(d.is_completed),
+  impactLevel: d.impact_level,
+  weight: d.weight,
 })
 
 export interface CreateDeadlinePayload {
@@ -29,7 +35,7 @@ export interface CreateDeadlinePayload {
   type: string
   dueDate: string
   estimatedHours: number
-  risk: RiskLevel
+  risk?: RiskLevel
   notes?: string
 }
 
@@ -47,4 +53,14 @@ export const createDeadline = async (
 
 export const deleteDeadline = async (id: string): Promise<void> => {
   await api.delete(`/deadlines/${id}`)
+}
+
+export const setDeadlineCompleted = async (
+  id: string,
+  isCompleted: boolean
+): Promise<Deadline> => {
+  const response = await api.patch<BackendDeadline>(`/deadlines/${id}`, {
+    is_completed: isCompleted,
+  })
+  return mapDeadline(response.data)
 }
