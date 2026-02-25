@@ -38,7 +38,7 @@ export const useAuthStore = create<AuthState>()(
       setAuth: (user, token) => set({ user, token, isLoggedIn: true }),
       logout: () => set({ user: null, token: null, isLoggedIn: false }),
       updateUser: (user) => set({ user }),
-      
+
       fetchProfile: async () => {
         const { user } = get()
         if (!user?.id) {
@@ -47,17 +47,17 @@ export const useAuthStore = create<AuthState>()(
         }
         try {
           set({ isLoadingProfile: true, profileError: null })
-          const response = await api.get(`/users/profile/${user.id}`)
+          const response = await api.get('/users/profile')
           set({ user: response.data.user, isLoadingProfile: false })
         } catch (error: unknown) {
           const err = error as { response?: { data?: { message?: string } } }
-          set({ 
-            isLoadingProfile: false, 
-            profileError: err.response?.data?.message || 'Failed to fetch profile' 
+          set({
+            isLoadingProfile: false,
+            profileError: err.response?.data?.message || 'Failed to fetch profile'
           })
         }
       },
-      
+
       updateProfile: async (data: FormData) => {
         const { user } = get()
         if (!user?.id) {
@@ -66,17 +66,14 @@ export const useAuthStore = create<AuthState>()(
         }
         try {
           set({ isLoadingProfile: true, profileError: null })
-          const response = await api.put(`/users/profile/${user.id}`, data, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
+          const response = await api.patch('/users/profile', data)
           set({ user: response.data.user, isLoadingProfile: false })
         } catch (error: unknown) {
-          const err = error as { response?: { data?: { message?: string } } }
-          set({ 
-            isLoadingProfile: false, 
-            profileError: err.response?.data?.message || 'Failed to update profile' 
+          const err = error as { response?: { data?: { message?: string } }, message: string }
+          console.error("DEBUG FRONTEND PROFILE UPDATE ERROR:", err.response?.data || err.message);
+          set({
+            isLoadingProfile: false,
+            profileError: err.response?.data?.message || 'Failed to update profile'
           })
           throw error
         }
@@ -84,10 +81,10 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ 
-        user: state.user, 
-        token: state.token, 
-        isLoggedIn: state.isLoggedIn 
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isLoggedIn: state.isLoggedIn
       }),
     }
   )

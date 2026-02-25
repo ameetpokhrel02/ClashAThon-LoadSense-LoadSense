@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react"
 import { Bell, User, Settings, LogOut, ChevronDown } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
+import { useWorkloadStore } from "@/store/workloadStore"
+import { useRemindersStore } from "@/store/reminderStore"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface TopNavbarProps {
@@ -9,6 +11,9 @@ interface TopNavbarProps {
 
 export function TopNavbar({ onNavigate }: TopNavbarProps) {
   const { user, logout } = useAuthStore()
+  const { alerts } = useWorkloadStore()
+  const { reminders } = useRemindersStore()
+
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -34,10 +39,22 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
     onNavigate('login')
   }
 
+  // Combine alerts and reminders into a single notifications array
   const notifications = [
-    { id: 1, title: "Deadline approaching", message: "CS301 Project due in 2 days", time: "2h ago", unread: true },
-    { id: 2, title: "Workload alert", message: "Your workload is above 80%", time: "5h ago", unread: true },
-    { id: 3, title: "New module added", message: "Database Systems added", time: "1d ago", unread: false },
+    ...(alerts || []).map((alert, i) => ({
+      id: `alert-${i}`,
+      title: "Workload Alert",
+      message: alert.message,
+      time: "Recent",
+      unread: true,
+    })),
+    ...(reminders || []).map((reminder) => ({
+      id: `reminder-${reminder._id}`,
+      title: "Deadline Approaching",
+      message: `${reminder.course}: ${reminder.title} due soon`,
+      time: new Date(reminder.dueDate).toLocaleDateString(),
+      unread: true,
+    }))
   ]
 
   const unreadCount = notifications.filter(n => n.unread).length
@@ -83,25 +100,30 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
                     <h3 className="font-semibold text-gray-800 dark:text-white">Notifications</h3>
                   </div>
                   <div className="max-h-80 overflow-y-auto">
-                    {notifications.map((notification) => (
-                      <div
-                        key={notification.id}
-                        className={`px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border-b border-gray-100 dark:border-gray-800 last:border-0 ${
-                          notification.unread ? 'bg-[#ff7400]/5' : ''
-                        }`}
-                      >
-                        <div className="flex items-start gap-3">
-                          {notification.unread && (
-                            <span className="w-2 h-2 bg-[#ff7400] rounded-full mt-2 flex-shrink-0" />
-                          )}
-                          <div className={notification.unread ? '' : 'ml-5'}>
-                            <p className="text-sm font-medium text-gray-800 dark:text-white">{notification.title}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{notification.message}</p>
-                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{notification.time}</p>
+                    {notifications.length === 0 ? (
+                      <div className="px-4 py-8 text-center text-sm text-gray-500">
+                        No notifications
+                      </div>
+                    ) : (
+                      notifications.map((notification) => (
+                        <div
+                          key={notification.id}
+                          className={`px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border-b border-gray-100 dark:border-gray-800 last:border-0 ${notification.unread ? 'bg-[#ff7400]/5' : ''
+                            }`}
+                        >
+                          <div className="flex items-start gap-3">
+                            {notification.unread && (
+                              <span className="w-2 h-2 bg-[#ff7400] rounded-full mt-2 flex-shrink-0" />
+                            )}
+                            <div className={notification.unread ? '' : 'ml-5'}>
+                              <p className="text-sm font-medium text-gray-800 dark:text-white">{notification.title}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{notification.message}</p>
+                              <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{notification.time}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                   </div>
                   <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
                     <button className="text-sm text-[#ff7400] hover:text-[#e66800] font-medium w-full text-center">

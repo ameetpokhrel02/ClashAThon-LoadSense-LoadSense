@@ -87,6 +87,50 @@ LoadSense/
 │   │   └── config/
 │
 └── README.md
+## Tech Stack
+-   **Frontend:** React, React Router
+-   **Backend:** Node.js, Express.js
+-   **Database:** MongoDB
+-   **Styling:** Tailwind CSS
+
+---
+
+## 🚀 Setup & Installation Instructions
+
+To run LoadSense locally, you'll need two terminal windows (one for the backend and one for the frontend). Follow the steps below sequentially:
+
+### 1. Backend Setup
+
+Open your terminal and navigate to the `backend` folder:
+```bash
+cd backend
+npm install
+```
+
+Make sure your `.env` file is properly configured with your MongoDB URI, JWT Secret, Gemini API key, and Cloudinary credentials. Once configured, start the backend server:
+
+```bash
+npm run dev
+```
+
+### 2. Frontend Setup
+
+Open a **new** terminal window and navigate to the `frontend` directory:
+```bash
+cd frontend
+pnpm install
+```
+
+Make sure the `.env` file in the frontend has `VITE_API_URL=http://localhost:5000/api`. Then start the development server:
+
+```bash
+pnpm run dev
+```
+
+The application will be available at [http://localhost:5173](http://localhost:5173) (or whatever port Vite provisions).
+
+---
+
 ⚙️ Tech Stack
 
 Frontend:

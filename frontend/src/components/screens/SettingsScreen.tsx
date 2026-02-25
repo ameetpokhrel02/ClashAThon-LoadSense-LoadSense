@@ -24,6 +24,7 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
   const [avatarPreview, setAvatarPreview] = useState<string | null>(user?.avatar || null)
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+  const [avatarError, setAvatarError] = useState<string | null>(null)
 
   // Update form when user data changes
   useEffect(() => {
@@ -58,12 +59,29 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      setAvatarFile(file)
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result as string)
+      // Validate file type
+      const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        setAvatarError("Only JPG, JPEG, or PNG files under 2MB are allowed.");
+        setAvatarFile(null);
+        setAvatarPreview(null);
+        return;
       }
-      reader.readAsDataURL(file)
+      // Validate file size (max 2MB)
+      const maxSize = 2 * 1024 * 1024;
+      if (file.size > maxSize) {
+        setAvatarError("Only JPG, JPEG, or PNG files under 2MB are allowed.");
+        setAvatarFile(null);
+        setAvatarPreview(null);
+        return;
+      }
+      setAvatarError(null);
+      setAvatarFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   }
 
@@ -181,7 +199,7 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/jpg,image/png"
                     onChange={handleFileChange}
                     className="hidden"
                   />
@@ -189,6 +207,9 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                 <div>
                   <p className="text-sm font-medium text-gray-800 dark:text-white">Profile Photo</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Click to upload a new photo</p>
+                  {avatarError && (
+                    <p className="text-xs text-red-600 mt-1">{avatarError}</p>
+                  )}
                 </div>
               </div>
               
@@ -200,12 +221,16 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     type="text"
+                    id="firstName"
+                    name="firstName"
                   />
                   <ModernInput
                     label="Last Name"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     type="text"
+                    id="lastName"
+                    name="lastName"
                   />
                 </div>
                 <ModernInput
@@ -214,6 +239,9 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                   type="email"
                   readOnly
                   className="bg-gray-50 dark:bg-gray-800"
+                  id="email"
+                  name="email"
+                  autoComplete="email"
                 />
                 <ModernInput
                   label="Phone"
@@ -221,6 +249,9 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                   onChange={(e) => setPhone(e.target.value)}
                   type="tel"
                   placeholder="Enter your phone number"
+                  id="phone"
+                  name="phone"
+                  autoComplete="tel"
                 />
                 <ModernInput
                   label="Address"
@@ -228,6 +259,9 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                   onChange={(e) => setAddress(e.target.value)}
                   type="text"
                   placeholder="Enter your address"
+                  id="address"
+                  name="address"
+                  autoComplete="street-address"
                 />
                 <ModernInput
                   label="Ward"
@@ -235,6 +269,8 @@ export default function SettingsScreen({ onNavigate }: { onNavigate: (screen: st
                   onChange={(e) => setWard(e.target.value)}
                   type="text"
                   placeholder="Enter your ward"
+                  id="ward"
+                  name="ward"
                 />
               </div>
             </div>

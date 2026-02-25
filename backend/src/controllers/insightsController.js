@@ -3,30 +3,16 @@ import Deadline from "../models/Deadline.js";
 import {
   getWeekStart,
   getDashboardAlerts,
-  getDashboardSummary,
   syncUpcomingWorkloadsForUser,
 } from "../models/dashboardscreenmodel.js";
 
-/**
- * GET /api/insights
- *
- * Returns a consolidated insights payload for the logged-in user:
- *   - weekly_trend        : workload scores per week (for bar/line chart)
- *   - risk_pattern         : distribution of risk levels across upcoming weeks
- *   - current_week         : this week's workload snapshot
- *   - peak_week            : the upcoming week with the highest load
- *   - week_over_week       : % change between current and previous week
- *   - total_overload_weeks : how many upcoming weeks are high/critical
- *   - alerts               : high/critical week alerts
- *   - deadline_type_distribution : count of upcoming deadlines grouped by type
- *   - smart_insights       : auto-generated textual insights based on data
- */
 export const getInsights = async (req, res) => {
   try {
     const user_id = req.user.id;
 
-    // ── 1. Ensure workloads are fresh ──────────────────────────────────
+    // ── 1. Ensure workloads are fresh ───────────────────────────────
     const currentWeekStart = getWeekStart(new Date());
+
     const existingWorkload = await Workload.findOne({
       user_id,
       week_start: { $gte: currentWeekStart },
@@ -36,10 +22,10 @@ export const getInsights = async (req, res) => {
       await syncUpcomingWorkloadsForUser(user_id);
     }
 
-    // ── 2. Fetch weekly workload data (trend) ──────────────────────────
+    // ── 2. Fetch weekly workload data ───────────────────────────────
     const weeks = await Workload.find({ user_id })
       .sort({ week_start: 1 })
-      .populate("deadlines", "title type dueDate weight impact_level course")
+      .populate("deadlines", "title type dueDate weight impact_level")
       .lean();
 
     const weekly_trend = weeks.map((w) => ({
@@ -51,16 +37,19 @@ export const getInsights = async (req, res) => {
       deadlines: w.deadlines,
     }));
 
-    // ── 3. Risk-level distribution across upcoming weeks ───────────────
+    // ── 3. Risk distribution ───────────────────────────────────────
     const upcomingWeeks = weeks.filter(
       (w) => new Date(w.week_start) >= currentWeekStart
     );
+
     const risk_pattern = { low: 0, moderate: 0, high: 0, critical: 0 };
+
     for (const w of upcomingWeeks) {
-      risk_pattern[w.risk_level] = (risk_pattern[w.risk_level] || 0) + 1;
+      risk_pattern[w.risk_level] =
+        (risk_pattern[w.risk_level] || 0) + 1;
     }
 
-    // ── 4. Current week & previous week for comparison ─────────────────
+    // ── 4. Current & previous week comparison ───────────────────────
     const current_week =
       upcomingWeeks.find(
         (w) =>
@@ -70,6 +59,7 @@ export const getInsights = async (req, res) => {
 
     const prevWeekStart = new Date(currentWeekStart);
     prevWeekStart.setDate(prevWeekStart.getDate() - 7);
+
     const previous_week =
       weeks.find(
         (w) =>
@@ -79,6 +69,7 @@ export const getInsights = async (req, res) => {
 
     const currentLoad = current_week?.load_score ?? 0;
     const previousLoad = previous_week?.load_score ?? 0;
+
     const week_over_week = {
       current_load: currentLoad,
       previous_load: previousLoad,
@@ -86,55 +77,65 @@ export const getInsights = async (req, res) => {
       direction: currentLoad >= previousLoad ? "increasing" : "decreasing",
     };
 
-    // ── 5. Peak week (highest load among upcoming) ─────────────────────
+    // ── 5. Peak week ───────────────────────────────────────────────
     const peak_week = upcomingWeeks.reduce(
       (max, w) => (w.load_score > (max?.load_score ?? 0) ? w : max),
       null
     );
 
-    // ── 6. Overload week count ─────────────────────────────────────────
+    // ── 6. Overload week count ─────────────────────────────────────
     const total_overload_weeks = upcomingWeeks.filter((w) =>
       ["high", "critical"].includes(w.risk_level)
     ).length;
 
-    // ── 7. Alerts (high/critical) ──────────────────────────────────────
+    // ── 7. Alerts ──────────────────────────────────────────────────
     const alerts = await getDashboardAlerts(user_id);
 
-    // ── 8. Deadline type distribution (upcoming, not completed) ────────
+    // ── 8. Upcoming deadline type distribution ─────────────────────
     const upcomingDeadlines = await Deadline.find({
       user_id,
       is_completed: false,
       dueDate: { $gte: new Date() },
     })
-      .select("type weight course dueDate")
+      .select("type dueDate")
       .lean();
 
     const deadline_type_distribution = {};
+
     for (const dl of upcomingDeadlines) {
       deadline_type_distribution[dl.type] =
         (deadline_type_distribution[dl.type] || 0) + 1;
     }
 
-    // ── 9. Smart insights (auto-generated) ─────────────────────────────
+    // ── 9. Smart Insights ──────────────────────────────────────────
     const smart_insights = [];
 
     if (alerts.length > 0) {
       smart_insights.push({
         type: "warning",
         title: "High Workload Detected",
-        message: `You have ${alerts.length} upcoming overload week${alerts.length > 1 ? "s" : ""}. Consider starting preparation early.`,
+        message: `You have ${alerts.length} upcoming overload week${
+          alerts.length > 1 ? "s" : ""
+        }. Consider starting preparation early.`,
       });
     }
 
     if (peak_week && peak_week.load_score > 0) {
-      const peakDate = new Date(peak_week.week_start).toLocaleDateString(
-        "en-GB",
-        { day: "numeric", month: "short" }
-      );
+      const peakDate = new Date(
+        peak_week.week_start
+      ).toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "short",
+      });
+
       smart_insights.push({
         type: "info",
         title: "Peak Week Ahead",
-        message: `Your busiest week starts ${peakDate} with ${peak_week.deadline_count} deadline${peak_week.deadline_count !== 1 ? "s" : ""} and a load score of ${peak_week.load_score}.`,
+        message: `Your busiest week starts ${peakDate} with ${
+          peak_week.deadline_count
+        } deadline${
+          peak_week.deadline_count !== 1 ? "s" : ""
+        } and a load score of ${peak_week.load_score}.`,
       });
     }
 
@@ -147,10 +148,10 @@ export const getInsights = async (req, res) => {
       });
     }
 
-    // Clustering warning: if 2+ overload weeks are consecutive
     for (let i = 0; i < upcomingWeeks.length - 1; i++) {
       const a = upcomingWeeks[i];
       const b = upcomingWeeks[i + 1];
+
       if (
         ["high", "critical"].includes(a.risk_level) &&
         ["high", "critical"].includes(b.risk_level)
@@ -161,15 +162,15 @@ export const getInsights = async (req, res) => {
           message:
             "You have back-to-back high-load weeks. Spread tasks out if possible to avoid burnout.",
         });
-        break; // only one such warning
+        break;
       }
     }
 
-    // Heavy type warning
-    const heavyTypes = ["exam", "midterm", "final"];
+    const heavyTypes = ["midterm", "final"];
     const heavyCount = upcomingDeadlines.filter((d) =>
       heavyTypes.includes(d.type)
     ).length;
+
     if (heavyCount >= 2) {
       smart_insights.push({
         type: "info",
@@ -178,7 +179,6 @@ export const getInsights = async (req, res) => {
       });
     }
 
-    // ── 10. Respond ────────────────────────────────────────────────────
     return res.json({
       weekly_trend,
       risk_pattern,

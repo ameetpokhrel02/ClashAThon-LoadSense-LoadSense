@@ -12,14 +12,13 @@ import dashboardRoutes from "./routes/dashboardscreenRoutes.js";
 import adminFeedbackRatingRoutes from "./routes/adminFeedbackRatingRoutes.js";
 import insightsRoutes from "./routes/insightsRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-
-import userRoutes from "./routes/userRoutes.js";
 import aiRoutes from "./routes/aiRoutes.js";
+import reminderRoutes from "./routes/reminderRoutes.js";
 
 
 dotenv.config();
 
-const app = express();   
+const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -36,9 +35,9 @@ app.use("/api/workload", workloadRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/insights", insightsRoutes);
 app.use("/api/feedback-ratings", adminFeedbackRatingRoutes);
-
 app.use("/api/users", userRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/api/reminders", reminderRoutes);
 app.get("/", (req, res) => {
   res.send("LoadSense API Running ");
 

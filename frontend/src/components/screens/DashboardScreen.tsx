@@ -7,17 +7,20 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
 import { useWorkloadStore } from "@/store/workloadStore"
+import { useRemindersStore } from "@/store/reminderStore"
 
 export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const { user, logout } = useAuthStore()
-  const { summary, alerts, isLoading, fetchSummary, fetchAlerts } = useWorkloadStore()
+  const { summary, alerts, isLoading: isWorkloadLoading, fetchSummary, fetchAlerts } = useWorkloadStore()
+  const { reminders, isLoading: isRemindersLoading, fetchReminders } = useRemindersStore()
 
   // Fetch workload data on mount
   useEffect(() => {
     fetchSummary()
     fetchAlerts()
-  }, [fetchSummary, fetchAlerts])
+    fetchReminders()
+  }, [fetchSummary, fetchAlerts, fetchReminders])
 
   const handleLogout = () => {
     logout()
@@ -54,7 +57,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
   }) || []
 
   // Get deadlines from current week and upcoming weeks
-  const priorityDeadlines = summary?.upcoming_weeks?.flatMap(week => 
+  const priorityDeadlines = summary?.upcoming_weeks?.flatMap(week =>
     week.deadlines?.map(deadline => ({
       title: deadline.title,
       course: deadline.course || 'General',
@@ -96,7 +99,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
         </div>
 
         {/* Loading State */}
-        {isLoading && (
+        {(isWorkloadLoading || isRemindersLoading) && (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="w-8 h-8 animate-spin text-[#ff7400]" />
           </div>
@@ -107,7 +110,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           <motion.div
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl p-4 flex items-center gap-3 border border-red-200 dark:border-red-800 cursor-pointer"
+            className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-xl p-4 flex items-center gap-3 border border-red-200 dark:border-red-800 cursor-pointer mb-4"
             onClick={() => onNavigate('overload-alert')}
           >
             <AlertTriangle className="w-5 h-5 flex-shrink-0" />
@@ -115,7 +118,26 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
           </motion.div>
         )}
 
-        {!isLoading && (
+        {/* Reminders Panel */}
+        {reminders && reminders.length > 0 && (
+          <motion.div
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl p-4 flex flex-col gap-2 border border-blue-200 dark:border-blue-800 mb-4"
+          >
+            <div className="flex items-center gap-3 font-medium text-sm">
+              <Clock className="w-5 h-5 flex-shrink-0" />
+              <span>You have {reminders.length} reminder(s) for the next 7 days:</span>
+            </div>
+            <ul className="pl-8 text-sm space-y-1">
+              {reminders.map(r => (
+                <li key={r._id} className="list-disc">{r.title} ({r.course}) - Due {new Date(r.dueDate).toLocaleDateString()}</li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {!(isWorkloadLoading || isRemindersLoading) && (
           <>
             {/* Top Section - Status Card */}
             <motion.div
@@ -165,7 +187,7 @@ export default function DashboardScreen({ onNavigate }: { onNavigate: (screen: s
                         <div key={week.day} className="flex flex-col items-center gap-2">
                           <div className="text-xs font-medium text-gray-500 dark:text-gray-400">{week.day}</div>
                           <div className="w-full h-24 md:h-28 bg-gray-100 dark:bg-gray-800 rounded-lg relative overflow-hidden flex items-end border border-gray-200 dark:border-gray-700">
-                            <div 
+                            <div
                               className={`w-full rounded-b-lg transition-all duration-500 ${bgColor}`}
                               style={{ height: `${Math.max(week.intensity, 10)}%` }}
                             />

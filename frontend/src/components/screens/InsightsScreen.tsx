@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
-import { 
-  TrendingUp, 
-  TrendingDown, 
+import {
+  TrendingUp,
+  TrendingDown,
   AlertTriangle,
   CheckCircle,
   BarChart3,
@@ -19,17 +19,20 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
 import { useWorkloadStore } from "@/store/workloadStore"
+import { useInsightsStore } from "@/store/insightsStore"
 
 export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const { user, logout } = useAuthStore()
-  const { weeks, summary, alerts, isLoading, fetchWorkload, fetchSummary, fetchAlerts } = useWorkloadStore()
+  const { weeks, summary, alerts, isLoading: isWorkloadLoading, fetchWorkload, fetchSummary, fetchAlerts } = useWorkloadStore()
+  const { insights, isLoading: isInsightsLoading, fetchInsights } = useInsightsStore()
 
   useEffect(() => {
     fetchWorkload()
     fetchSummary()
     fetchAlerts()
-  }, [fetchWorkload, fetchSummary, fetchAlerts])
+    fetchInsights()
+  }, [fetchWorkload, fetchSummary, fetchAlerts, fetchInsights])
 
   const handleLogout = () => {
     logout()
@@ -56,43 +59,15 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
   const loadChange = currentWeekLoad - previousWeekLoad
   const loadTrend = loadChange > 0 ? 'increasing' : 'decreasing'
 
-  const riskLevel = summary?.current_week?.risk_level === 'critical' ? 'Overload' 
+  const riskLevel = summary?.current_week?.risk_level === 'critical' ? 'Overload'
     : summary?.current_week?.risk_level === 'high' ? 'High'
-    : summary?.current_week?.risk_level === 'moderate' ? 'Moderate' 
-    : 'Safe'
+      : summary?.current_week?.risk_level === 'moderate' ? 'Moderate'
+        : 'Safe'
   const riskColor = riskLevel === 'Overload' ? 'red' : riskLevel === 'High' ? 'orange' : riskLevel === 'Moderate' ? 'yellow' : 'green'
 
   const deadlineCount = summary?.current_week?.deadline_count || 0
 
-  // Generate insights based on real data
-  const insights = []
-  if (alerts.length > 0) {
-    insights.push({
-      type: 'warning',
-      title: 'High Workload Detected',
-      message: alerts[0].message,
-      icon: AlertTriangle,
-      color: 'red'
-    })
-  }
-  if (summary?.peak_week && summary.peak_week.load_score > 10) {
-    insights.push({
-      type: 'info',
-      title: 'Peak Week Ahead',
-      message: `Your busiest week has ${summary.peak_week.deadline_count} deadlines with a load score of ${summary.peak_week.load_score}.`,
-      icon: Calendar,
-      color: 'yellow'
-    })
-  }
-  if (summary?.total_overload_weeks === 0) {
-    insights.push({
-      type: 'success',
-      title: 'Good Progress',
-      message: 'Your workload looks manageable. No overload weeks detected!',
-      icon: CheckCircle,
-      color: 'green'
-    })
-  }
+  const isLoading = isWorkloadLoading || isInsightsLoading;
 
   const getBarColor = (status: string) => {
     switch (status) {
@@ -135,22 +110,21 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
               <motion.div
                 initial={{ y: -10, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className={`rounded-xl p-4 flex items-start gap-3 border ${
-                  riskLevel === 'Overload' 
-                    ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400' 
+                className={`rounded-xl p-4 flex items-start gap-3 border ${riskLevel === 'Overload'
+                    ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-700 dark:text-red-400'
                     : riskLevel === 'High'
-                    ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400'
-                    : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400'
-                }`}
+                      ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400'
+                      : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400'
+                  }`}
               >
                 <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="font-medium">
-                    {riskLevel === 'Overload' 
-                      ? 'You are entering a high workload zone' 
+                    {riskLevel === 'Overload'
+                      ? 'You are entering a high workload zone'
                       : riskLevel === 'High'
-                      ? 'High workload detected'
-                      : 'Moderate workload detected'}
+                        ? 'High workload detected'
+                        : 'Moderate workload detected'}
                   </p>
                   <p className="text-sm mt-1 opacity-80">
                     {riskLevel === 'Overload'
@@ -222,153 +196,147 @@ export default function InsightsScreen({ onNavigate }: { onNavigate: (screen: st
               </motion.div>
             </div>
 
-        {/* Workload Trend Graph */}
-        <motion.div
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6"
-        >
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Weekly Workload Trend</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Track your workload patterns over time</p>
-            </div>
-            <div className="flex items-center gap-1 text-sm text-gray-500">
-              {loadTrend === 'increasing' ? (
-                <>
-                  <TrendingUp className="w-4 h-4 text-red-500" />
-                  <span className="text-red-600">Increasing</span>
-                </>
-              ) : (
-                <>
-                  <TrendingDown className="w-4 h-4 text-green-500" />
-                  <span className="text-green-600">Decreasing</span>
-                </>
-              )}
-            </div>
-          </div>
-
-          {/* Bar Chart */}
-          <div className="relative">
-            {/* Threshold Lines */}
-            <div className="absolute left-0 right-0 top-[20%] border-t border-dashed border-red-300 dark:border-red-700 z-0">
-              <span className="absolute -top-2.5 right-0 text-[10px] text-red-400 bg-white dark:bg-gray-900 px-1">Overload (80%)</span>
-            </div>
-            <div className="absolute left-0 right-0 top-[40%] border-t border-dashed border-yellow-300 dark:border-yellow-700 z-0">
-              <span className="absolute -top-2.5 right-0 text-[10px] text-yellow-500 dark:text-yellow-400 bg-white dark:bg-gray-900 px-1">Moderate (60%)</span>
-            </div>
-
-            <div className="flex items-end justify-between gap-4 h-48 relative z-10">
-              {weeklyData.map((week, index) => (
-                <div key={week.week} className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full h-40 bg-gray-100 dark:bg-gray-800 rounded-lg relative overflow-hidden flex items-end">
-                    <motion.div 
-                      initial={{ height: 0 }}
-                      animate={{ height: `${week.load}%` }}
-                      transition={{ delay: 0.1 * index, duration: 0.5, ease: "easeOut" }}
-                      className={`w-full rounded-t-lg ${getBarColor(week.status)}`}
-                    />
-                  </div>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">{week.week.replace('Week ', 'W')}</span>
+            {/* Workload Trend Graph */}
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6"
+            >
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Weekly Workload Trend</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Track your workload patterns over time</p>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Legend */}
-          <div className="flex items-center justify-center gap-6 mt-6 text-xs text-gray-500 dark:text-gray-400">
-            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-green-500"></span> Safe (&lt;60%)</div>
-            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-yellow-500"></span> Moderate (60-70%)</div>
-            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-orange-500"></span> High (70-80%)</div>
-            <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-red-500"></span> Overload (&gt;80%)</div>
-          </div>
-        </motion.div>
-
-        {/* AI Insights */}
-        <motion.div
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
-              <Zap className="w-4 h-4 text-[#ff7400]" />
-            </div>
-            <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Smart Insights</h2>
-          </div>
-          
-          <div className="space-y-3">
-            {insights.map((insight, index) => (
-              <motion.div
-                key={index}
-                initial={{ x: -10, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.4 + index * 0.1 }}
-                className={`p-4 rounded-xl border ${
-                  insight.color === 'red' 
-                    ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' 
-                    : insight.color === 'yellow' 
-                    ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800' 
-                    : 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
-                }`}
-              >
-                <div className="flex items-start gap-3">
-                  <insight.icon className={`w-5 h-5 flex-shrink-0 ${
-                    insight.color === 'red' 
-                      ? 'text-red-600 dark:text-red-400' 
-                      : insight.color === 'yellow' 
-                      ? 'text-yellow-600 dark:text-yellow-400' 
-                      : 'text-green-600 dark:text-green-400'
-                  }`} />
-                  <div>
-                    <p className={`font-medium ${
-                      insight.color === 'red' 
-                        ? 'text-red-800 dark:text-red-300' 
-                        : insight.color === 'yellow' 
-                        ? 'text-yellow-800 dark:text-yellow-300' 
-                        : 'text-green-800 dark:text-green-300'
-                    }`}>{insight.title}</p>
-                    <p className={`text-sm mt-0.5 ${
-                      insight.color === 'red' 
-                        ? 'text-red-700 dark:text-red-400' 
-                        : insight.color === 'yellow' 
-                        ? 'text-yellow-700 dark:text-yellow-400' 
-                        : 'text-green-700 dark:text-green-400'
-                    }`}>{insight.message}</p>
-                  </div>
+                <div className="flex items-center gap-1 text-sm text-gray-500">
+                  {loadTrend === 'increasing' ? (
+                    <>
+                      <TrendingUp className="w-4 h-4 text-red-500" />
+                      <span className="text-red-600">Increasing</span>
+                    </>
+                  ) : (
+                    <>
+                      <TrendingDown className="w-4 h-4 text-green-500" />
+                      <span className="text-green-600">Decreasing</span>
+                    </>
+                  )}
                 </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+              </div>
 
-        {/* Tips */}
-        <motion.div
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="bg-gradient-to-r from-[#ff7400]/5 to-[#ff7400]/10 dark:from-[#ff7400]/10 dark:to-[#ff7400]/20 border border-[#ff7400]/20 dark:border-[#ff7400]/30 rounded-xl p-6"
-        >
-          <div className="flex items-start gap-3">
-            <Info className="w-5 h-5 text-[#ff7400] flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-medium text-gray-800 dark:text-white">Pro Tip</p>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                Break down large assignments into smaller tasks spread across multiple days. 
-                This helps maintain a balanced workload and reduces last-minute stress.
-              </p>
-              <Button
-                onClick={() => onNavigate('add-deadline')}
-                className="mt-3 bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg text-sm"
-                size="sm"
-              >
-                Plan Your Tasks
-              </Button>
-            </div>
-          </div>
-        </motion.div>
+              {/* Bar Chart */}
+              <div className="relative">
+                {/* Threshold Lines */}
+                <div className="absolute left-0 right-0 top-[20%] border-t border-dashed border-red-300 dark:border-red-700 z-0">
+                  <span className="absolute -top-2.5 right-0 text-[10px] text-red-400 bg-white dark:bg-gray-900 px-1">Overload (80%)</span>
+                </div>
+                <div className="absolute left-0 right-0 top-[40%] border-t border-dashed border-yellow-300 dark:border-yellow-700 z-0">
+                  <span className="absolute -top-2.5 right-0 text-[10px] text-yellow-500 dark:text-yellow-400 bg-white dark:bg-gray-900 px-1">Moderate (60%)</span>
+                </div>
+
+                <div className="flex items-end justify-between gap-4 h-48 relative z-10">
+                  {weeklyData.map((week, index) => (
+                    <div key={week.week} className="flex-1 flex flex-col items-center gap-2">
+                      <div className="w-full h-40 bg-gray-100 dark:bg-gray-800 rounded-lg relative overflow-hidden flex items-end">
+                        <motion.div
+                          initial={{ height: 0 }}
+                          animate={{ height: `${week.load}%` }}
+                          transition={{ delay: 0.1 * index, duration: 0.5, ease: "easeOut" }}
+                          className={`w-full rounded-t-lg ${getBarColor(week.status)}`}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">{week.week.replace('Week ', 'W')}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Legend */}
+              <div className="flex items-center justify-center gap-6 mt-6 text-xs text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-green-500"></span> Safe (&lt;60%)</div>
+                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-yellow-500"></span> Moderate (60-70%)</div>
+                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-orange-500"></span> High (70-80%)</div>
+                <div className="flex items-center gap-2"><span className="w-3 h-3 rounded bg-red-500"></span> Overload (&gt;80%)</div>
+              </div>
+            </motion.div>
+
+            {/* AI Insights */}
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-6"
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-[#ff7400]/10 rounded-lg flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-[#ff7400]" />
+                </div>
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-white">Smart Insights</h2>
+              </div>
+
+              <div className="space-y-3">
+                {insights.map((insight, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ x: -10, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: 0.4 + index * 0.1 }}
+                    className={`p-4 rounded-xl border ${insight.color === 'red'
+                        ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800'
+                        : insight.color === 'yellow'
+                          ? 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800'
+                          : 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800'
+                      }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      {insight.color === 'red' && <AlertTriangle className="w-5 h-5 flex-shrink-0 text-red-600 dark:text-red-400" />}
+                      {insight.color === 'yellow' && <Calendar className="w-5 h-5 flex-shrink-0 text-yellow-600 dark:text-yellow-400" />}
+                      {insight.color === 'green' && <CheckCircle className="w-5 h-5 flex-shrink-0 text-green-600 dark:text-green-400" />}
+                      {insight.color === 'blue' && <Info className="w-5 h-5 flex-shrink-0 text-blue-600 dark:text-blue-400" />}
+                      <div>
+                        <p className={`font-medium ${insight.color === 'red'
+                            ? 'text-red-800 dark:text-red-300'
+                            : insight.color === 'yellow'
+                              ? 'text-yellow-800 dark:text-yellow-300'
+                              : 'text-green-800 dark:text-green-300'
+                          }`}>{insight.title}</p>
+                        <p className={`text-sm mt-0.5 ${insight.color === 'red'
+                            ? 'text-red-700 dark:text-red-400'
+                            : insight.color === 'yellow'
+                              ? 'text-yellow-700 dark:text-yellow-400'
+                              : 'text-green-700 dark:text-green-400'
+                          }`}>{insight.message}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Tips */}
+            <motion.div
+              initial={{ y: 10, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="bg-gradient-to-r from-[#ff7400]/5 to-[#ff7400]/10 dark:from-[#ff7400]/10 dark:to-[#ff7400]/20 border border-[#ff7400]/20 dark:border-[#ff7400]/30 rounded-xl p-6"
+            >
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 text-[#ff7400] flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-medium text-gray-800 dark:text-white">Pro Tip</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                    Break down large assignments into smaller tasks spread across multiple days.
+                    This helps maintain a balanced workload and reduces last-minute stress.
+                  </p>
+                  <Button
+                    onClick={() => onNavigate('add-deadline')}
+                    className="mt-3 bg-[#ff7400] hover:bg-[#e66800] text-white rounded-lg text-sm"
+                    size="sm"
+                  >
+                    Plan Your Tasks
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
           </>
         )}
       </div>

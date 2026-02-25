@@ -89,7 +89,7 @@ export const generateStudyPlan = async (req, res) => {
     const priorityTasks = deadlines.map((dl) => {
       const typeLower = dl.type.toLowerCase();
       const courseLower = dl.course.toLowerCase();
-      
+
       // Get base weight from task type
       let baseWeight = 1;
       for (const [key, weight] of Object.entries(taskWeights)) {
@@ -101,7 +101,7 @@ export const generateStudyPlan = async (req, res) => {
 
       // Get course credits (default to 3 if not found)
       const credits = moduleMap[courseLower] || 3;
-      
+
       // Calculate adjusted weight
       const adjustedWeight = baseWeight * credits;
 
@@ -132,10 +132,10 @@ export const generateStudyPlan = async (req, res) => {
     // 5. Determine overall risk level
     const totalLoad = priorityTasks.reduce((sum, t) => sum + t.adjustedWeight, 0);
     const avgDailyLoad = totalLoad / 7;
-    
+
     let riskLevel = "low";
     let riskMessage = "Your workload looks manageable this week.";
-    
+
     if (avgDailyLoad >= 10 || priorityTasks.some(t => t.daysUntilDue <= 2 && t.adjustedWeight >= 10)) {
       riskLevel = "critical";
       riskMessage = "🔴 Critical overload detected! You have multiple high-priority tasks due soon.";
@@ -195,7 +195,7 @@ Keep suggestions concise and actionable. Distribute work evenly across days, pri
     let weeklyPlan = [];
 
     try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
       const result = await model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
@@ -209,7 +209,7 @@ Keep suggestions concise and actionable. Distribute work evenly across days, pri
       }
     } catch (aiError) {
       console.error("Gemini AI Error:", aiError.message);
-      
+
       // Fallback suggestions if AI fails
       aiSuggestions = [
         `Focus on "${priorityTasks[0]?.title}" first - it has the highest priority.`,
@@ -222,11 +222,11 @@ Keep suggestions concise and actionable. Distribute work evenly across days, pri
       // Fallback weekly plan
       const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
       const today = new Date();
-      
+
       weeklyPlan = days.slice(0, 5).map((day, i) => {
         const planDate = new Date(today);
         planDate.setDate(today.getDate() + i);
-        
+
         const tasksForDay = priorityTasks
           .filter((t) => t.daysUntilDue >= i && t.daysUntilDue <= i + 2)
           .slice(0, 2);
