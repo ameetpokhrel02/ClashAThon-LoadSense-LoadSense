@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button"
 import { NavigationSidebar } from "@/components/ui/navigation-sidebar"
 import { LayoutWrapper, SidebarLayout } from "@/components/ui/layout-wrapper"
 import { MobileNavigation, MobileSidebar } from "@/components/ui/mobile-navigation"
-import { 
-  User, 
-  Mail, 
+import {
+  User,
+  Mail,
   GraduationCap,
   LogOut,
   Edit2,
@@ -19,14 +19,21 @@ import {
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useAuthStore } from "@/store/authStore"
+import { useModuleStore } from "@/store/moduleStore"
+import { useDeadlineStore } from "@/store/deadlineStore"
 
 export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: string) => void }) {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
   const { user, logout, fetchProfile, isLoadingProfile } = useAuthStore()
 
+  const { modules, fetchModules } = useModuleStore()
+  const { deadlines, loadDeadlines } = useDeadlineStore()
+
   useEffect(() => {
     fetchProfile()
-  }, [fetchProfile])
+    fetchModules()
+    loadDeadlines()
+  }, [fetchProfile, fetchModules, loadDeadlines])
 
   const handleLogout = () => {
     logout()
@@ -37,10 +44,20 @@ export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: str
     setIsMobileSidebarOpen(!isMobileSidebarOpen)
   }
 
+  const deadlinesCompleted = deadlines.filter(d => d.isCompleted).length;
+  const coursesEnrolled = modules ? modules.length : 0;
+
+  // Calculate average load dynamically:
+  // (Completed weight vs total weight) or simple completed / total ratio if weight isn't heavily mapped on frontend
+  const totalDeadlines = deadlines.length;
+  const averageLoad = totalDeadlines > 0
+    ? Math.round((deadlinesCompleted / totalDeadlines) * 100)
+    : 0;
+
   const profileStats = [
-    { label: 'Deadlines Completed', value: '24' },
-    { label: 'Courses Enrolled', value: '5' },
-    { label: 'Average Load', value: '65%' },
+    { label: 'Deadlines Completed', value: deadlinesCompleted.toString() },
+    { label: 'Courses Enrolled', value: coursesEnrolled.toString() },
+    { label: 'Completion Rate', value: `${averageLoad}%` },
   ]
 
   const menuItems = [
@@ -103,9 +120,9 @@ export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: str
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
                   {user?.avatar ? (
-                    <img 
-                      src={user.avatar} 
-                      alt="Profile" 
+                    <img
+                      src={user.avatar}
+                      alt="Profile"
                       className="w-20 h-20 rounded-2xl object-cover shadow-lg"
                     />
                   ) : (
@@ -198,9 +215,8 @@ export default function ProfileScreen({ onNavigate }: { onNavigate: (screen: str
             <button
               key={item.label}
               onClick={item.action}
-              className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${
-                index !== menuItems.length - 1 ? 'border-b border-gray-100 dark:border-gray-800' : ''
-              }`}
+              className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors ${index !== menuItems.length - 1 ? 'border-b border-gray-100 dark:border-gray-800' : ''
+                }`}
             >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center">

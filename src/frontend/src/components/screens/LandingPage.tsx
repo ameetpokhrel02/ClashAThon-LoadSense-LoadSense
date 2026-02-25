@@ -1,12 +1,12 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
-import { 
-  GraduationCap, 
-  Calendar, 
-  BarChart3, 
-  Shield, 
-  CheckCircle, 
+import {
+  GraduationCap,
+  Calendar,
+  BarChart3,
+  Shield,
+  CheckCircle,
   ArrowRight,
   Clock,
   Target,
@@ -117,7 +117,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
   return (
     <div className="min-h-screen bg-[#F6FAFB]">
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <nav className="bg-white sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -127,14 +127,14 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               <span className="text-xl font-semibold text-gray-800">LoadSense</span>
             </div>
             <div className="flex items-center gap-3">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 className="text-gray-600 hover:text-gray-800 font-medium"
                 onClick={() => onNavigate('login')}
               >
                 Sign In
               </Button>
-              <Button 
+              <Button
                 className="bg-[#ff7400] hover:bg-[#e66800] text-white font-medium rounded-lg shadow-sm"
                 onClick={() => onNavigate('register')}
               >
@@ -160,11 +160,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 <span className="text-[#ff7400]">Before It Happens</span>
               </h1>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Plan smarter. Reduce stress. Stay ahead of deadlines. 
+                Plan smarter. Reduce stress. Stay ahead of deadlines.
                 LoadSense helps you visualize your workload and prevent academic burnout.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button 
+                <Button
                   size="lg"
                   className="bg-[#ff7400] hover:bg-[#e66800] text-white font-semibold rounded-xl px-8 shadow-sm"
                   onClick={() => onNavigate('register')}
@@ -172,7 +172,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   Get Started
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-                <Button 
+                <Button
                   size="lg"
                   variant="outline"
                   className="border-2 border-gray-300 text-gray-700 font-semibold rounded-xl px-8 hover:bg-gray-50"
@@ -195,7 +195,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               <div className="relative">
                 {/* Main Image with Mouse Tracking */}
                 <motion.div
-                  animate={{ 
+                  animate={{
                     x: mousePosition.x,
                     y: mousePosition.y,
                   }}
@@ -204,7 +204,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     filter: `drop-shadow(${mousePosition.x * 0.5}px ${mousePosition.y * 0.5 + 8}px 20px rgba(255, 116, 0, 0.35))`
                   }}
                 >
-                  <img 
+                  <img
                     src={heroImage}
                     alt="Student managing workload"
                     className="w-full h-auto"
@@ -216,7 +216,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   {/* Book - Top */}
                   <motion.div
                     className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4"
-                    animate={{ 
+                    animate={{
                       rotate: [0, 10, -10, 0],
                       y: [-4, -12, -4]
                     }}
@@ -230,7 +230,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   {/* Pencil - Right */}
                   <motion.div
                     className="absolute top-1/4 right-0 translate-x-4"
-                    animate={{ 
+                    animate={{
                       rotate: [0, 15, -15, 0],
                       x: [4, 12, 4]
                     }}
@@ -244,7 +244,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   {/* Calculator - Bottom Right */}
                   <motion.div
                     className="absolute bottom-1/4 right-4"
-                    animate={{ 
+                    animate={{
                       rotate: [0, -10, 10, 0],
                       scale: [1, 1.1, 1]
                     }}
@@ -258,7 +258,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   {/* Ruler - Left */}
                   <motion.div
                     className="absolute top-1/3 left-0 -translate-x-4"
-                    animate={{ 
+                    animate={{
                       rotate: [0, -20, 20, 0],
                       x: [-4, -12, -4]
                     }}
@@ -272,7 +272,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   {/* Graduation Cap - Bottom Left */}
                   <motion.div
                     className="absolute bottom-1/3 left-4"
-                    animate={{ 
+                    animate={{
                       y: [0, -8, 0],
                       rotate: [0, 5, -5, 0]
                     }}
@@ -284,14 +284,14 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                   </motion.div>
                 </div>
                 {/* Floating accent elements */}
-                <motion.div 
+                <motion.div
                   className="absolute -top-4 -right-4 bg-green-100 border border-green-200 rounded-xl p-3 shadow-sm"
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
                   <CheckCircle className="w-6 h-6 text-green-600" />
                 </motion.div>
-                <motion.div 
+                <motion.div
                   className="absolute -bottom-4 -left-4 bg-[#ff7400]/10 border border-[#ff7400]/20 rounded-xl p-3 shadow-sm"
                   animate={{ y: [0, 8, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
@@ -305,9 +305,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* Problem Section */}
-      <section className="py-16 bg-white border-y border-gray-200">
+      <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div 
+          <motion.div
             className="text-center mb-12"
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -330,9 +330,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-red-50 border border-red-100 rounded-xl p-6 text-center"
+                className="bg-white shadow-md rounded-xl p-6 text-center"
               >
-                <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <problem.icon className="w-6 h-6 text-red-500" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">{problem.title}</h3>
@@ -346,7 +346,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       {/* Solution Section */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div 
+          <motion.div
             className="text-center mb-12"
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -369,7 +369,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white border border-gray-200 rounded-xl p-6 text-center hover:border-[#ff7400]/30 hover:shadow-md transition-all"
+                className="bg-white shadow-md rounded-xl p-6 text-center hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="w-14 h-14 bg-[#ff7400]/10 rounded-xl flex items-center justify-center mx-auto mb-5">
                   <solution.icon className="w-7 h-7 text-[#ff7400]" />
@@ -383,9 +383,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-white border-y border-gray-200">
+      <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div 
+          <motion.div
             className="text-center mb-10"
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -403,9 +403,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="flex items-center gap-4 bg-green-50 border border-green-100 rounded-xl px-6 py-4"
+                className="flex items-center gap-4 bg-white shadow-md rounded-xl px-6 py-4"
               >
-                <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
                   <benefit.icon className="w-5 h-5 text-green-600" />
                 </div>
                 <span className="text-gray-800 font-medium">{benefit.text}</span>
@@ -418,7 +418,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       {/* How It Works Section */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div 
+          <motion.div
             className="text-center mb-12"
             initial={{ y: 20, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
@@ -445,13 +445,13 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                 {index < howItWorks.length - 1 && (
                   <div className="hidden md:block absolute top-10 left-[calc(50%+40px)] w-[calc(100%-80px)] h-0.5 bg-gray-200" />
                 )}
-                
-                <div className="bg-white border border-gray-200 rounded-xl p-6 text-center relative">
+
+                <div className="bg-white shadow-md rounded-xl p-6 text-center relative hover:shadow-lg transition-shadow duration-300">
                   {/* Step number */}
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-8 h-8 bg-[#ff7400] rounded-full flex items-center justify-center text-white font-bold text-sm shadow-sm">
                     {item.step}
                   </div>
-                  
+
                   <div className="w-14 h-14 bg-[#ff7400]/10 rounded-xl flex items-center justify-center mx-auto mt-4 mb-5">
                     <item.icon className="w-7 h-7 text-[#ff7400]" />
                   </div>
@@ -480,7 +480,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               Join students who are taking control of their academic workload.
               It's free to get started.
             </p>
-            <Button 
+            <Button
               size="lg"
               className="bg-white text-[#ff7400] hover:bg-gray-100 font-semibold rounded-xl px-10 shadow-lg"
               onClick={() => onNavigate('register')}
@@ -493,7 +493,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 py-8">
+      <footer className="bg-white py-8">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
