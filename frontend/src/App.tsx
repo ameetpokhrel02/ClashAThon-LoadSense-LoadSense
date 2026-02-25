@@ -17,6 +17,7 @@ import InsightsScreen from './components/screens/InsightsScreen'
 import ProfileScreen from './components/screens/ProfileScreen'
 import OverloadAlertScreen from './components/screens/OverloadAlertScreen'
 import SuggestionScreen from './components/screens/SuggestionScreen'
+import SmartPlanScreen from './components/screens/SmartPlanScreen'
 import CalendarScreen from './components/screens/CalendarScreen'
 import SettingsScreen from './components/screens/SettingsScreen'
 import { useAuthStore } from './store/authStore'
@@ -76,6 +77,7 @@ function AppRoutes() {
       'settings': '/settings',
       'overload-alert': '/overload-alert',
       'suggestion': '/suggestion',
+      'smart-plan': '/smart-plan',
     }
     navigate(routeMap[screen] || '/')
   }
@@ -219,6 +221,12 @@ function AppRoutes() {
         <Route path="/suggestion" element={
           <ProtectedRoute>
             <SuggestionScreen onNavigate={handleNavigate} />
+          </ProtectedRoute>
+        } />
+        
+        <Route path="/smart-plan" element={
+          <ProtectedRoute>
+            <SmartPlanScreen onNavigate={handleNavigate} />
           </ProtectedRoute>
         } />
 

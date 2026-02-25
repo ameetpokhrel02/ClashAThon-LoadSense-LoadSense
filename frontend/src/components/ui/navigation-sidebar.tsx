@@ -10,7 +10,8 @@ import {
   User,
   LogOut,
   Plus,
-  GraduationCap
+  GraduationCap,
+  Brain
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -49,6 +50,13 @@ export function NavigationSidebar({
       label: 'Courses',
       icon: BookOpen,
       active: currentScreen === 'courses'
+    },
+    {
+      id: 'smart-plan',
+      label: 'Smart Planning',
+      icon: Brain,
+      active: currentScreen === 'smart-plan' || currentScreen === 'suggestion',
+      highlight: true
     },
     {
       id: 'insights',
@@ -101,18 +109,23 @@ export function NavigationSidebar({
         <nav className="flex-1 px-4 space-y-1">
           {navigationItems.map((item) => {
             const Icon = item.icon
+            const isHighlight = 'highlight' in item && item.highlight
             return (
               <Button
                 key={item.id}
                 variant="ghost"
                 className={cn(
                   "w-full justify-start gap-3 text-gray-600 dark:text-gray-400 hover:text-[#ff7400] hover:bg-[#ff7400]/10 rounded-xl py-3 px-4 transition-all duration-200 font-medium text-sm",
-                  item.active && "bg-[#ff7400]/10 text-[#ff7400] font-semibold"
+                  item.active && "bg-[#ff7400]/10 text-[#ff7400] font-semibold",
+                  isHighlight && !item.active && "bg-gradient-to-r from-orange-50 to-transparent dark:from-orange-900/20 border border-orange-200 dark:border-orange-800/50"
                 )}
                 onClick={() => onNavigate(item.id)}
               >
-                <Icon className={cn("w-5 h-5", item.active && "text-[#ff7400]")} />
+                <Icon className={cn("w-5 h-5", item.active && "text-[#ff7400]", isHighlight && "text-[#ff7400]")} />
                 {item.label}
+                {isHighlight && !item.active && (
+                  <span className="ml-auto text-[10px] bg-[#ff7400] text-white px-1.5 py-0.5 rounded-full font-bold">AI</span>
+                )}
               </Button>
             )
           })}

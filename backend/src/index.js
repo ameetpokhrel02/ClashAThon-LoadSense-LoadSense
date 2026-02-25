@@ -7,8 +7,13 @@ import authRoutes from "./routes/authRoutes.js";
 import moduleRoutes from "./routes/moduleRoutes.js";
 import deadlineRoutes from "./routes/deadlineRoutes.js";
 import workloadRoutes from "./routes/workloadRoutes.js";
+
 import dashboardRoutes from "./routes/dashboardscreenRoutes.js";
 import adminFeedbackRatingRoutes from "./routes/adminFeedbackRatingRoutes.js";
+
+import userRoutes from "./routes/userRoutes.js";
+import aiRoutes from "./routes/aiRoutes.js";
+
 
 dotenv.config();
 
@@ -24,9 +29,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/modules", moduleRoutes);
 app.use("/api/deadlines", deadlineRoutes);
 app.use("/api/workload", workloadRoutes);
+
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/feedback-ratings", adminFeedbackRatingRoutes);
 
+app.use("/api/users", userRoutes);
+app.use("/api/ai", aiRoutes);
 app.get("/", (req, res) => {
   res.send("LoadSense API Running ");
 

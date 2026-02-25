@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { Home, Plus, CalendarCheck, BarChart3, User, Menu, X } from "lucide-react"
+import { Home, Plus, CalendarCheck, BarChart3, User, Menu, X, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface MobileNavigationProps {
@@ -21,7 +21,7 @@ export function MobileNavigation({ currentScreen, onNavigate, className }: Mobil
     { id: 'dashboard', icon: Home, label: 'Home' },
     { id: 'deadlines', icon: CalendarCheck, label: 'Deadlines' },
     { id: 'add-deadline', icon: Plus, label: 'Add' },
-    { id: 'insights', icon: BarChart3, label: 'Insights' },
+    { id: 'smart-plan', icon: Brain, label: 'AI Plan' },
     { id: 'profile', icon: User, label: 'Profile' },
   ]
 
@@ -68,6 +68,7 @@ export function MobileSidebar({
     { id: 'dashboard', icon: Home, label: 'Dashboard' },
     { id: 'deadlines', icon: CalendarCheck, label: 'Deadlines' },
     { id: 'add-deadline', icon: Plus, label: 'Add Deadline' },
+    { id: 'smart-plan', icon: Brain, label: 'Smart Planning', highlight: true },
     { id: 'insights', icon: BarChart3, label: 'Insights' },
     { id: 'profile', icon: User, label: 'Profile' },
   ]
