@@ -92,7 +92,7 @@ Future-ready AI module enables smart study planning.
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone <repo-url>
+git clone :https://github.com/ameetpokhrel02/ClashAThon-LoadSense-LoadSense
 cd LoadSense
 
 2️⃣ Backend Setup
@@ -127,6 +127,7 @@ Backend	Render
 Database	MongoDB Atlas
 
 Live deployment enables access through public URL.
+live url https://loadsense.vercel.app
 
 📊 Expected Impact
 
