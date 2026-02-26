@@ -92,7 +92,7 @@ Future-ready AI module enables smart study planning.
 ### 1️⃣ Clone Repository
 
 ```bash
-git clone :https://github.com/ameetpokhrel02/ClashAThon-LoadSense-LoadSense
+git clone https://github.com/ameetpokhrel02/ClashAThon-LoadSense-LoadSense
 cd LoadSense
 
 2️⃣ Backend Setup
@@ -185,28 +185,3 @@ Predictive Academic Risk Detection
 
 Transforming academic chaos into clarity.
 
-
----
-
-# ✅ This README now satisfies Requirement 5.3 fully
-
-Includes:
-
-✔ Project Title  
-✔ Problem  
-✔ Solution  
-✔ USP  
-✔ Tech Stack  
-✔ Setup  
-✔ Environment Variables  
-✔ Deployment  
-✔ Team  
-
----
-
-If you want, I can also generate:
-
-📄 Final BUSINESS_MODEL.md  
-📄 ARCHITECTURE.md diagram version  
-
-for submission polish 🚀
