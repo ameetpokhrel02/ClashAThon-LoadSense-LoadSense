@@ -34,9 +34,12 @@ export const generateStudyPlan = async (req, res) => {
     const userId = req.user._id || req.user.id;
 
     // 1. Fetch ONLY the logged-in user's upcoming deadlines
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
     const deadlines = await Deadline.find({
-      user: userId,
-      dueDate: { $gte: new Date() },
+      user_id: userId,
+      dueDate: { $gte: todayStart },
     }).sort({ dueDate: 1 });
 
     if (!deadlines.length) {
@@ -107,8 +110,11 @@ export const generateStudyPlan = async (req, res) => {
       const adjustedWeight = baseWeight * credits;
 
       // Calculate urgency based on days until due
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+
       const daysUntilDue = Math.ceil(
-        (new Date(dl.dueDate) - new Date()) / (1000 * 60 * 60 * 24)
+        (new Date(dl.dueDate) - todayStart) / (1000 * 60 * 60 * 24)
       );
 
       return {

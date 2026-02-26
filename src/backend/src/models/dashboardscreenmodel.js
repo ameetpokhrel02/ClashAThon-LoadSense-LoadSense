@@ -26,10 +26,13 @@ export const getWeekStart = (date) => {
 };
 
 export const calculateWorkloadForUser = async (user_id) => {
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
   const deadlines = await Deadline.find({
     user_id,
     is_completed: false,
-    dueDate: { $gte: new Date() },
+    dueDate: { $gte: todayStart },
   }).sort({ dueDate: 1 });
 
   if (!deadlines.length) {
@@ -52,9 +55,9 @@ export const calculateWorkloadForUser = async (user_id) => {
 
   const modules = courseCodes.length
     ? await Module.find(
-        { user: user_id, moduleCode: { $in: courseCodes } },
-        "moduleCode credits"
-      ).lean()
+      { user: user_id, moduleCode: { $in: courseCodes } },
+      "moduleCode credits"
+    ).lean()
     : [];
   const creditsByCourse = new Map(modules.map((m) => [m.moduleCode, m.credits]));
 
@@ -137,11 +140,14 @@ export const syncUpcomingWorkloadsForUser = async (user_id) => {
 const ensureUpcomingWorkloadsFresh = async (user_id) => {
   const currentWeekStart = getWeekStart(new Date());
 
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
   const [latestDeadline, latestWorkload] = await Promise.all([
     Deadline.findOne({
       user_id,
       is_completed: false,
-      dueDate: { $gte: new Date() },
+      dueDate: { $gte: todayStart },
     })
       .sort({ updatedAt: -1 })
       .select("updatedAt")

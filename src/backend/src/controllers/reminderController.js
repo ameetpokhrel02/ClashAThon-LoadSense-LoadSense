@@ -9,6 +9,7 @@ export const getReminders = async (req, res) => {
         }
 
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         const nextWeek = new Date();
         nextWeek.setDate(today.getDate() + 7);
 
