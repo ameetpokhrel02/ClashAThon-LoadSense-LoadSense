@@ -89,7 +89,6 @@ Future-ready AI module enables smart study planning.
 - AI Study Planner (Implemented)
 - Smart Workload Insights  
 
-🤖 Add New Feature Section
 ## 🧠 AI Study Planner
 
 LoadSense includes an integrated AI Study Planner that generates personalized study plans based on:
