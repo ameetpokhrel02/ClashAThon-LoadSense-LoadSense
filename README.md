@@ -79,13 +79,33 @@ Future-ready AI module enables smart study planning.
 
 ## 🧩 MVP Features
 
+## 🧩 Core Features
+
 - Student Authentication  
 - Course Management  
 - Deadline Tracking  
 - Weekly Workload Calculation  
 - Overload Detection Alerts  
+- AI Study Planner (Implemented)
+- Smart Workload Insights  
 
----
+🤖 Add New Feature Section
+## 🧠 AI Study Planner
+
+LoadSense includes an integrated AI Study Planner that generates personalized study plans based on:
+
+- Upcoming deadlines
+- Workload intensity
+- Task priority
+
+Students can:
+
+✔ View AI-generated study suggestions  
+✔ Convert suggestions into tasks  
+✔ Track study progress inside the platform  
+
+This allows students not only to **analyze workload** but also to **act on it directly within the system**.
+
 
 ## 🚀 Setup Instructions (Run Locally)
 
@@ -166,13 +186,10 @@ Future LMS integration expands scalability.
 
 🔮 Future Scope
 
-AI Study Planner
-
-LMS Integration
-
-Faculty Analytics
-
-Predictive Academic Risk Detection
+- LMS Integration  
+- Faculty Analytics Dashboard  
+- Institutional Workload Monitoring  
+- Predictive Academic Risk Detection  
 
 🏁 Hackathon Alignment
 

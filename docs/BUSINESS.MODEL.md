@@ -100,5 +100,3 @@ Post-hackathon potential:
 - LMS plugin
 - Academic planning tool
 - EdTech SaaS product
-
-Ensures long-term institutional adoption.
