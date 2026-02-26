@@ -8,7 +8,7 @@ import { Loader2, Mail, Lock, BookOpen, Pencil, Eye, EyeOff } from "lucide-react
 import { useAuthStore } from "@/store/authStore"
 import { api, handleApiError } from "@/lib/api"
 import childrenImage from "@/assets/childenjooying-Photoroom.png"
-import logo from "@/assets/logo.png"
+import { GraduationCap } from "lucide-react"
 
 interface LoginScreenProps {
   onLogin: () => void
@@ -80,12 +80,15 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
 
         {/* Logo */}
         <motion.div
-          className="p-8 flex items-center relative z-10"
+          className="p-8 flex items-center gap-3 relative z-10"
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <img src={logo} alt="LoadSense Logo" className="h-12 w-auto" />
+          <div className="w-16 h-16 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
+            <GraduationCap className="w-9 h-9 text-white" />
+          </div>
+          <span className="font-bold text-2xl ml-3" style={{ color: '#22223b', textShadow: '0 1px 2px rgba(0,0,0,0.08)' }}>LoadSense</span>
         </motion.div>
 
         {/* Hero Image - Large & Centered with Orange Glow */}
@@ -142,8 +145,11 @@ export default function LoginScreen({ onLogin, onNavigate }: LoginScreenProps) {
           transition={{ duration: 0.6 }}
         >
           {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-2 mb-8 justify-center">
-            <img src={logo} alt="LoadSense Logo" className="h-12 w-auto" />
+          <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
+            <div className="w-12 h-12 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
+              <GraduationCap className="w-7 h-7 text-white" />
+            </div>
+            <span className="font-bold text-xl ml-3" style={{ color: '#22223b', textShadow: '0 1px 2px rgba(0,0,0,0.08)' }}>LoadSense</span>
           </div>
 
           <Card className="bg-white dark:bg-gray-900 shadow-xl shadow-black/5 dark:shadow-black/20 border border-gray-100 dark:border-gray-800 rounded-3xl">

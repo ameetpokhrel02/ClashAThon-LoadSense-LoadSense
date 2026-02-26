@@ -1,7 +1,6 @@
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { LogoutDialog } from "@/components/ui/logout-dialog"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
 import {
   LayoutDashboard,
   BookOpen,
@@ -14,7 +13,7 @@ import {
   CalendarDays
 } from "lucide-react"
 import { cn } from "@/lib/utils"
-import logo from "@/assets/logo.png"
+import { GraduationCap } from "lucide-react"
 
 interface NavigationSidebarProps {
   currentScreen: string
@@ -85,13 +84,15 @@ export function NavigationSidebar({
         "hidden lg:flex w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex-col transition-colors duration-200 h-full min-h-screen",
         className
       )}>
-        {/* Brand Header with Main Logo */}
+        {/* Brand Header with Main Logo and Name */}
         <div className="p-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <img src={logo} alt="Site Logo" className="w-16 h-16 rounded-xl shadow-sm object-contain bg-white dark:bg-gray-900 p-1" />
+            <div className="flex items-center gap-3">
+              <div className="w-16 h-16 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
+                <GraduationCap className="w-9 h-9 text-white" />
+              </div>
+              <span className="font-bold text-2xl ml-3" style={{ color: '#22223b', textShadow: '0 1px 2px rgba(0,0,0,0.08)' }}>LoadSense</span>
             </div>
-            <ThemeToggle />
           </div>
         </div>
 

@@ -64,27 +64,21 @@ Student Authentication
 Course Management
 
 Deadline Tracking
-
 Weekly Workload Calculation
 
 Overload Detection Alerts
 
 📂 Project Structure
-LoadSense/
-│
-├── frontend/
-│   ├── src/
-│   ├── components/
-│   ├── pages/
-│   └── styles/
-│
-├── backend/
-│   ├── src/
-│   │   ├── models/
-│   │   ├── controllers/
-│   │   ├── routes/
-│   │   ├── middleware/
-│   │   └── config/
+├── src/
+│   ├── frontend/
+│   │   ├── src/
+│   │   ├── public/
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   └── backend/
+│       ├── src/
+│       └── package.json
 │
 └── README.md
 ## Tech Stack
@@ -101,29 +95,19 @@ To run LoadSense locally, you'll need two terminal windows (one for the backend 
 
 ### 1. Backend Setup
 
-Open your terminal and navigate to the `backend` folder:
+Open your terminal and navigate to the `src/backend` folder:
 ```bash
-cd backend
-npm install
-```
-
-Make sure your `.env` file is properly configured with your MongoDB URI, JWT Secret, Gemini API key, and Cloudinary credentials. Once configured, start the backend server:
-
-```bash
-npm run dev
+cd src/backend
+pnpm install
+pnpm run dev
 ```
 
 ### 2. Frontend Setup
 
-Open a **new** terminal window and navigate to the `frontend` directory:
+Open a **new** terminal window and navigate to the `src/frontend` directory:
 ```bash
-cd frontend
+cd src/frontend
 pnpm install
-```
-
-Make sure the `.env` file in the frontend has `VITE_API_URL=http://localhost:5000/api`. Then start the development server:
-
-```bash
 pnpm run dev
 ```
 

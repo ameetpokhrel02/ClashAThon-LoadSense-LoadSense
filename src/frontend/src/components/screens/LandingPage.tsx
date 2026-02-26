@@ -22,7 +22,7 @@ import {
   Calculator
 } from "lucide-react"
 import heroImage from "@/assets/STUDENT1-Photoroom.png"
-import logo from "@/assets/logo.png"
+import { GraduationCap } from "lucide-react"
 
 interface LandingPageProps {
   onNavigate: (screen: string) => void
@@ -120,8 +120,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       <nav className="bg-white sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <img src={logo} alt="LoadSense Logo" className="h-10 w-auto" />
+            <div className="flex items-center gap-3">
+              <div className="w-16 h-16 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
+                <GraduationCap className="w-9 h-9 text-white" />
+              </div>
+              <span className="font-bold text-2xl ml-3" style={{ color: '#22223b', textShadow: '0 1px 2px rgba(0,0,0,0.08)' }}>LoadSense</span>
             </div>
             <div className="flex items-center gap-3">
               <Button
@@ -276,7 +279,9 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
                   >
                     <div className="w-12 h-12 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center p-2">
-                      <img src={logo} alt="Logo" className="w-full h-full object-contain" />
+                      <div className="w-12 h-12 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
+                        <GraduationCap className="w-7 h-7 text-white" />
+                      </div>
                     </div>
                   </motion.div>
                 </div>
@@ -493,8 +498,11 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
       <footer className="bg-white py-8">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center">
-              <img src={logo} alt="LoadSense Logo" className="h-8 w-auto opacity-80" />
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
+                <GraduationCap className="w-7 h-7 text-white" />
+              </div>
+              <span className="font-bold text-xl ml-3" style={{ color: '#22223b', textShadow: '0 1px 2px rgba(0,0,0,0.08)' }}>LoadSense</span>
             </div>
             <p className="text-sm text-gray-500">
               © 2026 LoadSense. Smart Academic Workload Management.

@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store/authStore"
 import { useWorkloadStore } from "@/store/workloadStore"
 import { useRemindersStore } from "@/store/reminderStore"
 import { motion, AnimatePresence } from "framer-motion"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 interface TopNavbarProps {
   onNavigate: (screen: string) => void
@@ -63,6 +64,7 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
     <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 md:px-6 py-3 sticky top-0 z-30">
       <div className="flex items-center justify-end">
         {/* Right - Notifications & Profile */}
+
         <div className="flex items-center gap-2 md:gap-4">
           {/* Notification Bell */}
           <div ref={notificationRef} className="relative">
@@ -125,6 +127,10 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
                 </motion.div>
               )}
             </AnimatePresence>
+          </div>
+          {/* Theme Toggle beside notification icon */}
+          <div className="ml-2">
+            <ThemeToggle variant="icon" />
           </div>
 
           {/* Profile Dropdown */}
