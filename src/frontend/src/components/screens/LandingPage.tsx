@@ -118,24 +118,24 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
     <div className="min-h-screen bg-[#F6FAFB]">
       {/* Navigation */}
       <nav className="bg-white sticky top-0 z-50 shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4">
+        <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-16 h-16 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
-                <GraduationCap className="w-9 h-9 text-white" />
+            <div className="flex items-center gap-2 md:gap-3">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
+                <GraduationCap className="w-7 h-7 md:w-9 md:h-9 text-white" />
               </div>
-              <span className="font-bold text-2xl ml-3" style={{ color: '#22223b', textShadow: '0 1px 2px rgba(0,0,0,0.08)' }}>LoadSense</span>
+              <span className="font-bold text-xl md:text-2xl ml-1 md:ml-3" style={{ color: '#22223b', textShadow: '0 1px 2px rgba(0,0,0,0.08)' }}>LoadSense</span>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3">
               <Button
                 variant="ghost"
-                className="text-gray-600 hover:text-gray-800 font-medium"
+                className="hidden md:inline-flex text-gray-600 hover:text-gray-800 font-medium"
                 onClick={() => onNavigate('login')}
               >
                 Sign In
               </Button>
               <Button
-                className="bg-[#ff7400] hover:bg-[#e66800] text-white font-medium rounded-lg shadow-sm"
+                className="bg-[#ff7400] hover:bg-[#e66800] text-white font-medium rounded-lg shadow-sm px-4 py-2 text-sm md:text-base"
                 onClick={() => onNavigate('register')}
               >
                 Get Started
@@ -155,7 +155,7 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
-              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6 mt-4 lg:mt-0">
                 Detect Academic Overload{" "}
                 <span className="text-[#ff7400]">Before It Happens</span>
               </h1>
@@ -222,8 +222,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <div className="w-12 h-12 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
-                      <BookOpen className="w-6 h-6 text-[#ff7400]" />
+                    <div className="w-8 h-8 md:w-12 md:h-12 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
+                      <BookOpen className="w-4 h-4 md:w-6 md:h-6 text-[#ff7400]" />
                     </div>
                   </motion.div>
 
@@ -236,8 +236,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     }}
                     transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                   >
-                    <div className="w-11 h-11 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
-                      <Pencil className="w-5 h-5 text-[#ff7400]" />
+                    <div className="w-7 h-7 md:w-11 md:h-11 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
+                      <Pencil className="w-3.5 h-3.5 md:w-5 md:h-5 text-[#ff7400]" />
                     </div>
                   </motion.div>
 
@@ -250,8 +250,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     }}
                     transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                   >
-                    <div className="w-10 h-10 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
-                      <Calculator className="w-5 h-5 text-[#ff7400]" />
+                    <div className="w-7 h-7 md:w-10 md:h-10 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
+                      <Calculator className="w-3.5 h-3.5 md:w-5 md:h-5 text-[#ff7400]" />
                     </div>
                   </motion.div>
 
@@ -264,8 +264,8 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     }}
                     transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
                   >
-                    <div className="w-11 h-11 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
-                      <Ruler className="w-5 h-5 text-[#ff7400]" />
+                    <div className="w-7 h-7 md:w-11 md:h-11 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center">
+                      <Ruler className="w-3.5 h-3.5 md:w-5 md:h-5 text-[#ff7400]" />
                     </div>
                   </motion.div>
 
@@ -278,27 +278,27 @@ export default function LandingPage({ onNavigate }: LandingPageProps) {
                     }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
                   >
-                    <div className="w-12 h-12 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center p-2">
-                      <div className="w-12 h-12 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
-                        <GraduationCap className="w-7 h-7 text-white" />
+                    <div className="w-8 h-8 md:w-12 md:h-12 bg-white rounded-xl shadow-lg border-2 border-[#ff7400]/30 flex items-center justify-center p-1 md:p-2">
+                      <div className="w-8 h-8 md:w-12 md:h-12 rounded-xl shadow-sm flex items-center justify-center bg-[#ff7400]">
+                        <GraduationCap className="w-4 h-4 md:w-7 md:h-7 text-white" />
                       </div>
                     </div>
                   </motion.div>
                 </div>
                 {/* Floating accent elements */}
                 <motion.div
-                  className="absolute -top-4 -right-4 bg-green-100 border border-green-200 rounded-xl p-3 shadow-sm"
+                  className="absolute -top-2 -right-2 md:-top-4 md:-right-4 bg-green-100 border border-green-200 rounded-xl p-2 md:p-3 shadow-sm"
                   animate={{ y: [0, -8, 0] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <CheckCircle className="w-6 h-6 text-green-600" />
+                  <CheckCircle className="w-4 h-4 md:w-6 md:h-6 text-green-600" />
                 </motion.div>
                 <motion.div
-                  className="absolute -bottom-4 -left-4 bg-[#ff7400]/10 border border-[#ff7400]/20 rounded-xl p-3 shadow-sm"
+                  className="absolute -bottom-2 -left-2 md:-bottom-4 md:-left-4 bg-[#ff7400]/10 border border-[#ff7400]/20 rounded-xl p-2 md:p-3 shadow-sm"
                   animate={{ y: [0, 8, 0] }}
                   transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
                 >
-                  <Zap className="w-6 h-6 text-[#ff7400]" />
+                  <Zap className="w-4 h-4 md:w-6 md:h-6 text-[#ff7400]" />
                 </motion.div>
               </div>
             </motion.div>
