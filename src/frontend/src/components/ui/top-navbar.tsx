@@ -3,6 +3,7 @@ import { Bell, User, Settings, LogOut, ChevronDown } from "lucide-react"
 import { useAuthStore } from "@/store/authStore"
 import { useWorkloadStore } from "@/store/workloadStore"
 import { useRemindersStore } from "@/store/reminderStore"
+import { useNotificationStore } from "@/store/notificationStore"
 import { motion, AnimatePresence } from "framer-motion"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 
@@ -14,6 +15,7 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
   const { user, logout } = useAuthStore()
   const { alerts } = useWorkloadStore()
   const { reminders } = useRemindersStore()
+  const { isRead, markAsRead, markAllAsRead } = useNotificationStore()
 
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [isNotificationOpen, setIsNotificationOpen] = useState(false)
@@ -42,21 +44,43 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
 
   // Combine alerts and reminders into a single notifications array
   const notifications = [
-    ...(alerts || []).map((alert, i) => ({
-      id: `alert-${i}`,
-      title: "Workload Alert",
-      message: alert.message,
-      time: "Recent",
-      unread: true,
-    })),
-    ...(reminders || []).map((reminder) => ({
-      id: `reminder-${reminder._id}`,
-      title: "Deadline Approaching",
-      message: `${reminder.course}: ${reminder.title} due soon`,
-      time: new Date(reminder.dueDate).toLocaleDateString(),
-      unread: true,
-    }))
+    ...(alerts || []).map((alert, i) => {
+      const id = `alert-${alert.week_start}-${i}`
+      return {
+        id,
+        title: "Workload Alert",
+        message: alert.message,
+        time: "Recent",
+        unread: !isRead(id),
+        type: 'alert'
+      }
+    }),
+    ...(reminders || []).map((reminder) => {
+      const id = `reminder-${reminder._id}`
+      return {
+        id,
+        title: "Deadline Approaching",
+        message: `${reminder.course}: ${reminder.title} due soon`,
+        time: new Date(reminder.dueDate).toLocaleDateString(),
+        unread: !isRead(id),
+        type: 'reminder'
+      }
+    })
   ]
+
+  const handleNotificationClick = (notification: any) => {
+    markAsRead(notification.id)
+    if (notification.type === 'alert') {
+      onNavigate('insights')
+    } else if (notification.type === 'reminder') {
+      onNavigate('deadlines')
+    }
+    setIsNotificationOpen(false)
+  }
+
+  const handleMarkAllAsRead = () => {
+    markAllAsRead(notifications.map(n => n.id))
+  }
 
   const unreadCount = notifications.filter(n => n.unread).length
 
@@ -102,6 +126,7 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
                       notifications.map((notification) => (
                         <div
                           key={notification.id}
+                          onClick={() => handleNotificationClick(notification)}
                           className={`px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border-b border-gray-100 dark:border-gray-800 last:border-0 ${notification.unread ? 'bg-[#ff7400]/5' : ''
                             }`}
                         >
@@ -120,8 +145,11 @@ export function TopNavbar({ onNavigate }: TopNavbarProps) {
                     )}
                   </div>
                   <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-                    <button className="text-sm text-[#ff7400] hover:text-[#e66800] font-medium w-full text-center">
-                      View all notifications
+                    <button
+                      onClick={handleMarkAllAsRead}
+                      className="text-sm text-[#ff7400] hover:text-[#e66800] font-medium w-full text-center"
+                    >
+                      Mark all as read
                     </button>
                   </div>
                 </motion.div>
