@@ -290,7 +290,7 @@ LoadSense can be offered to colleges as a SaaS platform.
 - Technical feasibility
 - Business sustainability
 
-** Built for Clash-a-Thon 2026 with love 💗**
+**Built for Clash-a-Thon 2026 with💗**
 
 Transforming academic chaos into clarity.
 
