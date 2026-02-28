@@ -161,10 +161,10 @@ LoadSense/
 ├── README.md
 └── package.json                       # (Optional) Root workspace config
 ```
-
+---
 ##  MVP Features
 
-## Core Features
+### Core Features
 
 - Student Authentication  
 - Course Management  
@@ -174,7 +174,9 @@ LoadSense/
 - AI Study Planner (Implemented)
 - Smart Workload Insights  
 
-##  AI Study Planner
+--- 
+
+###  AI Study Planner
 
 LoadSense includes an integrated AI Study Planner that generates personalized study plans based on:
 
@@ -183,13 +185,13 @@ LoadSense includes an integrated AI Study Planner that generates personalized st
 - Task priority
 
 Students can:
-
-View AI-generated study suggestions  
-Convert suggestions into tasks  
-Track study progress inside the platform  
+- View AI-generated study suggestions  
+- Convert suggestions into tasks  
+- Track study progress inside the platform  
 
 This allows students not only to **analyze workload** but also to **act on it directly within the system**.
 
+---
 
 ##  Setup Instructions (Run Locally)
 
@@ -233,58 +235,62 @@ Frontend	Vercel
 Backend	Render
 Database	MongoDB Atlas
 ```
+---
+
 ### Deployment
 ```bash
 Live deployment enables access through public URL.
 live url https://loadsense.vercel.app
 ```
-Expected Impact
-LoadSense improves:
-Time management
-Academic performance
-Workload visibility
-Student well-being
+---
+### Expected Impact
+- LoadSense improves:
+- Time management
+- Academic performance
+- Workload visibility
+- Student well-being
 
 It enables institutions to monitor workload distribution and reduce academic overload risks.
 
+---
+
 ### Team Members
 ```bash
-Name	Role
-Amit Pokhrel	Frontend (Interface Layer)
-Samir Bhandari	Backend (Logic Layer)
-Aaryan Karki	Backend Logic
-Anish Tamang	Database (Storage Layer)
-Isha Karki	Research & Business
+Name	            Role
+Amit Pokhrel	    Frontend (Interface Layer)
+Samir Bhandari	  Backend (Logic Layer)
+Aaryan Karki	    Backend Logic
+Anish Tamang	    Database (Storage Layer)
+Isha Karki	      Research & Business
 ```
-Business Perspective
+
+---
+
+### Business Perspective
 
 LoadSense can be offered to colleges as a SaaS platform.
 
-Benefits:
+### Benefits:
 
-Reduced student overload
+- Reduced student overload
+- Improved academic coordination
+- Better performance tracking
+- Future LMS integration expands scalability.
 
-Improved academic coordination
-
-Better performance tracking
-
-Future LMS integration expands scalability.
-
-Future Scope
+### Future Scope
 
 - LMS Integration  
 - Faculty Analytics Dashboard  
 - Institutional Workload Monitoring  
 - Predictive Academic Risk Detection  
 
-Hackathon Alignment
+### Hackathon Alignment
+- Real-world problem
+- Practical solution 
+- Technical feasibility
+- Business sustainability
 
-Real-world problem
-Practical solution 
-Technical feasibility
-Business sustainability
-
-Built for Clash-a-Thon 2026
+** Built for Clash-a-Thon 2026 with love 💗**
 
 Transforming academic chaos into clarity.
 
