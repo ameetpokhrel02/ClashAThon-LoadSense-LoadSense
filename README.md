@@ -184,9 +184,9 @@ LoadSense includes an integrated AI Study Planner that generates personalized st
 
 Students can:
 
-✔ View AI-generated study suggestions  
-✔ Convert suggestions into tasks  
-✔ Track study progress inside the platform  
+View AI-generated study suggestions  
+Convert suggestions into tasks  
+Track study progress inside the platform  
 
 This allows students not only to **analyze workload** but also to **act on it directly within the system**.
 
@@ -198,24 +198,27 @@ This allows students not only to **analyze workload** but also to **act on it di
 ```bash
 git clone https://github.com/ameetpokhrel02/ClashAThon-LoadSense-LoadSense
 cd LoadSense
+```
 
-2️ Backend Setup
+### 2️ Backend Setup
+```bash
 cd backend
 npm install
 npm run dev
+```
 
-3️ Frontend Setup
+### 3️ Frontend Setup
+```bash
 cd frontend
 pnpm install
 pnpm dev
 ```
-App runs at:
 
-http://localhost:5173
+```bash
+App runs at: http://localhost:5173
 Environment Variables
 
 Create a .env file in backend:
-
 PORT=5000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
@@ -229,32 +232,30 @@ Service	Platform
 Frontend	Vercel
 Backend	Render
 Database	MongoDB Atlas
-
+```
+### Deployment
+```bash
 Live deployment enables access through public URL.
 live url https://loadsense.vercel.app
-
+```
 Expected Impact
-
 LoadSense improves:
-
 Time management
-
 Academic performance
-
 Workload visibility
-
 Student well-being
 
 It enables institutions to monitor workload distribution and reduce academic overload risks.
 
-Team Members
+### Team Members
+```bash
 Name	Role
 Amit Pokhrel	Frontend (Interface Layer)
 Samir Bhandari	Backend (Logic Layer)
 Aaryan Karki	Backend Logic
 Anish Tamang	Database (Storage Layer)
 Isha Karki	Research & Business
-
+```
 Business Perspective
 
 LoadSense can be offered to colleges as a SaaS platform.
@@ -278,10 +279,10 @@ Future Scope
 
 Hackathon Alignment
 
-✔ Real-world problem
-✔ Practical solution
-✔ Technical feasibility
-✔ Business sustainability
+Real-world problem
+Practical solution 
+Technical feasibility
+Business sustainability
 
 Built for Clash-a-Thon 2026
 
