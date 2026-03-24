@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { Home, Plus, CalendarCheck, BarChart3, User, Menu, X, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { MobileBottomNav } from "@/components/ui/mobile-bottom-nav"
 import logo from "@/assets/logo.png"
 
 interface MobileNavigationProps {
@@ -17,9 +18,8 @@ interface MobileSidebarProps {
   onLogout: () => void
 }
 
-export function MobileNavigation(_props: MobileNavigationProps) {
-  // Mobile bottom navigation is replaced by the hamburger side-menu to save vertical screen space.
-  return null
+export function MobileNavigation({ currentScreen, onNavigate }: MobileNavigationProps) {
+  return <MobileBottomNav currentScreen={currentScreen} onNavigate={onNavigate} />
 }
 
 export function MobileSidebar({
